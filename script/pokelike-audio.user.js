@@ -77,7 +77,7 @@
   }
 
   const SETTINGS = {
-    sfxVolume: 0.18,
+    sfxVolume: 0.08,
     bgmVolume: 0.06,
     sfxEnabled: true,
     bgmEnabled: true,
@@ -115,23 +115,42 @@
     osc.stop(ctx.currentTime + delay + duration);
   }
 
-  function playMp3Sfx(url, volume = 1.0) {
+  // Cache buffer SFX: url → AudioBuffer | false(fallito) | null(loading)
+  const _sfxBuffers = {};
+  let _sfxPreloaded = false;
+
+  function playMp3Sfx(url) {
     if (!SETTINGS.sfxEnabled || !url) return false;
+    const buf = _sfxBuffers[url];
+    if (buf === undefined) {
+      _preloadSfx(url); // avvia preload in background
+      return false;     // usa sintesi subito
+    }
+    if (!buf) return false; // in caricamento o fallito → usa sintesi
     const ctx = getCtx();
-    fetch(url)
-      .then(r => r.arrayBuffer())
-      .then(buf => ctx.decodeAudioData(buf))
-      .then(decoded => {
-        const src = ctx.createBufferSource();
-        const gain = ctx.createGain();
-        src.buffer = decoded;
-        gain.gain.setValueAtTime(volume * SETTINGS.sfxVolume / 0.18, ctx.currentTime);
-        src.connect(gain);
-        gain.connect(ctx.destination);
-        src.start();
-      })
-      .catch(() => {});
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    src.buffer = buf;
+    gain.gain.setValueAtTime(SETTINGS.sfxVolume / 0.18, ctx.currentTime);
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start();
     return true;
+  }
+
+  async function _preloadSfx(url) {
+    if (_sfxBuffers[url] !== undefined) return;
+    _sfxBuffers[url] = null; // in caricamento
+    try {
+      const r = await fetch(url);
+      if (!r.ok) { _sfxBuffers[url] = false; return; }
+      const buf = await r.arrayBuffer();
+      _sfxBuffers[url] = await getCtx().decodeAudioData(buf);
+    } catch { _sfxBuffers[url] = false; }
+  }
+
+  function preloadAllSfx() {
+    Object.values(MP3_SFX).forEach(url => { if (url) _preloadSfx(url); });
   }
 
   // Ogni SFX con fallback sintesi
@@ -216,11 +235,17 @@
   };
 
   // ============================================================
-  // BGM (sintesi loop con oscillatori)
+  // BGM — look-ahead scheduler + synth-first (MP3 subentra se carica)
   // ============================================================
-  let bgmNodes = null;
-  let bgmAudioEl = null;
-  let currentBgm = null;
+  let bgmAudioEl    = null;  // elemento <audio> per MP3
+  let _bgmInterval  = null;  // setInterval look-ahead
+  let _bgmPatName   = null;  // nome pattern sintetico corrente
+  let _bgmPatIdx    = 0;     // indice nota corrente
+  let _bgmNextNote  = 0;     // prossima nota da schedulare (ctx.currentTime)
+  let currentBgm    = null;
+
+  const BGM_LOOKAHEAD = 0.5;  // secondi di anticipo scheduling
+  const BGM_TICK_MS   = 100;  // tick ogni 100ms
 
   // Pattern melodici: array di [freq, durata] in secondi
   const BGM_PATTERNS = {
@@ -254,67 +279,48 @@
     ],
   };
 
-  function stopBgm() {
-    if (bgmAudioEl) {
-      bgmAudioEl.pause();
-      bgmAudioEl.src = '';
-      bgmAudioEl = null;
-    }
-    if (bgmNodes) {
-      try { bgmNodes.forEach(n => n.stop && n.stop()); } catch {}
-      bgmNodes = null;
-    }
-    currentBgm = null;
+  function _stopBgmSynth() {
+    if (_bgmInterval) { clearInterval(_bgmInterval); _bgmInterval = null; }
+    _bgmPatName = null;
   }
 
-  function playMp3Bgm(url) {
-    if (!url) return false;
-    stopBgm();
-    bgmAudioEl = new Audio(url);
-    bgmAudioEl.loop = true;
-    bgmAudioEl.volume = SETTINGS.bgmVolume;
-    bgmAudioEl.play().catch(() => {});
-    return true;
-  }
-
-  function playBgmSynth(name) {
+  function _startBgmSynth(name) {
     const pattern = BGM_PATTERNS[name];
     if (!pattern) return;
-    const ctx = getCtx();
-    const loopDuration = pattern.reduce((s, [, d]) => s + d, 0);
+    _stopBgmSynth();
+    _bgmPatName  = name;
+    _bgmPatIdx   = 0;
+    _bgmNextNote = getCtx().currentTime + 0.05;
 
-    let cancelled = false;
-    const nodes = [];
-    bgmNodes = nodes;
-
-    function scheduleLoop(startTime) {
-      if (cancelled) return;
-      let t = startTime;
-      pattern.forEach(([freq, dur]) => {
+    _bgmInterval = setInterval(() => {
+      if (!SETTINGS.bgmEnabled || _bgmPatName !== name) { _stopBgmSynth(); return; }
+      const ctx = getCtx();
+      if (ctx.state === 'suspended') return;
+      const pat = BGM_PATTERNS[_bgmPatName];
+      while (_bgmNextNote < ctx.currentTime + BGM_LOOKAHEAD) {
+        const [freq, dur] = pat[_bgmPatIdx % pat.length];
         if (freq > 0) {
-          const osc = ctx.createOscillator();
+          const osc  = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, t);
-          gain.gain.setValueAtTime(SETTINGS.bgmVolume * 0.6, t);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.9);
+          osc.frequency.setValueAtTime(freq, _bgmNextNote);
+          gain.gain.setValueAtTime(SETTINGS.bgmVolume * 0.6, _bgmNextNote);
+          gain.gain.exponentialRampToValueAtTime(0.0001, _bgmNextNote + dur * 0.9);
           osc.connect(gain);
           gain.connect(ctx.destination);
-          osc.start(t);
-          osc.stop(t + dur);
-          nodes.push(osc);
+          osc.start(_bgmNextNote);
+          osc.stop(_bgmNextNote + dur);
         }
-        t += dur;
-      });
-      // Riprogramma il loop prima che finisca
-      const loopTimeout = setTimeout(() => {
-        if (!cancelled && bgmNodes === nodes) scheduleLoop(ctx.currentTime);
-      }, (loopDuration - 0.1) * 1000);
-      nodes._loopTimeout = loopTimeout;
-    }
+        _bgmNextNote += dur;
+        _bgmPatIdx++;
+      }
+    }, BGM_TICK_MS);
+  }
 
-    scheduleLoop(ctx.currentTime);
-    nodes._cancel = () => { cancelled = true; clearTimeout(nodes._loopTimeout); };
+  function stopBgm() {
+    if (bgmAudioEl) { bgmAudioEl.pause(); bgmAudioEl.src = ''; bgmAudioEl = null; }
+    _stopBgmSynth();
+    currentBgm = null;
   }
 
   function playBgm(name) {
@@ -322,13 +328,41 @@
     if (currentBgm === name) return;
     stopBgm();
     currentBgm = name;
+
+    // La sintesi parte immediatamente — nessuna latenza, nessun fetch
+    _startBgmSynth(name);
+
+    // Tenta MP3 in background: se carica con successo sostituisce la sintesi
     const url = MP3_BGM[name];
-    if (url && playMp3Bgm(url)) return;
-    playBgmSynth(name);
+    if (url) {
+      const audio = new Audio(url);
+      audio.loop = true;
+      audio.volume = SETTINGS.bgmVolume;
+      audio.addEventListener('canplaythrough', () => {
+        if (currentBgm !== name) return; // schermata già cambiata
+        _stopBgmSynth();                 // spegni sintesi
+        bgmAudioEl = audio;              // subentra MP3
+      }, { once: true });
+      audio.addEventListener('error', () => {}, { once: true });
+      audio.play().catch(() => {});
+    }
+  }
+
+  function _bgmForScreen(screenId) {
+    if (screenId === 'map-screen') return 'map';
+    if (screenId === 'win-screen') return 'win';
+    if (screenId === 'battle-screen') {
+      const t = document.getElementById('battle-title')?.textContent || '';
+      if (t.includes('Elite') || t.includes('Champion') || t.includes('Final Boss')) return 'elite';
+      if (t.includes('Gym') || t.includes('Big Boss')) return 'boss';
+      return 'battle';
+    }
+    return null;
   }
 
   function updateBgmVolume() {
     if (bgmAudioEl) bgmAudioEl.volume = SETTINGS.bgmVolume;
+    // La sintesi legge SETTINGS.bgmVolume ad ogni nota — aggiornamento automatico
   }
 
   // ============================================================
@@ -491,6 +525,12 @@
   function initClickSounds() {
     document.addEventListener('click', (e) => {
       getCtx(); // risveglia il contesto audio al primo click
+
+      // Primo click: precarica tutti gli SFX MP3 in background
+      if (!_sfxPreloaded) {
+        _sfxPreloaded = true;
+        setTimeout(preloadAllSfx, 1000);
+      }
 
       const target = e.target;
 
@@ -746,8 +786,13 @@
     // BGM toggle
     document.getElementById('pau-bgm-toggle').addEventListener('change', (e) => {
       SETTINGS.bgmEnabled = e.target.checked;
-      if (!SETTINGS.bgmEnabled) stopBgm();
-      else if (lastScreen) onScreenChange(lastScreen); // riattiva BGM corrente
+      if (!SETTINGS.bgmEnabled) {
+        stopBgm();
+      } else {
+        // Riattiva BGM per la schermata corrente
+        const bgmName = _bgmForScreen(lastScreen);
+        if (bgmName) { currentBgm = null; playBgm(bgmName); }
+      }
       saveSettings();
     });
 
