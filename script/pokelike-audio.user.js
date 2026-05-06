@@ -40,7 +40,7 @@
 
   const MP3_BGM = {
     map:    `${CDN}/audio/bgm/map.mp3`,
-    win:    `${CDN}/audio/bgm/win.mp3`,
+    // gli altri pattern BGM usano solo la sintesi — nessun MP3 aggiuntivo
   };
 
   const MP3_SFX = {
@@ -78,6 +78,7 @@
     bgmVolume: 0.06,
     sfxEnabled: true,
     bgmEnabled: true,
+    bgmTrack: 'map',  // traccia BGM selezionata manualmente
   };
 
   function loadSettings() {
@@ -252,28 +253,6 @@
       [294, 0.25], [330, 0.25], [392, 0.25], [440, 0.5],
       [494, 0.25], [440, 0.5], [0, 0.25],
     ],
-    battle: [
-      [440, 0.15], [494, 0.15], [523, 0.15], [494, 0.15],
-      [440, 0.15], [415, 0.3], [392, 0.15], [440, 0.15],
-      [494, 0.15], [523, 0.3], [587, 0.15], [659, 0.3],
-      [587, 0.15], [523, 0.15], [494, 0.15], [440, 0.3],
-    ],
-    boss: [
-      [220, 0.2], [247, 0.1], [262, 0.2], [294, 0.1],
-      [330, 0.3], [294, 0.1], [262, 0.1], [247, 0.1],
-      [220, 0.2], [196, 0.1], [220, 0.4], [0, 0.2],
-      [330, 0.2], [349, 0.1], [392, 0.3], [440, 0.4],
-    ],
-    elite: [
-      [262, 0.15], [294, 0.15], [330, 0.3], [392, 0.15],
-      [440, 0.3], [392, 0.15], [349, 0.15], [330, 0.15],
-      [294, 0.3], [262, 0.15], [220, 0.3], [196, 0.15],
-      [220, 0.5], [0, 0.25],
-    ],
-    win: [
-      [523, 0.2], [659, 0.2], [784, 0.4],
-      [523, 0.15], [659, 0.15], [784, 0.15], [1046, 0.5],
-    ],
   };
 
   function _stopBgmSynth() {
@@ -293,6 +272,8 @@
       if (!SETTINGS.bgmEnabled || _bgmPatName !== name) { _stopBgmSynth(); return; }
       const ctx = getCtx();
       if (ctx.state === 'suspended') return;
+      // Reset se il timestamp è diventato stantio (tab in background, context sospeso, ecc.)
+      if (_bgmNextNote < ctx.currentTime - 0.5) _bgmNextNote = ctx.currentTime + 0.05;
       const pat = BGM_PATTERNS[_bgmPatName];
       while (_bgmNextNote < ctx.currentTime + BGM_LOOKAHEAD) {
         const [freq, dur] = pat[_bgmPatIdx % pat.length];
@@ -345,18 +326,6 @@
     }
   }
 
-  function _bgmForScreen(screenId) {
-    if (screenId === 'map-screen') return 'map';
-    if (screenId === 'win-screen') return 'win';
-    if (screenId === 'battle-screen') {
-      const t = document.getElementById('battle-title')?.textContent || '';
-      if (t.includes('Elite') || t.includes('Champion') || t.includes('Final Boss')) return 'elite';
-      if (t.includes('Gym') || t.includes('Big Boss')) return 'boss';
-      return 'battle';
-    }
-    return null;
-  }
-
   function updateBgmVolume() {
     if (bgmAudioEl) bgmAudioEl.volume = SETTINGS.bgmVolume;
     // La sintesi legge SETTINGS.bgmVolume ad ogni nota — aggiornamento automatico
@@ -373,28 +342,7 @@
     const prev = lastScreen;
     lastScreen = screenId;
 
-    // Aggiorna BGM
-    if (screenId === 'map-screen') {
-      playBgm('map');
-    } else if (screenId === 'battle-screen') {
-      const title = document.getElementById('battle-title')?.textContent || '';
-      if (title.includes('Gym') || title.includes('Elite') || title.includes('Champion') ||
-          title.includes('Big Boss') || title.includes('Final Boss')) {
-        if (title.includes('Elite') || title.includes('Champion') || title.includes('Final Boss')) {
-          playBgm('elite');
-        } else {
-          playBgm('boss');
-        }
-      } else {
-        playBgm('battle');
-      }
-    } else if (screenId === 'win-screen') {
-      playBgm('win');
-    } else if (screenId === 'title-screen' || screenId === 'gameover-screen') {
-      stopBgm();
-    }
-
-    // SFX per evento schermata
+    // SFX per evento schermata — il BGM non viene mai interrotto dal cambio schermata
     if (screenId === 'battle-screen') {
       const title = document.getElementById('battle-title')?.textContent || '';
       if (title.includes('Gym') || title.includes('Big Boss') || title.includes('Final Boss')) {
@@ -523,10 +471,11 @@
     document.addEventListener('click', (e) => {
       getCtx(); // risveglia il contesto audio al primo click
 
-      // Primo click: precarica tutti gli SFX MP3 in background
+      // Primo click: avvia BGM + precarica SFX (richiede gesture per AudioContext)
       if (!_sfxPreloaded) {
         _sfxPreloaded = true;
         setTimeout(preloadAllSfx, 1000);
+        if (!currentBgm) playBgm(SETTINGS.bgmTrack);
       }
 
       const target = e.target;
@@ -653,6 +602,9 @@
           </div>
           <input type="range" id="pau-bgm-vol" min="0" max="0.3" step="0.005"
             value="${SETTINGS.bgmVolume}" class="pau-slider">
+          <select id="pau-bgm-select" class="pau-select">
+            ${[...new Set([...Object.keys(MP3_BGM), ...Object.keys(BGM_PATTERNS)])].map(k => `<option value="${k}" ${SETTINGS.bgmTrack===k?'selected':''}>${k}</option>`).join('')}
+          </select>
         </div>
         <div class="pau-section" id="pau-stats">
           <div class="pau-stats-title">📊 Stats Run</div>
@@ -763,6 +715,19 @@
         border-radius: 3px;
       }
       .pau-btn:hover { background: #3a2a5e; }
+      .pau-select {
+        width: 100%;
+        margin-top: 4px;
+        background: #2a1a4e;
+        border: 1px solid #7a4af0;
+        color: #c8a8ff;
+        font-family: inherit;
+        font-size: 7px;
+        padding: 3px 4px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .pau-select option { background: #1a0a2e; }
     `;
     document.head.appendChild(style);
     document.body.appendChild(panel);
@@ -786,11 +751,19 @@
       if (!SETTINGS.bgmEnabled) {
         stopBgm();
       } else {
-        // Riattiva BGM per la schermata corrente
-        const bgmName = _bgmForScreen(lastScreen);
-        if (bgmName) { currentBgm = null; playBgm(bgmName); }
+        // Riattiva la traccia selezionata
+        currentBgm = null;
+        playBgm(SETTINGS.bgmTrack);
       }
       saveSettings();
+    });
+
+    // Selezione traccia BGM
+    document.getElementById('pau-bgm-select').addEventListener('change', (e) => {
+      SETTINGS.bgmTrack = e.target.value;
+      saveSettings();
+      currentBgm = null;
+      playBgm(SETTINGS.bgmTrack);
     });
 
     // SFX volume
@@ -894,6 +867,7 @@
     initBattleObserver();
     initToastObserver();
     initClickSounds();
+    // Il BGM parte al primo click utente (necessario per sbloccare l'AudioContext)
   }
 
   // Avvia dopo che il DOM è pronto
