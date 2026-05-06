@@ -36,31 +36,33 @@
   // ============================================================
   // CONFIGURAZIONE URL MP3 (lascia '' per usare la sintesi)
   // ============================================================
+  const CDN = 'https://deven-debug.github.io/pokelike-audio';
+
   const MP3_BGM = {
-    map:    '',  // musica mappa / navigazione
-    battle: '',  // musica battaglia normale
-    boss:   '',  // musica boss / palestra
-    elite:  '',  // musica Elite 4
-    win:    '',  // jingle vittoria
+    map:    `${CDN}/audio/bgm/map.mp3`,
+    battle: `${CDN}/audio/bgm/battle.mp3`,
+    boss:   `${CDN}/audio/bgm/boss.mp3`,
+    elite:  `${CDN}/audio/bgm/elite.mp3`,
+    win:    `${CDN}/audio/bgm/win.mp3`,
   };
 
   const MP3_SFX = {
-    wild:      '', // incontro selvaggio
-    trainer:   '', // incontro allenatore
-    gym:       '', // incontro capopalestra
-    catch:     '', // schermata cattura
-    item:      '', // oggetto trovato
-    heal:      '', // pokecenter
-    trade:     '', // scambio / move tutor
-    shiny:     '', // Pokémon shiny apparso
-    legendary: '', // leggendario apparso
-    badge:     '', // medaglia ottenuta
-    levelup:   '', // level up
-    faint:     '', // Pokémon sviene
-    gameover:  '', // game over
-    victory:   '', // vittoria partita
-    select:    '', // selezione starter
-    click:     '', // click generico UI
+    wild:      `${CDN}/audio/sfx/wild.mp3`,
+    trainer:   `${CDN}/audio/sfx/trainer.mp3`,
+    gym:       `${CDN}/audio/sfx/gym.mp3`,
+    catch:     `${CDN}/audio/sfx/catch.mp3`,
+    item:      `${CDN}/audio/sfx/item.mp3`,
+    heal:      `${CDN}/audio/sfx/heal.mp3`,
+    trade:     `${CDN}/audio/sfx/trade.mp3`,
+    shiny:     `${CDN}/audio/sfx/shiny.mp3`,
+    legendary: `${CDN}/audio/sfx/legendary.mp3`,
+    badge:     `${CDN}/audio/sfx/badge.mp3`,
+    levelup:   `${CDN}/audio/sfx/levelup.mp3`,
+    faint:     `${CDN}/audio/sfx/faint.mp3`,
+    gameover:  `${CDN}/audio/sfx/gameover.mp3`,
+    victory:   `${CDN}/audio/sfx/victory.mp3`,
+    select:    `${CDN}/audio/sfx/select.mp3`,
+    click:     `${CDN}/audio/sfx/click.mp3`,
   };
 
   // ============================================================
