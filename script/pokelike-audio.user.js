@@ -43,7 +43,6 @@
     map1:    `${CDN}/audio/bgm/map1.mp3`,
     map2:    `${CDN}/audio/bgm/map2.mp3`,
     map3:    `${CDN}/audio/bgm/map3.mp3`,
-    map4:    `${CDN}/audio/bgm/map4.mp3`,
     // gli altri pattern BGM usano solo la sintesi — nessun MP3 aggiuntivo
   };
 
