@@ -40,6 +40,10 @@
 
   const MP3_BGM = {
     map:    `${CDN}/audio/bgm/map.mp3`,
+    map1:    `${CDN}/audio/bgm/map1.mp3`,
+    map2:    `${CDN}/audio/bgm/map2.mp3`,
+    map3:    `${CDN}/audio/bgm/map3.mp3`,
+    map4:    `${CDN}/audio/bgm/map4.mp3`,
     // gli altri pattern BGM usano solo la sintesi — nessun MP3 aggiuntivo
   };
 
@@ -151,85 +155,86 @@
     Object.values(MP3_SFX).forEach(url => { if (url) _preloadSfx(url); });
   }
 
+  // Cooldown per evitare SFX duplicati da observer multipli
+  const _sfxCooldown = {};
+  function _sfxOnce(key, fn, ms = 400) {
+    const now = Date.now();
+    if (_sfxCooldown[key] && now - _sfxCooldown[key] < ms) return;
+    _sfxCooldown[key] = now;
+    fn();
+  }
+
+  // Helper: suona SFX e logga nome + modalità
+  function _sfx(name, url, synthFn) {
+    if (!SETTINGS.sfxEnabled) return;
+    const mp3 = playMp3Sfx(url);
+    console.log(
+      `%c[SFX] ${name} → ${mp3 ? '\uD83C\uDFB5 MP3' : '\uD83D\uDD0A SYNTH'}`,
+      `background:#0a1a2e;color:${mp3 ? '#00e5ff' : '#a0ffa0'};font-weight:bold;padding:1px 5px;border-left:2px solid ${mp3 ? '#00e5ff' : '#a0ffa0'};`
+    );
+    if (!mp3) synthFn();
+  }
+
   // Ogni SFX con fallback sintesi
   const SFX = {
-    WILD: () => {
-      if (playMp3Sfx(MP3_SFX.wild)) return;
+    WILD:      () => _sfx('WILD',      MP3_SFX.wild,      () => {
       playTone(330, 'sine', 0.12);
       playTone(262, 'sine', 0.25, 0.1, 0.12);
       playTone(440, 'sawtooth', 0.3, 0.12, 0.3);
-    },
-    TRAINER: () => {
-      if (playMp3Sfx(MP3_SFX.trainer)) return;
+    }),
+    TRAINER:   () => _sfx('TRAINER',   MP3_SFX.trainer,   () => {
       [523, 659, 523, 784].forEach((f, i) => playTone(f, 'square', 0.1, 0.12, i * 0.11));
-    },
-    GYM: () => {
-      if (playMp3Sfx(MP3_SFX.gym)) return;
+    }),
+    GYM:       () => _sfx('GYM',       MP3_SFX.gym,       () => {
       [330, 415, 494, 659, 784].forEach((f, i) => playTone(f, 'sawtooth', 0.15, 0.14, i * 0.1));
-    },
-    CATCH: () => {
-      if (playMp3Sfx(MP3_SFX.catch)) return;
+    }),
+    CATCH:     () => _sfx('CATCH',     MP3_SFX.catch,     () => {
       playTone(880, 'sine', 0.08);
       playTone(987, 'sine', 0.08, 0.1, 0.1);
       playTone(1046, 'sine', 0.12, 0.1, 0.2);
-    },
-    ITEM: () => {
-      if (playMp3Sfx(MP3_SFX.item)) return;
+    }),
+    ITEM:      () => _sfx('ITEM',      MP3_SFX.item,      () => {
       [1046, 1318, 1568].forEach((f, i) => playTone(f, 'sine', 0.15, 0.12, i * 0.08));
-    },
-    HEAL: () => {
-      if (playMp3Sfx(MP3_SFX.heal)) return;
+    }),
+    HEAL:      () => _sfx('HEAL',      MP3_SFX.heal,      () => {
       [523, 659, 784, 1046].forEach((f, i) => playTone(f, 'triangle', 0.35, 0.12, i * 0.1));
-    },
-    TRADE: () => {
-      if (playMp3Sfx(MP3_SFX.trade)) return;
+    }),
+    TRADE:     () => _sfx('TRADE',     MP3_SFX.trade,     () => {
       playTone(440, 'sine', 0.2);
       playTone(550, 'sine', 0.2, 0.1, 0.2);
       playTone(660, 'sine', 0.3, 0.12, 0.4);
-    },
-    SHINY: () => {
-      if (playMp3Sfx(MP3_SFX.shiny)) return;
-      // Effetto stelle brillanti
+    }),
+    SHINY:     () => _sfx('SHINY',     MP3_SFX.shiny,     () => {
       [1568, 1760, 2093, 2637].forEach((f, i) => {
         playTone(f, 'sine', 0.1, 0.13, i * 0.07);
         playTone(f * 0.5, 'triangle', 0.2, 0.08, i * 0.07 + 0.05);
       });
-    },
-    LEGENDARY: () => {
-      if (playMp3Sfx(MP3_SFX.legendary)) return;
-      // Fanfara drammatica
+    }),
+    LEGENDARY: () => _sfx('LEGENDARY', MP3_SFX.legendary, () => {
       [196, 247, 330, 392, 494].forEach((f, i) => playTone(f, 'sawtooth', 0.4, 0.13, i * 0.12));
-    },
-    BADGE: () => {
-      if (playMp3Sfx(MP3_SFX.badge)) return;
+    }),
+    BADGE:     () => _sfx('BADGE',     MP3_SFX.badge,     () => {
       [523, 659, 784, 1046, 1318].forEach((f, i) => playTone(f, 'triangle', 0.3, 0.13, i * 0.1));
-    },
-    LEVELUP: () => {
-      if (playMp3Sfx(MP3_SFX.levelup)) return;
+    }),
+    LEVELUP:   () => _sfx('LEVELUP',   MP3_SFX.levelup,   () => {
       [330, 415, 523].forEach((f, i) => playTone(f, 'sine', 0.15, 0.1, i * 0.1));
-    },
-    FAINT: () => {
-      if (playMp3Sfx(MP3_SFX.faint)) return;
+    }),
+    FAINT:     () => _sfx('FAINT',     MP3_SFX.faint,     () => {
       [330, 262, 196, 147].forEach((f, i) => playTone(f, 'sawtooth', 0.25, 0.1, i * 0.12));
-    },
-    GAMEOVER: () => {
-      if (playMp3Sfx(MP3_SFX.gameover)) return;
+    }),
+    GAMEOVER:  () => _sfx('GAMEOVER',  MP3_SFX.gameover,  () => {
       [262, 247, 220, 196, 175, 165].forEach((f, i) => playTone(f, 'triangle', 0.4, 0.13, i * 0.15));
-    },
-    VICTORY: () => {
-      if (playMp3Sfx(MP3_SFX.victory)) return;
-      const melody = [523, 523, 523, 523, 415, 466, 523];
-      melody.forEach((f, i) => playTone(f, 'square', 0.12, 0.13, i * 0.15));
-    },
-    SELECT: () => {
-      if (playMp3Sfx(MP3_SFX.select)) return;
+    }),
+    VICTORY:   () => _sfx('VICTORY',   MP3_SFX.victory,   () => {
+      [523, 523, 523, 523, 415, 466, 523].forEach((f, i) => playTone(f, 'square', 0.12, 0.13, i * 0.15));
+    }),
+    SELECT:    () => _sfx('SELECT',    MP3_SFX.select,    () => {
       playTone(880, 'sine', 0.1);
       playTone(1100, 'sine', 0.15, 0.12, 0.1);
-    },
-    CLICK: () => {
-      if (playMp3Sfx(MP3_SFX.click)) return;
+    }),
+    CLICK:     () => _sfx('CLICK',     MP3_SFX.click,     () => {
       playTone(1200, 'sine', 0.04, 0.08);
-    },
+    }),
   };
 
   // ============================================================
@@ -358,7 +363,6 @@
       }
     }
 
-    if (screenId === 'catch-screen') SFX.CATCH();
     if (screenId === 'item-screen') SFX.ITEM();
     if (screenId === 'shiny-screen') {
       const content = document.getElementById('shiny-content')?.textContent || '';
@@ -370,10 +374,9 @@
     if (screenId === 'win-screen') SFX.VICTORY();
     if (screenId === 'stat-buff-screen') SFX.SELECT();
 
-    // Game over
+    // Game over: ritorno al titolo dopo una battaglia = sconfitta
     if (prev === 'battle-screen' && screenId === 'title-screen') {
-      // Game over se torniamo al titolo dopo una battaglia
-      // Il game over mostra un toast prima di andare al titolo
+      SFX.GAMEOVER();
     }
   }
 
@@ -415,13 +418,14 @@
       mutations.forEach(m => {
         m.addedNodes.forEach(node => {
           if (node.nodeType !== 1) return;
-          const cls = node.className || '';
+          const cls = typeof node.className === 'string' ? node.className : (node.className?.baseVal ?? '');
           // Level up animation
           if (cls.includes('levelup') || node.textContent?.includes('grew to')) {
-            SFX.LEVELUP();
+            _sfxOnce('levelup', () => SFX.LEVELUP());
           }
-          // Faint
-          if (cls.includes('fainted') || node.textContent?.includes('fainted')) {
+          // Faint SOLO del player (ignora pokémon avversario)
+          if (node.closest && node.closest('#player-side') &&
+              (cls.includes('fainted') || node.textContent?.includes('fainted'))) {
             SFX.FAINT();
           }
         });
@@ -436,11 +440,11 @@
       mutations.forEach(m => {
         m.addedNodes.forEach(node => {
           if (node.nodeType !== 1) return;
-          const cls = node.className || '';
+          const cls = typeof node.className === 'string' ? node.className : (node.className?.baseVal ?? '');
           const text = node.textContent || '';
 
           if (cls.includes('levelup-toast') || cls.includes('level-up')) {
-            SFX.LEVELUP();
+            _sfxOnce('levelup', () => SFX.LEVELUP());
           }
           if (cls.includes('item-found-toast')) {
             SFX.ITEM();
@@ -449,17 +453,15 @@
             SFX.BADGE();
           }
           if (text.includes('healed') || text.includes('pokecenter') || cls.includes('pokecenter')) {
-            SFX.HEAL();
-          }
-          if (text.includes('fainted')) {
-            SFX.FAINT();
+            _sfxOnce('heal', () => SFX.HEAL());
           }
           if (cls.includes('bug-levelup') || cls.includes('map-notification')) {
-            if (text.includes('grew to') || text.includes('leveled')) SFX.LEVELUP();
+            if (text.includes('grew to') || text.includes('leveled')) _sfxOnce('levelup', () => SFX.LEVELUP());
           }
           if (text.includes('fully healed')) {
-            SFX.HEAL();
+            _sfxOnce('heal', () => SFX.HEAL());
           }
+          // faint non gestito qui: viene rilevato in initBattleObserver solo per il player
         });
       });
     });
