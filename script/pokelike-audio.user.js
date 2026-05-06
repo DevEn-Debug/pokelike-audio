@@ -40,9 +40,6 @@
 
   const MP3_BGM = {
     map:    `${CDN}/audio/bgm/map.mp3`,
-    battle: `${CDN}/audio/bgm/battle.mp3`,
-    boss:   `${CDN}/audio/bgm/boss.mp3`,
-    elite:  `${CDN}/audio/bgm/elite.mp3`,
     win:    `${CDN}/audio/bgm/win.mp3`,
   };
 
