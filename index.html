@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PokeLike Audio Engine – CDN</title>
+  <title>PokeLike Audio Engine – Installa</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       background: #0d0720;
       color: #c8a8ff;
@@ -16,166 +17,124 @@
       min-height: 100vh;
       margin: 0;
     }
-    h1 { color: #b090ff; font-size: 16px; margin-bottom: 8px; text-align: center; }
-    p  { font-size: 9px; color: #8070aa; margin: 4px 0; text-align: center; }
+    h1 { color: #b090ff; font-size: 16px; margin-bottom: 6px; text-align: center; }
+    .sub { font-size: 8px; color: #8070aa; margin: 4px 0; text-align: center; }
     .box {
       background: #1a0a2e;
       border: 2px solid #7a4af0;
       border-radius: 8px;
       padding: 20px 24px;
       margin: 20px 0;
-      max-width: 700px;
+      max-width: 560px;
       width: 100%;
     }
-    .box h2 { color: #9b6ef0; font-size: 10px; margin-bottom: 12px; }
-    .file-list { list-style: none; padding: 0; margin: 0; }
-    .file-list li {
-      font-size: 8px;
-      padding: 5px 0;
-      border-bottom: 1px solid #2a1a4e;
+    .box h2 { color: #9b6ef0; font-size: 10px; margin: 0 0 14px; }
+    .step {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      font-size: 8px;
+      line-height: 1.8;
     }
-    .file-list li:last-child { border-bottom: none; }
-    .file-list .key { color: #c8a8ff; }
-    .file-list .url { color: #4af0a0; font-size: 7px; word-break: break-all; }
-    code {
-      background: #2a1a4e;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 7px;
-      color: #4af0a0;
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      background: #7a4af0;
+      color: #fff;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      flex-shrink: 0;
     }
-    .badge {
-      display: inline-block;
+    .step-body { flex: 1; }
+    .step-body a { color: #4af0a0; }
+    .btn-install {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background: #7a4af0;
+      color: #fff;
+      text-align: center;
+      font-family: inherit;
+      font-size: 9px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 1px;
+      box-shadow: 0 0 16px #7a4af066;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-install:hover { background: #9b6ef0; transform: scale(1.02); }
+    .tm-links {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .tm-links a {
+      flex: 1;
+      min-width: 120px;
+      padding: 8px 6px;
       background: #2a1a4e;
       border: 1px solid #7a4af0;
-      border-radius: 3px;
-      padding: 2px 6px;
+      border-radius: 4px;
+      color: #c8a8ff;
+      text-align: center;
       font-size: 7px;
-      color: #9b6ef0;
+      text-decoration: none;
+      transition: background 0.2s;
     }
+    .tm-links a:hover { background: #3a2a5e; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <h1>🎵 PokeLike Audio Engine</h1>
-  <p>CDN per file audio · <a href="https://pokelike.xyz" style="color:#9b6ef0;">pokelike.xyz</a></p>
-  <p style="margin-top:4px;"><span class="badge">GitHub Pages</span></p>
+  <p class="sub">SFX + musiche per <a href="https://pokelike.xyz" style="color:#9b6ef0;">pokelike.xyz</a> &nbsp;·&nbsp; v5.0</p>
 
   <div class="box">
-    <h2>📁 Struttura File</h2>
-    <ul class="file-list">
-      <li>
-        <span class="key">🎵 BGM – Mappa</span>
-        <span class="url">audio/bgm/map.mp3</span>
-      </li>
-      <li>
-        <span class="key">🎵 BGM – Battaglia</span>
-        <span class="url">audio/bgm/battle.mp3</span>
-      </li>
-      <li>
-        <span class="key">🎵 BGM – Boss / Palestra</span>
-        <span class="url">audio/bgm/boss.mp3</span>
-      </li>
-      <li>
-        <span class="key">🎵 BGM – Elite 4</span>
-        <span class="url">audio/bgm/elite.mp3</span>
-      </li>
-      <li>
-        <span class="key">🎵 BGM – Vittoria</span>
-        <span class="url">audio/bgm/win.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Incontro Selvatico</span>
-        <span class="url">audio/sfx/wild.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Allenatore</span>
-        <span class="url">audio/sfx/trainer.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Palestra</span>
-        <span class="url">audio/sfx/gym.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Cattura</span>
-        <span class="url">audio/sfx/catch.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Oggetto</span>
-        <span class="url">audio/sfx/item.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Pokécenter</span>
-        <span class="url">audio/sfx/heal.mp3</span>
-      </li>
-      <li>
-        <span class="key">🔊 SFX – Scambio / Move Tutor</span>
-        <span class="url">audio/sfx/trade.mp3</span>
-      </li>
-      <li>
-        <span class="key">✨ SFX – Shiny</span>
-        <span class="url">audio/sfx/shiny.mp3</span>
-      </li>
-      <li>
-        <span class="key">🌟 SFX – Leggendario</span>
-        <span class="url">audio/sfx/legendary.mp3</span>
-      </li>
-      <li>
-        <span class="key">🏅 SFX – Medaglia</span>
-        <span class="url">audio/sfx/badge.mp3</span>
-      </li>
-      <li>
-        <span class="key">⬆️ SFX – Level Up</span>
-        <span class="url">audio/sfx/levelup.mp3</span>
-      </li>
-      <li>
-        <span class="key">💀 SFX – Svenimento</span>
-        <span class="url">audio/sfx/faint.mp3</span>
-      </li>
-      <li>
-        <span class="key">💔 SFX – Game Over</span>
-        <span class="url">audio/sfx/gameover.mp3</span>
-      </li>
-      <li>
-        <span class="key">🏆 SFX – Vittoria</span>
-        <span class="url">audio/sfx/victory.mp3</span>
-      </li>
-      <li>
-        <span class="key">🎯 SFX – Selezione</span>
-        <span class="url">audio/sfx/select.mp3</span>
-      </li>
-    </ul>
+    <h2>📦 Passo 1 – Installa Tampermonkey</h2>
+    <p style="font-size:8px;line-height:2;margin:0 0 10px;">
+      Tampermonkey è un'estensione gratuita per il tuo browser che permette di eseguire userscript.
+      Scegli il link per il tuo browser:
+    </p>
+    <div class="tm-links">
+      <a href="https://www.tampermonkey.net/?browser=chrome" target="_blank" rel="noopener">🟡 Chrome</a>
+      <a href="https://www.tampermonkey.net/?browser=firefox" target="_blank" rel="noopener">🦊 Firefox</a>
+      <a href="https://www.tampermonkey.net/?browser=edge" target="_blank" rel="noopener">🔵 Edge</a>
+      <a href="https://www.tampermonkey.net/?browser=safari" target="_blank" rel="noopener">🍎 Safari</a>
+    </div>
   </div>
 
   <div class="box">
-    <h2>🔧 Come usare</h2>
-    <p style="text-align:left;line-height:2;margin-bottom:8px;">
-      Carica i tuoi MP3 nelle cartelle <code>audio/sfx/</code> e <code>audio/bgm/</code>
-      con i nomi esatti mostrati sopra, poi nello script usermonkey imposta le URL base:
-    </p>
-    <p style="text-align:left;">
-      <code>https://DevEn-Debug.github.io/pokelike-audio/audio/sfx/wild.mp3</code>
-    </p>
+    <h2>📥 Passo 2 – Installa lo script</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">Assicurati di aver installato Tampermonkey (Passo 1).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">Clicca il bottone qui sotto — Tampermonkey aprirà la pagina di installazione.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">Clicca <strong style="color:#4af0a0;">Installa</strong> nella pagina che si apre.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">Vai su <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> e gioca — l'icona 🎵 apparirà in basso a sinistra.</div>
+    </div>
+    <a href="script/pokelike-audio.user.js" class="btn-install">⬇ INSTALLA SCRIPT</a>
   </div>
 
-  <div class="box">
-    <h2>📥 Userscript</h2>
-    <p style="text-align:left;line-height:2;">
-      Lo script Tampermonkey si trova in <code>script/pokelike-audio.user.js</code>
-    </p>
-    <p style="text-align:left;margin-top:8px;">
-      <a href="script/pokelike-audio.user.js" style="color:#4af0a0;font-size:8px;">
-        ⬇ Scarica / Installa Script
-      </a>
-    </p>
-  </div>
+  <p style="margin-top:10px;font-size:7px;color:#4a3a6a;">DevEn-Debug · GitHub Pages · PokeLike Audio Engine v5.0</p>
 
-  <p style="margin-top:20px;font-size:7px;color:#4a3a6a;">
-    DevEn-Debug · GitHub Pages · PokeLike Audio Engine v5.0
-  </p>
 </body>
 </html>

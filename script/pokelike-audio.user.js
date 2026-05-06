@@ -103,7 +103,7 @@
   function playTone(freq, type, duration, volume = 0.1, delay = 0) {
     if (!SETTINGS.sfxEnabled) return;
     const ctx = getCtx();
-    const vol = volume * SETTINGS.sfxVolume / 0.18;
+    const vol = volume * SETTINGS.sfxVolume / 0.18 * SYNTH_SCALE;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = type;
@@ -156,6 +156,7 @@
 
   // Cooldown per evitare SFX duplicati da observer multipli
   const _sfxCooldown = {};
+  const SYNTH_SCALE = 0.35; // synth più bassi rispetto agli MP3
   function _sfxOnce(key, fn, ms = 400) {
     const now = Date.now();
     if (_sfxCooldown[key] && now - _sfxCooldown[key] < ms) return;
@@ -369,7 +370,7 @@
       else SFX.TRADE(); // schermata trade usa shiny-screen
     }
     if (screenId === 'trade-screen') SFX.TRADE();
-    if (screenId === 'badge-screen') SFX.BADGE();
+    if (screenId === 'badge-screen') _sfxOnce('badge', () => SFX.BADGE());
     if (screenId === 'win-screen') SFX.VICTORY();
     if (screenId === 'stat-buff-screen') SFX.SELECT();
 
@@ -449,7 +450,7 @@
             SFX.ITEM();
           }
           if (cls.includes('achievement-toast') || cls.includes('ach-toast')) {
-            SFX.BADGE();
+            _sfxOnce('badge', () => SFX.BADGE());
           }
           if (text.includes('healed') || text.includes('pokecenter') || cls.includes('pokecenter')) {
             _sfxOnce('heal', () => SFX.HEAL());
