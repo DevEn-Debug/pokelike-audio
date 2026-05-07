@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      5.0
 // @description  SFX + musiche di sottofondo sintetiche per ogni evento del gioco, pannello volume, contatore punti run
-// @author       GitHub Copilot
+// @author       Erry96
 // @match        https://pokelike.xyz/*
 // @grant        none
 // @run-at       document-idle
