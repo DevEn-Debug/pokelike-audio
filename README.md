@@ -1,43 +1,32 @@
-# PokeLike Audio Engine 🎵
+# PokeLike Toolkit 🎮
 
-CDN per file audio del Tampermonkey script **PokeLike Audio Engine v5.0** per [pokelike.xyz](https://pokelike.xyz).
+Toolkit all-in-one per [pokelike.xyz](https://pokelike.xyz): audio engine, DexFaker, StarterPC e BuffFaker in un unico widget Tampermonkey.
+
+## ✨ Funzionalità
+
+| Tab | Nome | Descrizione |
+|-----|------|-------------|
+| 🔊 | **Audio** | SFX (MP3 o sintesi Web Audio), volume musica di gioco, bypass manutenzione, transizioni istantanee su desktop |
+| 📖 | **Pokédex** | DexFaker - aggiungi Pokemon al Pokedex (numero o nome), opzione Shiny |
+| 🖥️ | **Starter PC** | StarterPC - un Pokemon nel PC della Battle Tower (numero o nome) |
+| ⚡ | **EV / Buff** | BuffFaker — modifica stat buff per singolo Pokémon |
 
 ## 📁 Struttura
 
 ```
 pokelike-audio/
-├── index.html              ← pagina CDN (GitHub Pages)
+├── index.html                    ← pagina installazione (GitHub Pages)
 ├── script/
-│   └── pokelike-audio.user.js   ← Tampermonkey script
+│   └── pokelike-audio.user.js    ← Tampermonkey script (PokeLike Toolkit v6.0)
 └── audio/
-    ├── bgm/
-    │   ├── map.mp3         ← musica mappa / navigazione
-    │   ├── battle.mp3      ← musica battaglia normale
-    │   ├── boss.mp3        ← musica boss / palestra
-    │   ├── elite.mp3       ← musica Elite 4
-    │   └── win.mp3         ← jingle vittoria
-    └── sfx/
-        ├── wild.mp3        ← incontro selvatico
-        ├── trainer.mp3     ← incontro allenatore
-        ├── gym.mp3         ← incontro capopalestra
-        ├── catch.mp3       ← schermata cattura
-        ├── item.mp3        ← oggetto trovato
-        ├── heal.mp3        ← pokécenter
-        ├── trade.mp3       ← scambio / move tutor
-        ├── shiny.mp3       ← pokémon shiny apparso
-        ├── legendary.mp3   ← leggendario apparso
-        ├── badge.mp3       ← medaglia ottenuta
-        ├── levelup.mp3     ← level up
-        ├── faint.mp3       ← pokémon sviene
-        ├── gameover.mp3    ← game over
-        ├── victory.mp3     ← vittoria partita
-        └── select.mp3      ← selezione starter / click
+    ├── bgm/                      ← musiche di sottofondo
+    └── sfx/                      ← effetti sonori
 ```
 
 ## 🔧 Aggiungere audio
 
-1. Carica i tuoi `.mp3` nelle cartelle `audio/sfx/` o `audio/bgm/` con i **nomi esatti** mostrati sopra
-2. Fai commit & push
+1. Carica i tuoi `.mp3` in `audio/sfx/` o `audio/bgm/`
+2. Commit & push
 3. I file saranno disponibili su:
 
 ```
@@ -45,16 +34,17 @@ https://DevEn-Debug.github.io/pokelike-audio/audio/sfx/NOME.mp3
 https://DevEn-Debug.github.io/pokelike-audio/audio/bgm/NOME.mp3
 ```
 
-## 📥 Script
+Le URL sono configurabili in cima allo script nei blocchi `MP3_BGM` e `MP3_SFX`.  
+Se una URL è vuota (`''`), lo script usa la **sintesi Web Audio API**.
 
-Lo script Tampermonkey è in `script/pokelike-audio.user.js`.  
-Nello script, le URL degli MP3 sono configurabili in cima al file nei blocchi `MP3_BGM` e `MP3_SFX`.
+## 📥 Installazione
 
-Se le URL sono vuote (`''`), lo script usa automaticamente la **sintesi Web Audio API** – nessun file necessario.
+1. Installa [Tampermonkey](https://www.tampermonkey.net/)
+2. Apri la [pagina di installazione](https://DevEn-Debug.github.io/pokelike-audio/)
+3. Clicca **Installa PokeLike Toolkit**
+4. Vai su [pokelike.xyz](https://pokelike.xyz) — widget in basso a sinistra
 
 ## 🌐 GitHub Pages
-
-Dopo aver attivato GitHub Pages su questo repo (Settings → Pages → Deploy from branch `main`), la pagina CDN sarà disponibile su:
 
 ```
 https://DevEn-Debug.github.io/pokelike-audio/

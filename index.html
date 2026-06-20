@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PokeLike Audio Engine – Installa</title>
+  <title>PokeLike Toolkit - Installa</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -13,22 +13,41 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      padding: 40px 20px 60px;
       min-height: 100vh;
       margin: 0;
     }
     h1 { color: #b090ff; font-size: 16px; margin-bottom: 6px; text-align: center; }
-    .sub { font-size: 8px; color: #8070aa; margin: 4px 0; text-align: center; }
+    .sub { font-size: 8px; color: #8070aa; margin: 4px 0 20px; text-align: center; line-height: 2; }
+    .sub a { color: #9b6ef0; }
     .box {
       background: #1a0a2e;
       border: 2px solid #7a4af0;
       border-radius: 8px;
       padding: 20px 24px;
-      margin: 20px 0;
-      max-width: 560px;
+      margin: 16px 0;
+      max-width: 600px;
       width: 100%;
     }
     .box h2 { color: #9b6ef0; font-size: 10px; margin: 0 0 14px; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    @media (max-width: 480px) { .feature-grid { grid-template-columns: 1fr; } }
+    .feature-card {
+      background: #100820;
+      border: 1px solid #c050ff44;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 7px;
+      line-height: 1.9;
+    }
+    .feature-card .icon { font-size: 16px; margin-bottom: 6px; }
+    .feature-card h3 { color: #c050ff; font-size: 8px; margin: 0 0 6px; }
+    .feature-card p { margin: 0; color: #a090c0; }
     .step {
       display: flex;
       gap: 12px;
@@ -91,19 +110,80 @@
       transition: background 0.2s;
     }
     .tm-links a:hover { background: #3a2a5e; }
+    .kofi-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+    .kofi-wrap a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: #2a1a4e;
+      border: 2px solid #ff5e5b;
+      border-radius: 8px;
+      color: #ff8a88;
+      font-size: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 0 12px #ff5e5b33;
+    }
+    .kofi-wrap a:hover { background: #3a2a5e; transform: scale(1.02); }
+    .kofi-wrap a svg { flex-shrink: 0; }
+    .kofi-note { font-size: 6px; color: #4a3a6a; margin-top: 8px; }
+    .footer { margin-top: 16px; font-size: 7px; color: #4a3a6a; text-align: center; }
+    .widget-hint {
+      font-size: 7px;
+      color: #8070aa;
+      text-align: center;
+      margin: 8px 0 0;
+      line-height: 2;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <h1>🎵 PokeLike Audio Engine</h1>
-  <p class="sub">SFX + musiche per <a href="https://pokelike.xyz" style="color:#9b6ef0;">pokelike.xyz</a> &nbsp;·&nbsp; v5.0</p>
+  <h1>🎮 PokeLike Toolkit</h1>
+  <p class="sub">
+    Tutto-in-uno per <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a>
+    &nbsp;·&nbsp; v6.0
+  </p>
 
   <div class="box">
-    <h2>📦 Passo 1 – Installa Tampermonkey</h2>
+    <h2>✨ Cosa include</h2>
+    <p style="font-size:7px;line-height:2;margin:0 0 12px;color:#a090c0;">
+      Un unico widget in basso a sinistra con 4 tab:
+    </p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon">🔊</div>
+        <h3>Audio</h3>
+        <p>SFX personalizzati (MP3 o sintesi), volume musica di gioco, bypass manutenzione e transizioni istantanee su desktop.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📖</div>
+        <h3>Pokédex</h3>
+        <p>DexFaker: aggiungi Pokemon al Pokedex per numero o nome, con opzione Shiny.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🖥️</div>
+        <h3>Starter PC</h3>
+        <p>StarterPC: un solo Pokemon nel PC della Battle Tower (N. o nome).</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">⚡</div>
+        <h3>EV / Buff</h3>
+        <p>BuffFaker: modifica gli EV/stat buff per singolo Pokémon.</p>
+      </div>
+    </div>
+    <p class="widget-hint">Clicca l'icona in basso a sinistra su pokelike.xyz per aprire il pannello.</p>
+  </div>
+
+  <div class="box">
+    <h2>📦 Passo 1 - Installa Tampermonkey</h2>
     <p style="font-size:8px;line-height:2;margin:0 0 10px;">
-      Tampermonkey è un'estensione gratuita per il tuo browser che permette di eseguire userscript.
-      Scegli il link per il tuo browser:
+      Tampermonkey è un'estensione gratuita che permette di eseguire userscript nel browser.
     </p>
     <div class="tm-links">
       <a href="https://www.tampermonkey.net/?browser=chrome" target="_blank" rel="noopener">🟡 Chrome</a>
@@ -114,14 +194,14 @@
   </div>
 
   <div class="box">
-    <h2>📥 Passo 2 – Installa lo script</h2>
+    <h2>📥 Passo 2 - Installa lo script</h2>
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">Assicurati di aver installato Tampermonkey (Passo 1).</div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-body">Clicca il bottone qui sotto — Tampermonkey aprirà la pagina di installazione.</div>
+      <div class="step-body">Clicca il bottone qui sotto - Tampermonkey aprirà la pagina di installazione.</div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
@@ -129,12 +209,43 @@
     </div>
     <div class="step">
       <div class="step-num">4</div>
-      <div class="step-body">Vai su <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> e gioca — l'icona 🎵 apparirà in basso a sinistra.</div>
+      <div class="step-body">Vai su <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> - il widget apparirà in basso a sinistra.</div>
     </div>
-    <a href="script/pokelike-audio.user.js" class="btn-install">⬇ INSTALLA SCRIPT</a>
+    <a href="script/pokelike-audio.user.js" class="btn-install">INSTALLA POKELIKE TOOLKIT</a>
   </div>
 
-  <p style="margin-top:10px;font-size:7px;color:#4a3a6a;">DevEn-Debug · GitHub Pages · PokeLike Audio Engine v5.0</p>
+  <div class="box">
+    <h2>Problemi su Chrome?</h2>
+    <p style="font-size:7px;line-height:2;margin:0;color:#a090c0;">
+      Se lo script non parte per alcuni utenti, di solito e uno di questi casi:
+    </p>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><strong>Tampermonkey disattivato</strong> - clicca l'icona TM e verifica che sia ON su pokelike.xyz.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body"><strong>Script vecchio</strong> - in Tampermonkey apri lo script e clicca Controlla aggiornamenti (v6.0.1).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body"><strong>Widget nascosto</strong> - icona viola in basso a sinistra (non piu il vecchio simbolo audio).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body"><strong>Debug</strong> - F12 &gt; Console, cerca <code style="color:#4af0a0;">[POKE-TOOLKIT]</code>. Se c'e un errore rosso, segnalalo.</div>
+    </div>
+  </div>
+
+  <div class="kofi-wrap">
+    <a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" title="Supporta su Ko-fi">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      Supporta su Ko-fi
+    </a>
+    <p class="kofi-note">Se ti piace il progetto, offrimi un caffè</p>
+  </div>
+
+  <p class="footer">DevEn-Debug · GitHub Pages · PokeLike Toolkit v6.0</p>
 
 </body>
 </html>
