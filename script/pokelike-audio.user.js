@@ -1,8 +1,8 @@
 ﻿// ==UserScript==
 // @name         PokeLike Toolkit v6.0
 // @namespace    http://tampermonkey.net/
-// @version      6.0.1
-// @description  Audio engine + DexFaker + StarterPC + BuffFaker per pokelike.xyz
+// @version      6.1.1
+// @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
 // @match        https://www.pokelike.xyz/*
@@ -225,7 +225,166 @@
       team: ids.map(id => ({ speciesId: id, isShiny: TOOLS.spcShiny, level: 5, name: '', types: [], spriteUrl: '' })),
     };
   }
-  const BF_STATS = ['hp', 'atk', 'def', 'speed', 'special'];
+  const BF_STATS = ['hp', 'atk', 'def', 'special', 'spdef', 'speed'];
+  const BF_LABELS = { hp: 'HP', atk: 'Atk', def: 'Def', special: 'SpA', spdef: 'SpD', speed: 'Spe' };
+  const BF_DEFAULT = { hp: 0, atk: 0, def: 0, special: 0, spdef: 0, speed: 0 };
+
+  const ITEM_CATALOG = [
+    { id: 'assault_vest', name: 'Assault Vest', desc: '+50% Difesa Speciale', icon: '🦺' },
+    { id: 'black_belt', name: 'Black Belt', desc: '+50% danno mosse Lotta', icon: '🥋' },
+    { id: 'charcoal', name: 'Charcoal', desc: '+50% danno mosse Fuoco', icon: '🔥' },
+    { id: 'choice_band', name: 'Choice Band', desc: '+40% danno fisico, -20% DEF', icon: '🎀' },
+    { id: 'choice_scarf', name: 'Choice Scarf', desc: '+50% Velocita', icon: '🧣' },
+    { id: 'choice_specs', name: 'Choice Specs', desc: '+30% danno speciale', icon: '👓' },
+    { id: 'eviolite', name: 'Eviolite', desc: 'Blocca evo: +50% DEF e Sp.Def', icon: '💎' },
+    { id: 'expert_belt', name: 'Expert Belt', desc: '+100% danno su superefficaci', icon: '🥊' },
+    { id: 'focus_sash', name: 'Focus Sash', desc: 'A PS pieni, sopravvivi con 1 PS', icon: '🎽' },
+    { id: 'kings_rock', name: 'King\'s Rock', desc: '30% chance tentennamento', icon: '👑' },
+    { id: 'lagging_tail', name: 'Lagging Tail', desc: 'Sempre ultimo, +100% danno', icon: '🐌' },
+    { id: 'leftovers', name: 'Leftovers', desc: 'Recupera 10% PS max/turno', icon: '🍃' },
+    { id: 'life_orb', name: 'Life Orb', desc: '+30% danno, -10% PS per colpo', icon: '🌑' },
+    { id: 'loaded_dice', name: 'Loaded Dice', desc: 'Inizio lotta: 37% +2 stat o -1', icon: '🎲' },
+    { id: 'lucky_egg', name: 'Lucky Egg', desc: '+30% chance livello extra', icon: '🥚' },
+    { id: 'magnet', name: 'Magnet', desc: '+50% danno mosse Elettro', icon: '🧲' },
+    { id: 'metal_coat', name: 'Metal Coat', desc: '+50% danno mosse Acciaio', icon: '🔩' },
+    { id: 'metronome', name: 'Metronome', desc: 'Dual-type: altro tipo, +20%', icon: '🎵' },
+    { id: 'miracle_seed', name: 'Miracle Seed', desc: '+50% danno mosse Erba', icon: '🌱' },
+    { id: 'moon_stone', name: 'Moon Stone', desc: 'Forza evoluzione', icon: '🌙' },
+    { id: 'mystic_water', name: 'Mystic Water', desc: '+50% danno mosse Acqua', icon: '💧' },
+    { id: 'pixie_plate', name: 'Pixie Plate', desc: '+50% danno mosse Folletto', icon: '✨' },
+    { id: 'quick_claw', name: 'Quick Claw', desc: '50% chance attaccare per primo', icon: '🪝' },
+    { id: 'rare_candy', name: 'Rare Candy', desc: '+3 livelli', icon: '🍬', usable: true },
+    { id: 'red_card', name: 'Red Card', desc: '-50% danno da superefficaci', icon: '🟥' },
+    { id: 'rocky_helmet', name: 'Rocky Helmet', desc: 'Attaccante -12% PS max/colpo', icon: '⛑️' },
+    { id: 'scope_lens', name: 'Scope Lens', desc: '+20% crit, crit +50% danno', icon: '🔭' },
+    { id: 'sharp_beak', name: 'Sharp Beak', desc: '+50% danno mosse Volante', icon: '🦅' },
+    { id: 'shell_bell', name: 'Shell Bell', desc: 'Cura 15% danno inflitto', icon: '🐚' },
+    { id: 'silk_scarf', name: 'Silk Scarf', desc: '+50% danno mosse Normale', icon: '🤍' },
+    { id: 'silver_powder', name: 'Silver Powder', desc: '+50% danno mosse Coleottero', icon: '🦋' },
+    { id: 'tm_normal', name: 'TM', desc: 'Aumenta move tier di 1', icon: '💿', usable: true },
+    { id: 'twisted_spoon', name: 'Twisted Spoon', desc: '+50% danno mosse Psico', icon: '🥄' },
+    { id: 'wide_lens', name: 'Wide Lens', desc: '+20% danno tutte le mosse', icon: '🔎' },
+    { id: 'adrenaline_orb', name: 'Adrenaline Orb', desc: 'Su superefficace: +1 ATK e Sp.Atk', icon: '⚡' },
+    { id: 'power_bracer', name: 'Power Bracer', desc: 'Pokemon infliggono +2 danno', icon: '💪', passive: true },
+    { id: 'bright_powder', name: 'Bright Powder', desc: 'Effetto passivo sulla mappa', icon: '🥽', passive: true },
+    { id: 'atk_band', name: 'Attack Band', desc: 'Bonus danno fisico', icon: '🥋', passive: true },
+    { id: 'sharp_beak_pass', name: 'Sharp Beak', desc: '+50% danno Volante (passivo)', icon: '🪶', passive: true },
+    { id: 'shoal_salt', name: 'Shoal Salt', desc: 'Effetto passivo sulla mappa', icon: '⚪', passive: true },
+    { id: 'lucky_punch', name: 'Lucky Punch', desc: 'Chance crit extra', icon: '🥊', passive: true },
+    { id: 'light_ball', name: 'Light Ball', desc: 'Potenzia Pokemon Elettro', icon: '✨', passive: true },
+    { id: 'thick_club', name: 'Thick Club', desc: 'Normal infliggono piu danno', icon: '🔨', passive: true },
+    { id: 'light_clay', name: 'Light Clay', desc: 'Riduce danno da mosse speciali', icon: '🦺', passive: true },
+    { id: 'cell_battery', name: 'Cell Battery', desc: 'Bonus stat dopo colpo Elettro', icon: '🔋', passive: true },
+    { id: 'electric_seed', name: 'Electric Seed', desc: 'Mosse Elettro colpiscono due volte', icon: '⚡', passive: true },
+    { id: 'yache_berry', name: 'Yache Berry', desc: 'Boost stat dopo attacco Ghiaccio', icon: '🍇', passive: true },
+    { id: 'grepa_berry', name: 'Grepa Berry', desc: 'Nemico nerfato quando colpito', icon: '🌿', passive: true },
+    { id: 'shell_bell_pass', name: 'Shell Bell', desc: 'Danno ridotto ma attacchi potenziati', icon: '🍃', passive: true },
+    { id: 'leaf_stone', name: 'Leaf Stone', desc: 'Erba: cura a fine turno', icon: '🌿', passive: true },
+    { id: 'grass_spore', name: 'Grass Spore', desc: 'Addormenta invece di attaccare', icon: '😴', passive: true },
+    { id: 'big_mushroom', name: 'Big Mushroom', desc: 'Danno extra ma ferisce il team', icon: '🍄', passive: true },
+    { id: 'sitrus_berry', name: 'Sitrus Berry', desc: 'Cura tutto il team', icon: '❤️', passive: true },
+    { id: 'figy_berry', name: 'Figy Berry', desc: 'Cura quando un alleato va KO', icon: '🍑', passive: true },
+    { id: 'mind_plate', name: 'Mind Plate', desc: 'Mosse Psico possono crittare', icon: '🧠', passive: true },
+    { id: 'splash_crit', name: 'Splash Plate', desc: 'Splash diventa critico', icon: '🔍', passive: true },
+    { id: 'hp_priority', name: 'HP Priority', desc: 'Pokemon con piu PS attacca prima', icon: '🦞', passive: true },
+    { id: 'execute_dmg', name: 'Execute Orb', desc: 'Bonus danno su nemici deboli', icon: '🥋', passive: true },
+    { id: 'ghost_heal', name: 'Ghost Heal', desc: 'Spettro: cura pari al danno', icon: '👻', passive: true },
+    { id: 'ghost_curse', name: 'Ghost Curse', desc: 'Effetto maledizione Spettro', icon: '💀', passive: true },
+    { id: 'ko_boost', name: 'KO Boost', desc: 'KO nemico: bonus al team', icon: '⚫', passive: true },
+    { id: 'flying_speed', name: 'Sky Plate', desc: 'Volante: +50% velocita', icon: '🌫️', passive: true },
+    { id: 'shed_shell', name: 'Shed Shell', desc: 'Colpi riducono livello nemico', icon: '🐛', passive: true },
+    { id: 'reaper_cloth', name: 'Reaper Cloth', desc: 'Una volta per run: potere Spettro', icon: '🪦', passive: true },
+    { id: 'safety_goggles', name: 'Safety Goggles', desc: 'Buio: bonus livello crit', icon: '🕶️', passive: true },
+    { id: 'dark_splash', name: 'Dark Splash', desc: 'Bonus danno Buio', icon: '🌑', passive: true },
+    { id: 'crit_lifesteal', name: 'Oran Berry', desc: 'Crit: cura dal danno', icon: '🫐', passive: true },
+    { id: 'rocky_pass', name: 'Rocky Helmet', desc: 'Rimborso danno ai attaccanti', icon: '🛡️', passive: true },
+    { id: 'protective_pads', name: 'Protective Pads', desc: 'Lotta: sopravvivi con 1 PS', icon: '🛡️', passive: true },
+    { id: 'spatk_stack', name: 'Sp.Atk Stack', desc: 'Stack Sp.Atk per colpo superefficace', icon: '⚫', passive: true },
+    { id: 'rock_sturdy', name: 'Rock Sturdy', desc: 'Roccia: sopravvivi a un KO', icon: '🪨', passive: true },
+    { id: 'dragon_fang', name: 'Dragon Fang', desc: '+50% danno Drago', icon: '🐉', passive: true },
+    { id: 'dragon_scale', name: 'Dragon Scale', desc: 'Primo crit Drago potenziato', icon: '🐲', passive: true },
+    { id: 'metal_alloy', name: 'Metal Alloy', desc: 'Acciaio: bonus difesa', icon: '⚙️', passive: true },
+    { id: 'fairy_charm', name: 'Pink Bow', desc: 'Folletto: effetto flinch', icon: '💞', passive: true },
+    { id: 'fairy_open', name: 'Fairy Open', desc: 'Attacchi Folletto potenziati', icon: '✨', passive: true },
+    { id: 'fight_revive', name: 'Chople Berry', desc: 'Primo KO: rivivi con PS', icon: '🥊', passive: true },
+    { id: 'hp_up_orb', name: 'HP Up', desc: 'Bonus PS max per la run', icon: '💚', passive: true },
+    { id: 'star_piece', name: 'Star Piece', desc: 'Potenzia mosse stellari', icon: '🌟', passive: true },
+    { id: 'comet_shard', name: 'Comet Shard', desc: 'Al pickup: team casuale', icon: '☄️', passive: true },
+    { id: 'legend_aegis', name: 'Legend Aegis', desc: 'Leggendari nel team: bonus', icon: '🌟', passive: true },
+    { id: 'water_mirror', name: 'Water Mirror', desc: 'Riflette bonus Acqua', icon: '💧', passive: true },
+    { id: 'casteliacone', name: 'Casteliacone', desc: 'Ghiaccia nemici al contatto', icon: '🍦', passive: true },
+    { id: 'ice_freeze', name: 'Ice Freeze', desc: 'Chance congelamento', icon: '⛄', passive: true },
+    { id: 'fire_share', name: 'Heat Rock', desc: 'Fuoco: condivide bonus', icon: '🪨', passive: true },
+    { id: 'fire_amp', name: 'Fire Amp', desc: 'Potenzia mosse Fuoco', icon: '🔥', passive: true },
+    { id: 'ground_slow', name: 'Soft Sand', desc: 'Terra: rallenta al contatto', icon: '🏜️', passive: true },
+    { id: 'poison_pass', name: 'Toxic Plate', desc: 'Avvelena il team nemico', icon: '☠️', passive: true },
+    { id: 'poison_armor', name: 'Poison Barb', desc: 'Veleno: bonus difesa', icon: '🍇', passive: true },
+    { id: 'poison_stack', name: 'Poison Stack', desc: 'Veleno: stack passivo', icon: '🟣', passive: true },
+    { id: 'bug_release', name: 'Insect Plate', desc: 'Coleottero: rilascia potere', icon: '🐞', passive: true },
+    { id: 'bug_legacy', name: 'Bug Legacy', desc: 'Coleottero: eredita bonus', icon: '🪲', passive: true },
+    { id: 'all_more', name: 'Absorb Orb', desc: 'Piu danno dato e ricevuto', icon: '🔮', passive: true },
+    { id: 'all_half', name: 'Guard Orb', desc: 'Meno danno dato e ricevuto', icon: '🛡️', passive: true },
+    { id: 'dmg_cap', name: 'Light Clay', desc: 'Cap danno da superefficaci', icon: '🪨', passive: true },
+    { id: 'elec_chain', name: 'Magnet Pass', desc: 'Catena effetti Elettro', icon: '🧲', passive: true },
+    { id: 'elec_lead', name: 'Battery', desc: 'Elettro guida il team', icon: '🔋', passive: true },
+    { id: 'grassy_seed', name: 'Grassy Seed', desc: 'Inizio lotta: +100% HP Erba', icon: '🌱', passive: true },
+    { id: 'muscle_band', name: 'Muscle Band', desc: 'Chance boost ATK e Speed', icon: '🦾', passive: true },
+    { id: 'power_lens', name: 'Power Lens', desc: 'Bonus su superefficaci', icon: '💪', passive: true },
+    { id: 'pure_incense', name: 'Pure Incense', desc: '+10% danno se slot vuoto', icon: '☯️', passive: true },
+    { id: 'rock_incense', name: 'Rock Incense', desc: 'Roccia: +50% da stage DEF', icon: '⛰️', passive: true },
+    { id: 'smoke_ball', name: 'Smoke Ball', desc: 'Immune confusione/veleno', icon: '💨', passive: true },
+    { id: 'smooth_rock', name: 'Smooth Rock', desc: 'Estende effetti campo', icon: '⏳', passive: true },
+    { id: 'air_balloon', name: 'Air Balloon', desc: 'Schiva un attacco', icon: '🎈', passive: true },
+    { id: 'dread_plate', name: 'Dread Plate', desc: 'Potenzia mosse spaventose', icon: '💀', passive: true },
+    { id: 'master_ball_pass', name: 'Master Ball', desc: 'Effetto passivo raro', icon: '🌟', passive: true },
+    { id: 'tiny_mushroom', name: 'Tiny Mushroom', desc: 'Spore al posto dell attacco', icon: '🍄', passive: true },
+    { id: 'roseli_berry', name: 'Roseli Berry', desc: 'Annulla debuff', icon: '🧚', passive: true },
+    { id: 'chilan_berry', name: 'Chilan Berry', desc: 'Riduce danno Normale', icon: '❄️', passive: true },
+    { id: 'aspear_berry', name: 'Aspear Berry', desc: 'Cura quando alleato curato', icon: '🍑', passive: true },
+    { id: 'rand_nerf', name: 'Grepa Berry', desc: 'Nerf stat nemico al colpo', icon: '🌿', passive: true },
+    { id: 'ko_maxhp', name: 'HP Up Orb', desc: 'Bonus PS massimi run', icon: '💚', passive: true },
+    { id: 'spell_tag', name: 'Spell Tag', desc: 'Potenzia mosse speciali', icon: '🏷️', passive: true },
+    { id: 'lifesteal', name: 'Big Root', desc: 'Cura dal danno inflitto', icon: '🌿', passive: true },
+    { id: 'water_def_debuff', name: 'Mystic Water Pass', desc: 'Acqua: debuff difesa nemica', icon: '🔱', passive: true },
+    { id: 'ice_refreeze', name: 'Never-Melt Ice', desc: 'Ricongela i nemici', icon: '❄️', passive: true },
+    { id: 'ice_shatter', name: 'Ice Shatter', desc: 'Doppio danno su congelati', icon: '🧊', passive: true },
+    { id: 'half_twice', name: 'Half Twice', desc: 'Danno dimezzato ma due volte', icon: '↪️', passive: true },
+    { id: 'crit_overflow', name: 'Scope Pass', desc: 'Eccesso crit diventa danno', icon: '🔭', passive: true },
+    { id: 'flying_dodge', name: 'Feather Pass', desc: 'Volante: chance schivata', icon: '💨', passive: true },
+    { id: 'ground_slow_onhit', name: 'Ground Slow', desc: 'Terra: rallenta al colpo', icon: '🟤', passive: true },
+    { id: 'poison_onhit', name: 'Poison Touch', desc: 'Avvelena al contatto', icon: '☠️', passive: true },
+    { id: 'debuff_mirror', name: 'Mental Herb', desc: 'Riflette debuff al nemico', icon: '🍃', passive: true },
+    { id: 'team_upgrade', name: 'Upgrade Disc', desc: 'Potenzia tutto il team', icon: '⬆️', passive: true }
+  ];
+  const ITEMS_HELD = ITEM_CATALOG.filter(i => !i.passive);
+  const ITEMS_PASSIVE = ITEM_CATALOG.filter(i => i.passive);
+
+  function _itemRowHtml(it) {
+    const tags = [];
+    if (it.passive) tags.push('passivo');
+    if (it.usable) tags.push('usabile');
+    const tagStr = tags.length ? ' <span class="pkt-item-tag">' + tags.join(', ') + '</span>' : '';
+    return '<div class="pkt-item-row">' +
+      '<span class="pkt-item-icon">' + (it.icon || '-') + '</span>' +
+      '<div class="pkt-item-info"><div class="pkt-item-name">' + it.name + tagStr + '</div>' +
+      '<div class="pkt-item-desc">' + it.desc + '</div></div></div>';
+  }
+  function _itemsListHtml(items) {
+    return items.length ? items.map(_itemRowHtml).join('') : '<div class="pkt-hint">Nessun item</div>';
+  }
+  function _collectLocalStorage() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    const dump = {};
+    keys.forEach(k => { if (k != null) dump[k] = localStorage.getItem(k); });
+    return dump;
+  }
+  function _humanSize(str) {
+    const b = new Blob([str]).size;
+    if (b < 1024) return b + ' B';
+    if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+    return (b / 1024 / 1024).toFixed(2) + ' MB';
+  }
   function _bfGetStore() { try { return JSON.parse(localStorage.getItem('poke_stat_buffs') || '{}'); } catch { return {}; } }
   function _bfSaveStore(store) { try { localStorage.setItem('poke_stat_buffs', JSON.stringify(store)); } catch {} }
   function _bfGetRoot(id) { return typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(id) : id; }
@@ -249,7 +408,7 @@
   }
   async function _bfApply(speciesId, vals) {
     const store = _bfGetStore();
-    store[_bfGetRoot(speciesId)] = { ...vals };
+    store[_bfGetRoot(speciesId)] = { ...BF_DEFAULT, ...vals };
     _bfSaveStore(store);
   }
   function _refreshSoon(ms) {
@@ -728,9 +887,9 @@
     const legacy = document.getElementById('poke-audio-panel');
     if (legacy) legacy.remove();
     if (document.getElementById('pkt-panel')) return;
-    const bfSlidersHtml = ['hp','atk','def','speed','special'].map(s =>
+    const bfSlidersHtml = BF_STATS.map(s =>
       '<div class="pkt-row" style="margin-bottom:4px"><span class="pkt-stat-label">' +
-      (s === 'special' ? 'SPC' : s === 'speed' ? 'SPD' : s.toUpperCase()) +
+      (BF_LABELS[s] || s) +
       '</span><input type="range" id="bf-stat-' + s + '" min="0" max="10" value="0" class="pkt-slider" style="flex:1">' +
       '<span id="bf-val-' + s + '" class="pkt-stat-val">0</span></div>'
     ).join('');
@@ -740,6 +899,8 @@
       dex: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
       starter: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
       ev: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+      items: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+      save: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
       kofi: '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
     };
     const panel = document.createElement('div');
@@ -747,12 +908,14 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.0.1</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.1.1</div>',
       '<div class="pkt-tabs">',
       '<button class="pkt-tab active" data-tab="audio" title="Audio">' + SVG.audio + '</button>',
       '<button class="pkt-tab" data-tab="dex" title="Pokedex">' + SVG.dex + '</button>',
       '<button class="pkt-tab" data-tab="starter" title="Starter PC">' + SVG.starter + '</button>',
       '<button class="pkt-tab" data-tab="ev" title="EV / Buff">' + SVG.ev + '</button>',
+      '<button class="pkt-tab" data-tab="items" title="Item">' + SVG.items + '</button>',
+      '<button class="pkt-tab" data-tab="save" title="Save">' + SVG.save + '</button>',
       '</div><div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
@@ -786,12 +949,26 @@
       '<div class="pkt-row" style="margin-top:6px;gap:4px"><button id="bf-apply-btn" class="pkt-btn pkt-full">Applica</button>',
       '<button id="bf-max-btn" class="pkt-btn pkt-full">Max tutto</button></div></div>',
       '<div class="pkt-section"><div id="bf-status" class="pkt-status">-</div></div></div>',
+      '<div class="pkt-tab-panel" data-panel="items">',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">Catalogo Item</div>',
+      '<div class="pkt-tab-desc">Riferimento item tenuti e passivi mappa.</div></div>',
+      '<div class="pkt-section"><div class="pkt-label">Tenuti (' + ITEMS_HELD.length + ')</div>',
+      '<div class="pkt-item-list pkt-item-list-held">' + _itemsListHtml(ITEMS_HELD) + '</div></div>',
+      '<div class="pkt-section"><div class="pkt-label">Passivi (' + ITEMS_PASSIVE.length + ')</div>',
+      '<div class="pkt-item-list pkt-item-list-passive">' + _itemsListHtml(ITEMS_PASSIVE) + '</div></div></div>',
+      '<div class="pkt-tab-panel" data-panel="save">',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">Backup Save</div>',
+      '<div class="pkt-tab-desc">Esporta o importa tutto il localStorage di pokelike.xyz.</div></div>',
+      '<div class="pkt-section"><button id="sv-export" class="pkt-btn pkt-full">Esporta tutto (file)</button>',
+      '<button id="sv-copy" class="pkt-btn pkt-full" style="margin-top:4px">Copia negli appunti</button>',
+      '<button id="sv-import" class="pkt-btn pkt-full" style="margin-top:4px">Importa da file</button></div>',
+      '<div class="pkt-section"><div id="sv-status" class="pkt-status">-</div></div></div>',
       '</div>',
       '<a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" class="pkt-kofi" title="Supporta su Ko-fi">' + SVG.kofi + '<span>Supporta su Ko-fi</span></a>',
       '</div></div>',
     ].join('');
     const style = document.createElement('style');
-    style.textContent = '#pkt-panel{position:fixed;bottom:12px;left:12px;z-index:99999;font-family:"Press Start 2P",monospace,sans-serif;font-size:9px}#pkt-toggle{width:36px;height:36px;background:#1a0e2e;border:2px solid #c050ff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 8px #c050ff44;transition:transform .2s;user-select:none}#pkt-toggle:hover{transform:scale(1.1)}#pkt-body{position:absolute;bottom:44px;left:0;background:#100820;border:2px solid #c050ff;border-radius:8px;padding:12px 14px;min-width:240px;max-width:280px;max-height:80vh;overflow-y:auto;box-shadow:0 0 16px #c050ff33;color:#e0b0ff}.pkt-header{font-size:7px;letter-spacing:1px;color:#c050ff;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #c050ff33;text-align:center}.pkt-tabs{display:flex;gap:4px;margin-bottom:10px;border-bottom:1px solid #c050ff33;padding-bottom:6px}.pkt-tab{flex:1;background:#1e103a;border:1px solid #9060cc;color:#9060cc;font-family:inherit;padding:6px 2px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center}.pkt-tab svg{display:block}.pkt-tab:hover{background:#2e1a50}.pkt-tab.active{background:#c050ff22;border-color:#c050ff;color:#e0b0ff}.pkt-tab-panel{display:none}.pkt-tab-panel.active{display:block}.pkt-tab-head{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #c050ff22}.pkt-tab-title{font-size:8px;color:#c050ff;margin-bottom:4px}.pkt-tab-desc{font-size:6px;color:#7050aa;line-height:1.8}.pkt-section{margin-bottom:8px}.pkt-label{font-size:7px;color:#9060cc;margin-bottom:4px}.pkt-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;color:#c8a0ff;font-size:7px}.pkt-hint{font-size:6px;color:#7050aa;line-height:1.7}.pkt-row{display:flex;gap:6px;align-items:center}.pkt-check-row{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:7px;color:#e0b0ff;margin-bottom:3px}.pkt-check-row.pkt-main{font-size:8px;color:#c050ff;margin-bottom:5px}.pkt-input{flex:1;min-width:0;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px}.pkt-select{width:100%;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px;cursor:pointer}.pkt-btn{background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 8px;border-radius:3px;cursor:pointer;white-space:nowrap}.pkt-btn:hover{background:#2e1a50}.pkt-btn.pkt-full{width:100%;display:block}.pkt-btn-red{border-color:#ff4444;color:#ff9999}.pkt-btn-red:hover{background:#3a0a0a}.pkt-status{font-size:7px;color:#a080d0;min-height:12px;word-break:break-all}.pkt-progress{font-size:9px;color:#c050ff;margin-top:3px;font-weight:bold}.pkt-slider{width:100%;accent-color:#c050ff;cursor:pointer}.pkt-stat-label{width:28px;font-size:6px;color:#9060cc}.pkt-stat-val{width:14px;text-align:right;font-size:7px}.pkt-footer{margin-top:6px;border-top:1px solid #c050ff33;padding-top:6px}.spc-ind-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;max-height:72px;overflow-y:auto}.spc-ind-tag{display:inline-flex;align-items:center;gap:3px;background:#1e103a;border:1px solid #9060cc;border-radius:3px;padding:2px 4px;font-size:6px;color:#c8a0ff}.spc-ind-rm{background:none;border:none;color:#ff8888;cursor:pointer;font-size:8px;padding:0 1px;line-height:1}.spc-ind-rm:hover{color:#ff4444}.pkt-kofi{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid #c050ff33;font-size:6px;color:#ff5e5b;text-decoration:none}.pkt-kofi:hover{color:#ff8a88}.pkt-kofi svg{flex-shrink:0}';
+    style.textContent = '#pkt-panel{position:fixed;bottom:12px;left:12px;z-index:99999;font-family:"Press Start 2P",monospace,sans-serif;font-size:9px}#pkt-toggle{width:36px;height:36px;background:#1a0e2e;border:2px solid #c050ff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 8px #c050ff44;transition:transform .2s;user-select:none}#pkt-toggle:hover{transform:scale(1.1)}#pkt-body{position:absolute;bottom:44px;left:0;background:#100820;border:2px solid #c050ff;border-radius:8px;padding:12px 14px;min-width:240px;max-width:280px;max-height:80vh;overflow-y:auto;box-shadow:0 0 16px #c050ff33;color:#e0b0ff}.pkt-header{font-size:7px;letter-spacing:1px;color:#c050ff;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #c050ff33;text-align:center}.pkt-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;border-bottom:1px solid #c050ff33;padding-bottom:6px}.pkt-tab{flex:1 1 28%;min-width:36px;background:#1e103a;border:1px solid #9060cc;color:#9060cc;font-family:inherit;padding:6px 2px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center}.pkt-tab svg{display:block}.pkt-tab:hover{background:#2e1a50}.pkt-tab.active{background:#c050ff22;border-color:#c050ff;color:#e0b0ff}.pkt-tab-panel{display:none}.pkt-tab-panel.active{display:block}.pkt-tab-head{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #c050ff22}.pkt-tab-title{font-size:8px;color:#c050ff;margin-bottom:4px}.pkt-tab-desc{font-size:6px;color:#7050aa;line-height:1.8}.pkt-section{margin-bottom:8px}.pkt-label{font-size:7px;color:#9060cc;margin-bottom:4px}.pkt-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;color:#c8a0ff;font-size:7px}.pkt-hint{font-size:6px;color:#7050aa;line-height:1.7}.pkt-row{display:flex;gap:6px;align-items:center}.pkt-check-row{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:7px;color:#e0b0ff;margin-bottom:3px}.pkt-check-row.pkt-main{font-size:8px;color:#c050ff;margin-bottom:5px}.pkt-input{flex:1;min-width:0;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px}.pkt-select{width:100%;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px;cursor:pointer}.pkt-btn{background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 8px;border-radius:3px;cursor:pointer;white-space:nowrap}.pkt-btn:hover{background:#2e1a50}.pkt-btn.pkt-full{width:100%;display:block}.pkt-btn-red{border-color:#ff4444;color:#ff9999}.pkt-btn-red:hover{background:#3a0a0a}.pkt-status{font-size:7px;color:#a080d0;min-height:12px;word-break:break-all}.pkt-progress{font-size:9px;color:#c050ff;margin-top:3px;font-weight:bold}.pkt-slider{width:100%;accent-color:#c050ff;cursor:pointer}.pkt-stat-label{width:28px;font-size:6px;color:#9060cc}.pkt-stat-val{width:14px;text-align:right;font-size:7px}.pkt-footer{margin-top:6px;border-top:1px solid #c050ff33;padding-top:6px}.spc-ind-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;max-height:72px;overflow-y:auto}.spc-ind-tag{display:inline-flex;align-items:center;gap:3px;background:#1e103a;border:1px solid #9060cc;border-radius:3px;padding:2px 4px;font-size:6px;color:#c8a0ff}.spc-ind-rm{background:none;border:none;color:#ff8888;cursor:pointer;font-size:8px;padding:0 1px;line-height:1}.spc-ind-rm:hover{color:#ff4444}.pkt-item-list-held{max-height:110px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-list-passive{max-height:150px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-row{display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid #1a1030}.pkt-item-row:last-child{border-bottom:none}.pkt-item-icon{font-size:10px;line-height:1.4;flex-shrink:0}.pkt-item-info{flex:1;min-width:0}.pkt-item-name{font-size:6px;color:#c8a0ff;line-height:1.6}.pkt-item-desc{font-size:5px;color:#7050aa;line-height:1.7;margin-top:1px}.pkt-item-tag{font-size:5px;color:#c050ff}.pkt-kofi{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid #c050ff33;font-size:6px;color:#ff5e5b;text-decoration:none}.pkt-kofi:hover{color:#ff8a88}.pkt-kofi svg{flex-shrink:0}';
     document.head.appendChild(style);
     document.body.appendChild(panel);
     const bodyEl = document.getElementById('pkt-body');
@@ -918,6 +1095,58 @@
       bfStatusEl.textContent = 'Tutto maxato per #' + _bfCurrentId;
       _refreshSoon();
     });
+    const svStatusEl = document.getElementById('sv-status');
+    document.getElementById('sv-export').addEventListener('click', () => {
+      try {
+        const dump = _collectLocalStorage();
+        const n = Object.keys(dump).length;
+        const json = JSON.stringify(dump, null, 2);
+        const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'pokelike-save-' + Date.now() + '.json';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 2000);
+        svStatusEl.textContent = 'Esportate ' + n + ' chiavi (' + _humanSize(json) + ')';
+      } catch (e) {
+        svStatusEl.textContent = 'Export fallito: ' + e.message;
+      }
+    });
+    document.getElementById('sv-copy').addEventListener('click', async () => {
+      const dump = _collectLocalStorage();
+      const n = Object.keys(dump).length;
+      const json = JSON.stringify(dump, null, 2);
+      try {
+        await navigator.clipboard.writeText(json);
+        svStatusEl.textContent = 'Copiate ' + n + ' chiavi (' + _humanSize(json) + ')';
+      } catch {
+        svStatusEl.textContent = 'Clipboard non disponibile - usa Esporta file';
+      }
+    });
+    document.getElementById('sv-import').addEventListener('click', () => {
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = '.json';
+      inp.onchange = e => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const r = new FileReader();
+        r.onload = ev => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, v));
+            svStatusEl.textContent = 'Importate ' + Object.keys(data).length + ' chiavi - ricarica la pagina';
+            _refreshSoon(3000);
+          } catch (err) {
+            svStatusEl.textContent = 'Import fallito: ' + err.message;
+          }
+        };
+        r.readAsText(file);
+      };
+      inp.click();
+    });
   }
 
   function log(msg, color) {
@@ -927,7 +1156,7 @@
 
   function init() {
     try {
-    log('PokeLike Toolkit v6.0.1 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.1.1 avviato', '#2ecc71');
     watchMaintenanceBypass();
     injectInstantScreenCSS();
     patchGameTransitions();
