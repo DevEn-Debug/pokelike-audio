@@ -147,13 +147,13 @@
   <h1>🎮 PokeLike Toolkit</h1>
   <p class="sub">
     Tutto-in-uno per <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a>
-    &nbsp;·&nbsp; v6.0
+    &nbsp;·&nbsp; v6.2.0
   </p>
 
   <div class="box">
     <h2>✨ Cosa include</h2>
     <p style="font-size:7px;line-height:2;margin:0 0 12px;color:#a090c0;">
-      Un unico widget in basso a sinistra con 4 tab:
+      Un unico widget in basso a sinistra con 6 tab:
     </p>
     <div class="feature-grid">
       <div class="feature-card">
@@ -174,10 +174,48 @@
       <div class="feature-card">
         <div class="icon">⚡</div>
         <h3>EV / Buff</h3>
-        <p>BuffFaker: modifica gli EV/stat buff per singolo Pokémon.</p>
+        <p>BuffFaker: modifica gli EV/stat buff per singolo Pokémon (salvati in poke_stat_buffs).</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🎒</div>
+        <h3>Item</h3>
+        <p>Catalogo di riferimento per item tenuti e passivi di mappa.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">💾</div>
+        <h3>Save</h3>
+        <p>Backup completo del localStorage: esporta, copia o importa il save.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🎁</div>
+        <h3>Daily Reward</h3>
+        <p>Una volta al giorno, al primo avvio con lo script attivo: reward casuale tra Pokédollars o uova Shiny/Leggendarie.</p>
       </div>
     </div>
     <p class="widget-hint">Clicca l'icona in basso a sinistra su pokelike.xyz per aprire il pannello.</p>
+  </div>
+
+  <div class="box">
+    <h2>💵 Pokédollars e Poké Mart (v2.0)</h2>
+    <p style="font-size:7px;line-height:2;margin:0 0 10px;color:#a090c0;">
+      Con l'aggiornamento v2.0 di <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> è stata introdotta la valuta <strong style="color:#c050ff;">Pokédollars</strong>, spendibile nel <strong>Poké Mart</strong> (pulsante nel menu principale).
+    </p>
+    <div class="step">
+      <div class="step-num">$</div>
+      <div class="step-body"><strong>Dove si salvano</strong> — localStorage: <code style="color:#4af0a0;">poke_pokedollars</code> (saldo) e <code style="color:#4af0a0;">poke_pokedollars_spent</code> (totale speso).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">$</div>
+      <div class="step-body"><strong>Cosa si compra</strong> — Uovo Shiny (2.000), Uovo Leggendario (10.000), vitamine EV a 200 ciascuna (HP Up, Protein, Iron, Zinc, Carbos).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">$</div>
+      <div class="step-body"><strong>Come si guadagnano in gioco</strong> — Completando Story, Battle Tower, Challenges; rimborsi se l'uovo dà un Pokémon già nel dex.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">🎁</div>
+      <div class="step-body"><strong>Daily Reward del Toolkit</strong> — Una volta al giorno: 500 / 1.000 / 2.000 / 3.000 Pokédollars, oppure uovo Shiny o Leggendario (probabilità uguali). Anteprima nel modal, poi consegna con grafica di gioco.</div>
+    </div>
   </div>
 
   <div class="box">
@@ -225,7 +263,7 @@
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-body"><strong>Script vecchio</strong> - in Tampermonkey apri lo script e clicca Controlla aggiornamenti (v6.0.1).</div>
+      <div class="step-body"><strong>Script vecchio</strong> - in Tampermonkey apri lo script e clicca Controlla aggiornamenti (v6.2.0).</div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
@@ -245,7 +283,7 @@
     <p class="kofi-note">Se ti piace il progetto, offrimi un caffè</p>
   </div>
 
-  <p class="footer">DevEn-Debug · GitHub Pages · PokeLike Toolkit v6.0</p>
+  <p class="footer">DevEn-Debug · GitHub Pages · PokeLike Toolkit v6.2.0</p>
 
 </body>
 </html>
