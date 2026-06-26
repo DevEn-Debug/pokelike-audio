@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         PokeLike Toolkit v6.0
 // @namespace    http://tampermonkey.net/
-// @version      6.1.1
+// @version      6.2.0
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -385,6 +385,188 @@
     if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
     return (b / 1024 / 1024).toFixed(2) + ' MB';
   }
+
+  // ============================================================
+  // DAILY REWARD — una riscossione al giorno (localStorage)
+  // ============================================================
+  const DAILY_REWARD_KEY = 'pkt_daily_reward_date';
+  const DAILY_REWARDS = [
+    { type: 'dollars', amount: 500, label: '500 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 1000, label: '1.000 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 2000, label: '2.000 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 3000, label: '3.000 Pokédollars', icon: '💵' },
+    { type: 'egg', eggType: 'shiny', label: 'Uovo Shiny', icon: '🥚' },
+    { type: 'egg', eggType: 'legendary', label: 'Uovo Leggendario', icon: '⭐' },
+  ];
+
+  function _todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function _dailyRewardClaimedToday() {
+    return localStorage.getItem(DAILY_REWARD_KEY) === _todayKey();
+  }
+
+  function _markDailyRewardClaimed() {
+    localStorage.setItem(DAILY_REWARD_KEY, _todayKey());
+  }
+
+  function _pickDailyReward() {
+    return DAILY_REWARDS[Math.floor(Math.random() * DAILY_REWARDS.length)];
+  }
+
+  async function _applyDailyReward(reward) {
+    if (reward.type === 'dollars') {
+      if (typeof window.addPokedollars !== 'function') throw new Error('addPokedollars non disponibile');
+      window.addPokedollars(reward.amount);
+      if (typeof window.refreshShopBalance === 'function') window.refreshShopBalance();
+      return;
+    }
+    if (reward.type === 'egg') {
+      if (typeof window.hatchEgg !== 'function') throw new Error('hatchEgg non disponibile');
+      await window.hatchEgg(reward.eggType);
+      return;
+    }
+    throw new Error('Reward sconosciuta');
+  }
+
+  function _rewardPreviewText(reward) {
+    if (reward.type === 'dollars') return reward.label;
+    return reward.label;
+  }
+
+  function _closeDailyRewardModal() {
+    const overlay = document.getElementById('pkt-daily-overlay');
+    if (overlay) overlay.remove();
+  }
+
+  async function _deliverDailyReward(reward) {
+    try {
+      await _applyDailyReward(reward);
+      if (reward.type === 'dollars') _showDailyDeliveryToast('+' + reward.amount + ' Pokédollars!');
+      log('Daily reward: ' + reward.label, '#f1c40f');
+    } catch (err) {
+      log('Daily reward errore: ' + err.message, '#e74c3c');
+      _showDailyDeliveryToast('Errore consegna reward', true);
+      console.error('[POKE-TOOLKIT] Daily reward:', err);
+    }
+  }
+
+  function _showDailyDeliveryToast(msg, isError) {
+    if (document.getElementById('pkt-daily-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'pkt-daily-toast';
+    toast.className = 'pkt-daily-toast' + (isError ? ' pkt-daily-toast-err' : '');
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('pkt-daily-toast-show'));
+    if (!isError && typeof SFX !== 'undefined' && SFX.ITEM) SFX.ITEM();
+    setTimeout(() => {
+      toast.classList.remove('pkt-daily-toast-show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3200);
+  }
+
+  function _showDailyRewardModal() {
+    if (_dailyRewardClaimedToday() || document.getElementById('pkt-daily-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'pkt-daily-overlay';
+    overlay.innerHTML = [
+      '<div id="pkt-daily-reward" class="pkt-daily-modal" role="dialog" aria-labelledby="pkt-daily-title">',
+      '<div class="pkt-daily-badge">PokeLike Toolkit</div>',
+      '<h2 id="pkt-daily-title">Reward Giornaliera</h2>',
+      '<p class="pkt-daily-sub">Regalo gratuito dal nostro tool. Una volta al giorno.</p>',
+      '<div class="pkt-daily-icon" id="pkt-daily-icon">🎁</div>',
+      '<div id="pkt-daily-result" class="pkt-daily-result" hidden>',
+      '<div class="pkt-daily-preview-label">La tua reward</div>',
+      '<div class="pkt-daily-preview-name" id="pkt-daily-preview-name"></div>',
+      '<div class="pkt-daily-preview-hint" id="pkt-daily-preview-hint"></div>',
+      '</div>',
+      '<button type="button" id="pkt-daily-claim" class="pkt-daily-btn">Riscatta</button>',
+      '</div>',
+    ].join('');
+
+    if (!document.getElementById('pkt-daily-styles')) {
+      const style = document.createElement('style');
+      style.id = 'pkt-daily-styles';
+      style.textContent = [
+        '#pkt-daily-overlay{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;',
+        'background:rgba(8,4,18,.88);backdrop-filter:blur(3px);font-family:"Press Start 2P",monospace,sans-serif;animation:pktDailyFadeIn .3s ease}',
+        '@keyframes pktDailyFadeIn{from{opacity:0}to{opacity:1}}',
+        '@keyframes pktDailyPop{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}',
+        '@keyframes pktDailyBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}',
+        '.pkt-daily-modal{width:min(100%,300px);padding:14px 12px 12px;border-radius:8px;text-align:center;',
+        'color:#e0b0ff;background:#100820;border:2px solid #c050ff;box-shadow:0 0 20px #c050ff44;animation:pktDailyPop .35s ease}',
+        '.pkt-daily-badge{display:inline-block;margin-bottom:8px;padding:4px 8px;border-radius:4px;',
+        'font-size:6px;letter-spacing:.5px;color:#100820;background:#c050ff}',
+        '.pkt-daily-modal h2{margin:0 0 6px;font-size:8px;font-weight:400;color:#c050ff;line-height:1.8}',
+        '.pkt-daily-sub{margin:0 0 10px;font-size:6px;line-height:1.9;color:#7050aa}',
+        '.pkt-daily-icon{font-size:32px;line-height:1;margin:2px 0 10px;animation:pktDailyBounce 1.6s ease-in-out infinite}',
+        '.pkt-daily-result{margin:0 0 10px;padding:8px 6px;border-radius:4px;border:1px solid #c050ff33;background:#1a0e2e}',
+        '.pkt-daily-preview-label{font-size:6px;color:#9060cc;margin-bottom:6px}',
+        '.pkt-daily-preview-name{font-size:8px;color:#e0b0ff;line-height:1.8;margin-bottom:4px}',
+        '.pkt-daily-preview-hint{font-size:5px;color:#7050aa;line-height:1.8}',
+        '.pkt-daily-btn{display:block;width:100%;margin-top:2px;padding:8px 6px;border:1px solid #c050ff;border-radius:4px;cursor:pointer;',
+        'font-family:inherit;font-size:7px;color:#e0b0ff;background:#1e103a}',
+        '.pkt-daily-btn:hover:not(:disabled){background:#2e1a50}',
+        '.pkt-daily-btn:disabled{opacity:.5;cursor:default}',
+        '.pkt-daily-toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-12px);z-index:2147483001;',
+        'padding:10px 14px;border-radius:6px;border:2px solid #c050ff;background:#100820;color:#e0b0ff;',
+        'font-family:"Press Start 2P",monospace,sans-serif;font-size:7px;line-height:1.8;opacity:0;pointer-events:none;',
+        'box-shadow:0 0 16px #c050ff55;transition:opacity .25s ease,transform .25s ease}',
+        '.pkt-daily-toast-show{opacity:1;transform:translate(-50%,0)}',
+        '.pkt-daily-toast-err{border-color:#ff6666;color:#ffaaaa}',
+      ].join('');
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(overlay);
+
+    const claimBtn = document.getElementById('pkt-daily-claim');
+    const resultEl = document.getElementById('pkt-daily-result');
+    const iconEl = document.getElementById('pkt-daily-icon');
+    const previewNameEl = document.getElementById('pkt-daily-preview-name');
+    const previewHintEl = document.getElementById('pkt-daily-preview-hint');
+    let pendingReward = null;
+
+    claimBtn.addEventListener('click', () => {
+      if (claimBtn.disabled) return;
+
+      if (!pendingReward) {
+        pendingReward = _pickDailyReward();
+        iconEl.textContent = pendingReward.icon;
+        previewNameEl.textContent = _rewardPreviewText(pendingReward);
+        previewHintEl.textContent = pendingReward.type === 'egg'
+          ? 'Chiudi per schiudere l\'uovo con la grafica di gioco.'
+          : 'Chiudi per accreditare i Pokédollars.';
+        resultEl.hidden = false;
+        claimBtn.textContent = 'Ricevi!';
+        return;
+      }
+
+      const reward = pendingReward;
+      claimBtn.disabled = true;
+      claimBtn.textContent = '...';
+      _markDailyRewardClaimed();
+      _closeDailyRewardModal();
+      setTimeout(() => { _deliverDailyReward(reward); }, 120);
+    });
+  }
+
+  function initDailyReward() {
+    if (_dailyRewardClaimedToday()) return;
+    let attempts = 0;
+    const wait = setInterval(() => {
+      attempts++;
+      if (typeof window.addPokedollars === 'function' && typeof window.hatchEgg === 'function') {
+        clearInterval(wait);
+        setTimeout(_showDailyRewardModal, 1000);
+      } else if (attempts > 80) clearInterval(wait);
+    }, 500);
+  }
+
   function _bfGetStore() { try { return JSON.parse(localStorage.getItem('poke_stat_buffs') || '{}'); } catch { return {}; } }
   function _bfSaveStore(store) { try { localStorage.setItem('poke_stat_buffs', JSON.stringify(store)); } catch {} }
   function _bfGetRoot(id) { return typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(id) : id; }
@@ -908,7 +1090,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.1.1</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.2.0</div>',
       '<div class="pkt-tabs">',
       '<button class="pkt-tab active" data-tab="audio" title="Audio">' + SVG.audio + '</button>',
       '<button class="pkt-tab" data-tab="dex" title="Pokedex">' + SVG.dex + '</button>',
@@ -1156,7 +1338,8 @@
 
   function init() {
     try {
-    log('PokeLike Toolkit v6.1.1 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.2.0 avviato', '#2ecc71');
+    initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
     patchGameTransitions();
