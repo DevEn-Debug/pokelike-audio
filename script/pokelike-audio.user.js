@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         PokeLike Toolkit v6.0
 // @namespace    http://tampermonkey.net/
-// @version      6.2.0
+// @version      6.2.3
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -120,7 +120,7 @@
     'Gen 7  (722-809)': [722, 809], 'Gen 8  (810-905)': [810, 905],
     'Gen 9  (906-1025)': [906, 1025],
   };
-  const TOOLS = { dfShiny: false, spcEnabled: false, spcShiny: false, spcIndividuals: [] };
+  const TOOLS = { dfShiny: false, spcEnabled: false, spcShiny: false, spcIndividuals: [], spcInjection: null };
   function loadTools() { try { Object.assign(TOOLS, JSON.parse(localStorage.getItem(TOOLS_STORAGE_KEY) || '{}')); } catch {} }
   function saveTools() { try { localStorage.setItem(TOOLS_STORAGE_KEY, JSON.stringify(TOOLS)); } catch {} }
   loadTools();
@@ -182,12 +182,14 @@
     const n = parseInt(id, 10);
     if (!n || n < 1 || n > 1025) return { ok: false, msg: 'ID non valido (1-1025)' };
     TOOLS.spcIndividuals = [n];
+    TOOLS.spcEnabled = true;
     saveTools();
     return { ok: true, id: n };
   }
   function spcClearIndividual() {
     TOOLS.spcIndividuals = [];
     saveTools();
+    _spcSyncToStorage();
   }
   async function spcAddByName(name) {
     const q = (name || '').trim().toLowerCase().replace(/\s+/g, '-');
@@ -216,14 +218,193 @@
       return { ok: false, msg: '"' + q + '" non trovato' };
     }
   }
+  function _spcIsLegendary(speciesId) {
+    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+    if (typeof window.LEGENDARY_ID_SET !== 'undefined') return window.LEGENDARY_ID_SET.has(root);
+    if (Array.isArray(window.LEGENDARY_IDS)) return window.LEGENDARY_IDS.includes(root) || window.LEGENDARY_IDS.includes(speciesId);
+    return false;
+  }
+
+  function _spcReadIndex() {
+    try {
+      const idx = JSON.parse(localStorage.getItem('poke_hof_index') || '{}');
+      if (!Array.isArray(idx.evoLineRoots)) idx.evoLineRoots = [];
+      if (!Array.isArray(idx.shinySpecies)) idx.shinySpecies = [];
+      if (!Array.isArray(idx.eggLegendaries)) idx.eggLegendaries = [];
+      if (!Array.isArray(idx.eggLegendaryShinies)) idx.eggLegendaryShinies = [];
+      if (!Array.isArray(idx.starterRuns)) idx.starterRuns = [];
+      return idx;
+    } catch {
+      return { evoLineRoots: [], shinySpecies: [], eggLegendaries: [], eggLegendaryShinies: [], starterRuns: [] };
+    }
+  }
+
+  function _spcRemoveInjection(idx, inj) {
+    if (!inj) return idx;
+    const drop = (arr, val) => (arr || []).filter(x => x !== val);
+    if (inj.root != null) idx.evoLineRoots = drop(idx.evoLineRoots, inj.root);
+    if (inj.speciesId != null) idx.shinySpecies = drop(idx.shinySpecies, inj.speciesId);
+    if (inj.legendary && inj.root != null) {
+      idx.eggLegendaries = drop(idx.eggLegendaries, inj.root);
+      idx.eggLegendaryShinies = drop(idx.eggLegendaryShinies, inj.root);
+    }
+    return idx;
+  }
+
+  function _spcAddUnique(arr, val) {
+    if (!arr.includes(val)) arr.push(val);
+    return arr;
+  }
+
+  function _spcSyncToStorage() {
+    let idx = _spcReadIndex();
+    idx = _spcRemoveInjection(idx, TOOLS.spcInjection);
+    TOOLS.spcInjection = null;
+
+    const ids = spcBuildIds();
+    if (TOOLS.spcEnabled && ids.length) {
+      const speciesId = ids[0];
+      const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+      const legendary = _spcIsLegendary(speciesId);
+      _spcAddUnique(idx.evoLineRoots, root);
+      if (TOOLS.spcShiny) _spcAddUnique(idx.shinySpecies, speciesId);
+      if (legendary) {
+        _spcAddUnique(idx.eggLegendaries, root);
+        if (TOOLS.spcShiny) _spcAddUnique(idx.eggLegendaryShinies, root);
+      }
+      TOOLS.spcInjection = { root, speciesId, legendary, shiny: !!TOOLS.spcShiny };
+    }
+
+    saveTools();
+    try {
+      localStorage.setItem('poke_hof_index', JSON.stringify(idx));
+      if (typeof window.syncToCloud === 'function') window.syncToCloud();
+    } catch (err) {
+      console.error('[POKE-TOOLKIT] StarterPC storage:', err);
+    }
+  }
+
   function _spcFakeEntry() {
     const ids = spcBuildIds();
     if (ids.length === 0) return null;
-    return {
-      _starterpc_fake: true, savedAt: 0, runNumber: 0, hardMode: false,
-      endless: true, stageNumber: 1, starterSpeciesId: null, date: '',
-      team: ids.map(id => ({ speciesId: id, isShiny: TOOLS.spcShiny, level: 5, name: '', types: [], spriteUrl: '' })),
+    const speciesId = ids[0];
+    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+    const legendary = _spcIsLegendary(speciesId);
+    const member = { speciesId, level: 5 };
+    if (TOOLS.spcShiny) member.isShiny = 1;
+    const entry = {
+      _starterpc_fake: true,
+      savedAt: Date.now(),
+      runNumber: 0,
+      hardMode: false,
+      endless: true,
+      stageNumber: 1,
+      starterSpeciesId: speciesId,
+      date: '',
+      team: [member],
     };
+    if (legendary) entry.source = 'egg';
+    return entry;
+  }
+
+  function _spcPatchHofIndex(real) {
+    const ids = spcBuildIds();
+    if (!ids.length) return real;
+    const speciesId = ids[0];
+    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+    const legendary = _spcIsLegendary(speciesId);
+    const idx = { ...real };
+    const roots = new Set(idx.evoLineRoots || []);
+    roots.add(root);
+    idx.evoLineRoots = [...roots];
+    if (TOOLS.spcShiny) {
+      const shinies = new Set(idx.shinySpecies || []);
+      shinies.add(speciesId);
+      idx.shinySpecies = [...shinies];
+    }
+    if (legendary) {
+      const eggs = new Set(idx.eggLegendaries || []);
+      eggs.add(root);
+      idx.eggLegendaries = [...eggs];
+      if (TOOLS.spcShiny) {
+        const eggShiny = new Set(idx.eggLegendaryShinies || []);
+        eggShiny.add(root);
+        idx.eggLegendaryShinies = [...eggShiny];
+      }
+    }
+    return idx;
+  }
+
+  let _spcPatched = false;
+  let _spcOrigGetHof = null;
+  let _spcOrigGetHofIndex = null;
+  let _spcOrigOpenHof = null;
+  let _spcOrigFetchPokemon = null;
+
+  function _spcResolveFetchId(requestedId) {
+    if (!TOOLS.spcEnabled) return requestedId;
+    const ids = spcBuildIds();
+    if (!ids.length) return requestedId;
+    const speciesId = ids[0];
+    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+    const req = Number(requestedId);
+    if (req === root || req === speciesId) return speciesId;
+    return requestedId;
+  }
+
+  function applySpcPatches() {
+    if (typeof window.getHallOfFame !== 'function') return false;
+    if (_spcPatched) return true;
+
+    _spcOrigGetHof = window.getHallOfFame;
+    _spcOrigGetHofIndex = typeof window.getHofIndex === 'function' ? window.getHofIndex : null;
+    _spcOrigOpenHof = window.openHallOfFameModal;
+    if (typeof window.fetchPokemonById === 'function') {
+      _spcOrigFetchPokemon = window.fetchPokemonById;
+      window.fetchPokemonById = async function (id) {
+        return _spcOrigFetchPokemon(_spcResolveFetchId(id));
+      };
+    }
+
+    function patchedGetHof() {
+      const real = _spcOrigGetHof();
+      if (!TOOLS.spcEnabled) return real;
+      const fake = _spcFakeEntry();
+      return fake ? [...real, fake] : real;
+    }
+
+    function patchedGetHofIndex() {
+      const real = _spcOrigGetHofIndex ? _spcOrigGetHofIndex() : {};
+      if (!TOOLS.spcEnabled) return real;
+      return _spcPatchHofIndex(real);
+    }
+
+    window.getHallOfFame = patchedGetHof;
+    if (_spcOrigGetHofIndex) window.getHofIndex = patchedGetHofIndex;
+    window.openHallOfFameModal = function () {
+      window.getHallOfFame = _spcOrigGetHof;
+      if (_spcOrigGetHofIndex) window.getHofIndex = _spcOrigGetHofIndex;
+      try {
+        if (typeof _spcOrigOpenHof === 'function') _spcOrigOpenHof();
+      } finally {
+        window.getHallOfFame = patchedGetHof;
+        if (_spcOrigGetHofIndex) window.getHofIndex = patchedGetHofIndex;
+      }
+    };
+
+    _spcPatched = true;
+    return true;
+  }
+
+  function ensureSpcPatches() {
+    const sync = () => { if (TOOLS.spcEnabled && spcBuildIds().length) _spcSyncToStorage(); };
+    if (applySpcPatches()) { sync(); return; }
+    let attempts = 0;
+    const wait = setInterval(() => {
+      attempts++;
+      if (applySpcPatches()) { sync(); clearInterval(wait); }
+      else if (attempts > 120) clearInterval(wait);
+    }, 500);
   }
   const BF_STATS = ['hp', 'atk', 'def', 'special', 'spdef', 'speed'];
   const BF_LABELS = { hp: 'HP', atk: 'Atk', def: 'Def', special: 'SpA', spdef: 'SpD', speed: 'Spe' };
@@ -596,24 +777,6 @@
   function _refreshSoon(ms) {
     if (ms === undefined) ms = 2500;
     setTimeout(() => location.reload(), ms);
-  }
-  function applySpcPatches() {
-    if (typeof window.getHallOfFame !== 'function') return false;
-    const _origGetHof = window.getHallOfFame;
-    const _origOpenHof = window.openHallOfFameModal;
-    function patchedGetHof() {
-      const real = _origGetHof();
-      if (!TOOLS.spcEnabled) return real;
-      const fake = _spcFakeEntry();
-      return fake ? [...real, fake] : real;
-    }
-    window.getHallOfFame = patchedGetHof;
-    window.openHallOfFameModal = function () {
-      window.getHallOfFame = _origGetHof;
-      if (typeof _origOpenHof === 'function') _origOpenHof();
-      window.getHallOfFame = patchedGetHof;
-    };
-    return true;
   }
   function bypassMaintenance() { document.documentElement.classList.remove('poke-maint-on'); }
   function watchMaintenanceBypass() {
@@ -1090,7 +1253,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.2.0</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.2.3</div>',
       '<div class="pkt-tabs">',
       '<button class="pkt-tab active" data-tab="audio" title="Audio">' + SVG.audio + '</button>',
       '<button class="pkt-tab" data-tab="dex" title="Pokedex">' + SVG.dex + '</button>',
@@ -1114,7 +1277,7 @@
       '<div class="pkt-section"><label class="pkt-check-row"><input type="checkbox" id="df-shiny-chk" ' + (TOOLS.dfShiny ? 'checked' : '') + '><span>Aggiungi anche versione Shiny</span></label></div>',
       '<div class="pkt-section"><div id="df-status" class="pkt-status">-</div></div></div>',
       '<div class="pkt-tab-panel" data-panel="starter">',
-      '<div class="pkt-tab-head"><div class="pkt-tab-title">StarterPC</div><div class="pkt-tab-desc">Aggiungi Pokemon al PC della Battle Tower come starter.</div></div>',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">StarterPC</div><div class="pkt-tab-desc">Inserisci la forma esatta (es. Butterfree, non Caterpie). Leggendari: supporto limitato.</div></div>',
       '<div class="pkt-section"><label class="pkt-check-row pkt-main"><input type="checkbox" id="spc-enabled" ' + (TOOLS.spcEnabled ? 'checked' : '') + '><span>Abilita StarterPC</span></label></div>',
       '<div class="pkt-section"><label class="pkt-check-row"><input type="checkbox" id="spc-shiny-chk" ' + (TOOLS.spcShiny ? 'checked' : '') + '><span>Mostrali come Shiny</span></label></div>',
       '<div class="pkt-section"><div class="pkt-label">N. Pokedex o nome</div>',
@@ -1209,12 +1372,22 @@
       }
     }
     renderSpcCurrent();
-    document.getElementById('spc-enabled').addEventListener('change', e => { TOOLS.spcEnabled = e.target.checked; saveTools(); });
-    document.getElementById('spc-shiny-chk').addEventListener('change', e => { TOOLS.spcShiny = e.target.checked; saveTools(); });
+    document.getElementById('spc-enabled').addEventListener('change', e => {
+      TOOLS.spcEnabled = e.target.checked;
+      saveTools();
+      _spcSyncToStorage();
+      ensureSpcPatches();
+    });
+    document.getElementById('spc-shiny-chk').addEventListener('change', e => {
+      TOOLS.spcShiny = e.target.checked;
+      saveTools();
+      _spcSyncToStorage();
+    });
     spcClearBtn.addEventListener('click', () => {
       spcClearIndividual();
       renderSpcCurrent();
-      spcIndStatusEl.textContent = 'Pokemon rimosso';
+      spcIndStatusEl.textContent = 'Pokemon rimosso — ricarico...';
+      _refreshSoon(1500);
     });
     document.getElementById('spc-add').addEventListener('click', async () => {
       const input = document.getElementById('spc-input');
@@ -1223,11 +1396,14 @@
       if (!resolved.ok) { spcIndStatusEl.textContent = resolved.msg; return; }
       const res = spcSetIndividual(resolved.id);
       if (!res.ok) { spcIndStatusEl.textContent = res.msg; return; }
+      document.getElementById('spc-enabled').checked = true;
       const label = resolved.name || ('#' + resolved.id);
-      spcIndStatusEl.textContent = label + ' impostato - refresh...';
+      _spcSyncToStorage();
+      ensureSpcPatches();
+      spcIndStatusEl.textContent = label + ' aggiunto — ricarico...';
       input.value = '';
       await renderSpcCurrent();
-      _refreshSoon();
+      _refreshSoon(1500);
     });
     document.getElementById('spc-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); document.getElementById('spc-add').click(); }
@@ -1338,7 +1514,7 @@
 
   function init() {
     try {
-    log('PokeLike Toolkit v6.2.0 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.2.3 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
@@ -1346,15 +1522,7 @@
     watchGameBgm();
     stopBgm();
     createPanel();
-    let spcAttempts = 0;
-    const waitSpc = setInterval(() => {
-      spcAttempts++;
-      if (typeof window.getHallOfFame === 'function') {
-        clearInterval(waitSpc);
-        applySpcPatches();
-        log('StarterPC patch applicata', '#2ecc71');
-      } else if (spcAttempts > 40) clearInterval(waitSpc);
-    }, 500);
+    ensureSpcPatches();
     function watchScreens() {
       const screens = document.querySelectorAll('.screen');
       if (screens.length === 0) { setTimeout(watchScreens, 500); return; }
