@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
-// @name         PokeLike Toolkit v6.0
+// @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
-// @version      6.2.3
+// @version      6.3.2
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -9,6 +9,8 @@
 // @updateURL    https://deven-debug.github.io/pokelike-audio/script/pokelike-audio.user.js
 // @downloadURL  https://deven-debug.github.io/pokelike-audio/script/pokelike-audio.user.js
 // @connect      pokeapi.co
+// @connect      www.youtube.com
+// @connect      i.ytimg.com
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
@@ -36,6 +38,10 @@
 
 (function () {
   'use strict';
+
+  try {
+    console.log('%c[POKE-TOOLKIT] carico v6.3.2', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
+  } catch (_) {}
 
   // ============================================================
   // CONFIGURAZIONE URL MP3 (lascia '' per usare la sintesi)
@@ -1226,6 +1232,67 @@
   // PANNELLO UI UNIFICATO
   let panelVisible = false;
   let activeTab = 'audio';
+  const YT_PLAYLIST_ID = 'PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz';
+  const YT_PLAYLIST_URL = 'https://www.youtube.com/playlist?list=' + YT_PLAYLIST_ID;
+  const YT_PLAYLIST_FALLBACK = [
+    { videoId: '4gVLygCnzIE', title: 'COME VINCERE HOENN - Pokemon Roguelike Pokelike' },
+    { videoId: 'zlExsKT6vB4', title: 'DISTRUGGO la SUPER4 GHOST - Pokemon Roguelike Pokelike' },
+    { videoId: 'JHglZOwB1zY', title: 'NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike' },
+    { videoId: '_rr0dOVwr74', title: 'Ho ROTTO la CHALLENGE - Pokemon Roguelike Pokelike' },
+    { videoId: 'igStBz6WbbQ', title: 'COMBO DEVASTANTE - Pokemon Roguelike Pokelike' },
+    { videoId: 'IjrFJztMtCU', title: 'Questo GIOCO è una DROGA! 2.0 - Pokemon Roguelike Pokelike' },
+    { videoId: 'L2x_E3l3YNI', title: 'ORA cambia TUTTO! - v2.0 UPDATE | Pokemon Roguelike Pokelike' },
+    { videoId: 'oCm9UHNENIQ', title: 'NUOVI POKEMON?! | Pokemon Roguelike Pokelike' },
+    { videoId: '6USEm_JPlmQ', title: 'VINCO SENZA CENTRI POKEMON?! - Achievement | Pokemon Roguelike Pokelike' },
+    { videoId: 'l8hRCkgaolM', title: 'COME BATTERE UNIMA! - Torre Pokemon | Pokemon Roguelike Pokelike' },
+    { videoId: 'rioCqSn2cCo', title: 'DISTRUGGO CAMILLA! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike' },
+    { videoId: 'XU6hEfzWAHo', title: 'GIOCHIAMO IN NUZLOCKE! - Kanto & Johto | Pokemon Roguelike Pokelike' },
+    { videoId: 'FerauBIml9g', title: 'ARCEUS IMBATTIBILE! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike' },
+    { videoId: 'R-eRBg0FNRg', title: 'DISTRUGGO LA TORRE! - Il POKEMON Finale | Pokemon Roguelike Pokelike' },
+    { videoId: 'Ms7oX6DysPM', title: 'HO ROTTO IL GIOCO! - La COMBO Definitiva | Pokemon Roguelike Pokelike' },
+  ];
+  let _playlistInit = false;
+  let _playlistLive = false;
+
+  function _fetchText(url) {
+    return fetch(url).then(r => (r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status))));
+  }
+
+  function _parseYoutubePlaylistXml(text) {
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+    return Array.from(xml.querySelectorAll('entry')).map(entry => {
+      const idEl = entry.getElementsByTagNameNS('http://www.youtube.com/xml/schemas/2015', 'videoId')[0];
+      const videoId = idEl ? idEl.textContent : (entry.querySelector('link')?.getAttribute('href') || '').split('v=')[1]?.split('&')[0];
+      const title = (entry.querySelector('title')?.textContent || 'Video').replace(/&amp;/g, '&');
+      return { videoId, title };
+    }).filter(v => v.videoId);
+  }
+
+  function _renderPlaylistItems(container, items) {
+    container.innerHTML = items.map(v =>
+      '<a class="pkt-playlist-item" href="https://www.youtube.com/watch?v=' + v.videoId + '&list=' + YT_PLAYLIST_ID + '" target="_blank" rel="noopener" title="' + v.title.replace(/"/g, '&quot;') + '">' +
+      '<img src="https://i.ytimg.com/vi/' + v.videoId + '/mqdefault.jpg" alt="" loading="lazy">' +
+      '<span class="pkt-playlist-item-title">' + v.title + '</span></a>'
+    ).join('');
+  }
+
+  async function loadYoutubePlaylist(container) {
+    if (!container) return;
+    if (!_playlistInit) {
+      _renderPlaylistItems(container, YT_PLAYLIST_FALLBACK);
+      _playlistInit = true;
+    }
+    if (_playlistLive) return;
+    try {
+      const text = await _fetchText('https://www.youtube.com/feeds/videos.xml?playlist_id=' + YT_PLAYLIST_ID);
+      const items = _parseYoutubePlaylistXml(text);
+      if (!items.length) throw new Error('Playlist vuota');
+      _renderPlaylistItems(container, items);
+      _playlistLive = true;
+    } catch (err) {
+      console.warn('[POKE-TOOLKIT] Playlist live:', err);
+    }
+  }
 
   function createPanel() {
     if (!document.body) { setTimeout(createPanel, 300); return; }
@@ -1240,28 +1307,23 @@
     ).join('');
     const SVG = {
       toggle: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#c050ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>',
-      audio: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
-      dex: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
-      starter: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
-      ev: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-      items: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
-      save: '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
-      kofi: '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+      audio: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>',
+      dex: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+      starter: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+      ev: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+      items: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+      save: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+      playlist: '<svg viewBox="0 0 24 24" width="12" height="12" fill="none"><mask id="pkt-yt-mask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="2" y="4" width="20" height="16"><path d="M12 5C21 5 21 5 21 12C21 19 21 19 12 19C3 19 3 19 3 12C3 5 3 5 12 5Z" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 8.5L16 12L10 15.5V8.5Z" fill="black"/></mask><g mask="url(#pkt-yt-mask)"><path d="M0 0H24V24H0V0Z" fill="currentColor"/></g></svg>',
+      kofi: '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+      twitch: '<svg viewBox="0 0 24 24" width="10" height="10" fill="none"><path d="M11.6397 5.93H13.0697V10.21H11.6397M15.5697 5.93H16.9997V10.21H15.5697M6.99969 2L3.42969 5.57V18.43H7.70969V22L11.2897 18.43H14.1397L20.5697 12V2M19.1397 11.29L16.2897 14.14H13.4297L10.9297 16.64V14.14H7.70969V3.43H19.1397V11.29Z" fill="currentColor"/></svg>',
     };
     const panel = document.createElement('div');
     panel.id = 'pkt-panel';
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.2.3</div>',
-      '<div class="pkt-tabs">',
-      '<button class="pkt-tab active" data-tab="audio" title="Audio">' + SVG.audio + '</button>',
-      '<button class="pkt-tab" data-tab="dex" title="Pokedex">' + SVG.dex + '</button>',
-      '<button class="pkt-tab" data-tab="starter" title="Starter PC">' + SVG.starter + '</button>',
-      '<button class="pkt-tab" data-tab="ev" title="EV / Buff">' + SVG.ev + '</button>',
-      '<button class="pkt-tab" data-tab="items" title="Item">' + SVG.items + '</button>',
-      '<button class="pkt-tab" data-tab="save" title="Save">' + SVG.save + '</button>',
-      '</div><div class="pkt-tab-panels">',
+      '<div class="pkt-header">PokeLike Toolkit v6.3.2</div>',
+      '<div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
       '<div class="pkt-section"><div class="pkt-label-row">SFX<input type="checkbox" id="pau-sfx-toggle" ' + (SETTINGS.sfxEnabled ? 'checked' : '') + '></div>',
@@ -1308,12 +1370,30 @@
       '<button id="sv-copy" class="pkt-btn pkt-full" style="margin-top:4px">Copia negli appunti</button>',
       '<button id="sv-import" class="pkt-btn pkt-full" style="margin-top:4px">Importa da file</button></div>',
       '<div class="pkt-section"><div id="sv-status" class="pkt-status">-</div></div></div>',
+      '<div class="pkt-tab-panel" data-panel="playlist">',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">Playlist Pokémon</div>',
+      '<div class="pkt-tab-desc">Video Pokelike AlepreRun, clicca per aprire su YouTube.</div></div>',
+      '<div id="pkt-playlist-scroll" class="pkt-playlist-scroll"></div>',
+      '<a href="' + YT_PLAYLIST_URL + '" target="_blank" rel="noopener" class="pkt-btn pkt-full" style="margin-top:6px;display:block;text-align:center;text-decoration:none">Apri playlist</a>',
       '</div>',
-      '<a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" class="pkt-kofi" title="Supporta su Ko-fi">' + SVG.kofi + '<span>Supporta su Ko-fi</span></a>',
+      '</div>',
+      '<div class="pkt-tabs">',
+      '<button class="pkt-tab active" data-tab="audio" title="Audio">' + SVG.audio + '</button>',
+      '<button class="pkt-tab" data-tab="dex" title="Pokedex">' + SVG.dex + '</button>',
+      '<button class="pkt-tab" data-tab="starter" title="Starter PC">' + SVG.starter + '</button>',
+      '<button class="pkt-tab" data-tab="ev" title="EV / Buff">' + SVG.ev + '</button>',
+      '<button class="pkt-tab" data-tab="items" title="Item">' + SVG.items + '</button>',
+      '<button class="pkt-tab" data-tab="save" title="Save">' + SVG.save + '</button>',
+      '<button class="pkt-tab" data-tab="playlist" title="Playlist">' + SVG.playlist + '</button>',
+      '</div>',
+      '<div class="pkt-links">',
+      '<a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" class="pkt-link pkt-link-kofi" title="Ko-fi">' + SVG.kofi + '<span>Ko-fi</span></a>',
+      '<a href="https://www.twitch.tv/alepre98" target="_blank" rel="noopener" class="pkt-link pkt-link-twitch" title="Twitch — Alepre98">' + SVG.twitch + '<span>Twitch</span></a>',
+      '</div>',
       '</div></div>',
     ].join('');
     const style = document.createElement('style');
-    style.textContent = '#pkt-panel{position:fixed;bottom:12px;left:12px;z-index:99999;font-family:"Press Start 2P",monospace,sans-serif;font-size:9px}#pkt-toggle{width:36px;height:36px;background:#1a0e2e;border:2px solid #c050ff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 8px #c050ff44;transition:transform .2s;user-select:none}#pkt-toggle:hover{transform:scale(1.1)}#pkt-body{position:absolute;bottom:44px;left:0;background:#100820;border:2px solid #c050ff;border-radius:8px;padding:12px 14px;min-width:240px;max-width:280px;max-height:80vh;overflow-y:auto;box-shadow:0 0 16px #c050ff33;color:#e0b0ff}.pkt-header{font-size:7px;letter-spacing:1px;color:#c050ff;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #c050ff33;text-align:center}.pkt-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;border-bottom:1px solid #c050ff33;padding-bottom:6px}.pkt-tab{flex:1 1 28%;min-width:36px;background:#1e103a;border:1px solid #9060cc;color:#9060cc;font-family:inherit;padding:6px 2px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center}.pkt-tab svg{display:block}.pkt-tab:hover{background:#2e1a50}.pkt-tab.active{background:#c050ff22;border-color:#c050ff;color:#e0b0ff}.pkt-tab-panel{display:none}.pkt-tab-panel.active{display:block}.pkt-tab-head{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #c050ff22}.pkt-tab-title{font-size:8px;color:#c050ff;margin-bottom:4px}.pkt-tab-desc{font-size:6px;color:#7050aa;line-height:1.8}.pkt-section{margin-bottom:8px}.pkt-label{font-size:7px;color:#9060cc;margin-bottom:4px}.pkt-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;color:#c8a0ff;font-size:7px}.pkt-hint{font-size:6px;color:#7050aa;line-height:1.7}.pkt-row{display:flex;gap:6px;align-items:center}.pkt-check-row{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:7px;color:#e0b0ff;margin-bottom:3px}.pkt-check-row.pkt-main{font-size:8px;color:#c050ff;margin-bottom:5px}.pkt-input{flex:1;min-width:0;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px}.pkt-select{width:100%;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px;cursor:pointer}.pkt-btn{background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 8px;border-radius:3px;cursor:pointer;white-space:nowrap}.pkt-btn:hover{background:#2e1a50}.pkt-btn.pkt-full{width:100%;display:block}.pkt-btn-red{border-color:#ff4444;color:#ff9999}.pkt-btn-red:hover{background:#3a0a0a}.pkt-status{font-size:7px;color:#a080d0;min-height:12px;word-break:break-all}.pkt-progress{font-size:9px;color:#c050ff;margin-top:3px;font-weight:bold}.pkt-slider{width:100%;accent-color:#c050ff;cursor:pointer}.pkt-stat-label{width:28px;font-size:6px;color:#9060cc}.pkt-stat-val{width:14px;text-align:right;font-size:7px}.pkt-footer{margin-top:6px;border-top:1px solid #c050ff33;padding-top:6px}.spc-ind-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;max-height:72px;overflow-y:auto}.spc-ind-tag{display:inline-flex;align-items:center;gap:3px;background:#1e103a;border:1px solid #9060cc;border-radius:3px;padding:2px 4px;font-size:6px;color:#c8a0ff}.spc-ind-rm{background:none;border:none;color:#ff8888;cursor:pointer;font-size:8px;padding:0 1px;line-height:1}.spc-ind-rm:hover{color:#ff4444}.pkt-item-list-held{max-height:110px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-list-passive{max-height:150px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-row{display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid #1a1030}.pkt-item-row:last-child{border-bottom:none}.pkt-item-icon{font-size:10px;line-height:1.4;flex-shrink:0}.pkt-item-info{flex:1;min-width:0}.pkt-item-name{font-size:6px;color:#c8a0ff;line-height:1.6}.pkt-item-desc{font-size:5px;color:#7050aa;line-height:1.7;margin-top:1px}.pkt-item-tag{font-size:5px;color:#c050ff}.pkt-kofi{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid #c050ff33;font-size:6px;color:#ff5e5b;text-decoration:none}.pkt-kofi:hover{color:#ff8a88}.pkt-kofi svg{flex-shrink:0}';
+    style.textContent = '#pkt-panel{position:fixed;bottom:12px;left:12px;z-index:99999;font-family:"Press Start 2P",monospace,sans-serif;font-size:9px}#pkt-toggle{width:36px;height:36px;background:#1a0e2e;border:2px solid #c050ff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 8px #c050ff44;transition:transform .2s;user-select:none}#pkt-toggle:hover{transform:scale(1.1)}#pkt-body{position:absolute;bottom:44px;left:0;background:#100820;border:2px solid #c050ff;border-radius:8px;padding:12px 14px;min-width:260px;max-width:300px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 0 16px #c050ff33;color:#e0b0ff}.pkt-header{font-size:7px;letter-spacing:1px;color:#c050ff;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #c050ff33;text-align:center}.pkt-links{display:flex;gap:6px;margin-top:8px;padding-top:6px;border-top:1px solid #c050ff33;flex-shrink:0}.pkt-link{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:5px 6px;border-radius:4px;font-size:6px;text-decoration:none;font-family:inherit;transition:background .15s}.pkt-link-kofi{background:#1e103a;border:1px solid #ff5e5b44;color:#ff5e5b}.pkt-link-kofi:hover{background:#2a1428;color:#ff8a88}.pkt-link-twitch{background:#c050ff22;border:1px solid #c050ff;color:#e0b0ff}.pkt-link-twitch:hover{background:#c050ff44}.pkt-tab-panels{flex:1;overflow-y:auto;min-height:0;margin-bottom:0}.pkt-tabs{display:flex;flex-wrap:nowrap;gap:3px;border-top:1px solid #c050ff33;padding-top:6px;margin-top:8px;flex-shrink:0}.pkt-tab{flex:1 1 0;min-width:0;background:#1e103a;border:1px solid #9060cc;color:#9060cc;font-family:inherit;padding:5px 1px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center}.pkt-tab svg{display:block}.pkt-tab:hover{background:#2e1a50}.pkt-tab.active{background:#c050ff22;border-color:#c050ff;color:#e0b0ff}.pkt-tab-panel{display:none}.pkt-tab-panel.active{display:block}.pkt-tab-head{margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #c050ff22}.pkt-tab-title{font-size:8px;color:#c050ff;margin-bottom:4px}.pkt-tab-desc{font-size:6px;color:#7050aa;line-height:1.8}.pkt-section{margin-bottom:8px}.pkt-label{font-size:7px;color:#9060cc;margin-bottom:4px}.pkt-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;color:#c8a0ff;font-size:7px}.pkt-hint{font-size:6px;color:#7050aa;line-height:1.7}.pkt-row{display:flex;gap:6px;align-items:center}.pkt-check-row{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:7px;color:#e0b0ff;margin-bottom:3px}.pkt-check-row.pkt-main{font-size:8px;color:#c050ff;margin-bottom:5px}.pkt-input{flex:1;min-width:0;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px}.pkt-select{width:100%;background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 6px;border-radius:3px;cursor:pointer}.pkt-btn{background:#1e103a;border:1px solid #c050ff;color:#e0b0ff;font-family:inherit;font-size:7px;padding:4px 8px;border-radius:3px;cursor:pointer;white-space:nowrap}.pkt-btn:hover{background:#2e1a50}.pkt-btn.pkt-full{width:100%;display:block}.pkt-btn-red{border-color:#ff4444;color:#ff9999}.pkt-btn-red:hover{background:#3a0a0a}.pkt-status{font-size:7px;color:#a080d0;min-height:12px;word-break:break-all}.pkt-progress{font-size:9px;color:#c050ff;margin-top:3px;font-weight:bold}.pkt-slider{width:100%;accent-color:#c050ff;cursor:pointer}.pkt-stat-label{width:28px;font-size:6px;color:#9060cc}.pkt-stat-val{width:14px;text-align:right;font-size:7px}.pkt-footer{margin-top:6px;border-top:1px solid #c050ff33;padding-top:6px}.spc-ind-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;max-height:72px;overflow-y:auto}.spc-ind-tag{display:inline-flex;align-items:center;gap:3px;background:#1e103a;border:1px solid #9060cc;border-radius:3px;padding:2px 4px;font-size:6px;color:#c8a0ff}.spc-ind-rm{background:none;border:none;color:#ff8888;cursor:pointer;font-size:8px;padding:0 1px;line-height:1}.spc-ind-rm:hover{color:#ff4444}.pkt-item-list-held{max-height:110px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-list-passive{max-height:150px;overflow-y:auto;border:1px solid #c050ff22;border-radius:4px;padding:4px 6px}.pkt-item-row{display:flex;gap:6px;align-items:flex-start;padding:4px 0;border-bottom:1px solid #1a1030}.pkt-item-row:last-child{border-bottom:none}.pkt-item-icon{font-size:10px;line-height:1.4;flex-shrink:0}.pkt-item-info{flex:1;min-width:0}.pkt-item-name{font-size:6px;color:#c8a0ff;line-height:1.6}.pkt-item-desc{font-size:5px;color:#7050aa;line-height:1.7;margin-top:1px}.pkt-item-tag{font-size:5px;color:#c050ff}.pkt-playlist-scroll{display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:200px;padding:2px 0;scrollbar-width:thin;scrollbar-color:#c050ff44 transparent}.pkt-playlist-scroll::-webkit-scrollbar{width:4px}.pkt-playlist-scroll::-webkit-scrollbar-thumb{background:#c050ff55;border-radius:2px}.pkt-playlist-item{display:flex;gap:6px;align-items:center;text-decoration:none;color:inherit;padding:3px;border-radius:3px}.pkt-playlist-item:hover{background:#1e103a}.pkt-playlist-item img{flex-shrink:0;width:72px;height:41px;object-fit:cover;border:1px solid #c050ff44;border-radius:3px;background:#1e103a}.pkt-playlist-item:hover img{border-color:#c050ff}.pkt-playlist-item-title{flex:1;min-width:0;font-size:5px;color:#9060cc;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}';
     document.head.appendChild(style);
     document.body.appendChild(panel);
     const bodyEl = document.getElementById('pkt-body');
@@ -1326,6 +1406,7 @@
         activeTab = btn.dataset.tab;
         document.querySelectorAll('.pkt-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === activeTab));
         document.querySelectorAll('.pkt-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === activeTab));
+        if (activeTab === 'playlist') loadYoutubePlaylist(document.getElementById('pkt-playlist-scroll'));
       });
     });
     document.getElementById('pau-sfx-toggle').addEventListener('change', e => { SETTINGS.sfxEnabled = e.target.checked; saveSettings(); });
@@ -1514,14 +1595,14 @@
 
   function init() {
     try {
-    log('PokeLike Toolkit v6.2.3 avviato', '#2ecc71');
+    createPanel();
+    log('PokeLike Toolkit v6.3.2 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
     patchGameTransitions();
     watchGameBgm();
     stopBgm();
-    createPanel();
     ensureSpcPatches();
     function watchScreens() {
       const screens = document.querySelectorAll('.screen');
@@ -1544,10 +1625,17 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    setTimeout(init, 500);
+  function boot() {
+    try { init(); } catch (err) { console.error('[POKE-TOOLKIT] Errore boot:', err); }
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+  setTimeout(() => {
+    if (!document.getElementById('pkt-panel')) boot();
+  }, 2000);
 
 })();

@@ -13,46 +13,63 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px 60px;
+      padding: 32px 16px 48px;
       min-height: 100vh;
       margin: 0;
     }
-    h1 { color: #b090ff; font-size: 16px; margin-bottom: 6px; text-align: center; }
-    .sub { font-size: 8px; color: #8070aa; margin: 4px 0 20px; text-align: center; line-height: 2; }
+    h1 {
+      color: #b090ff;
+      font-size: 16px;
+      margin: 0 0 6px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    h1 svg { width: 16px; height: 16px; color: #c050ff; flex-shrink: 0; }
+    .sub { font-size: 8px; color: #8070aa; margin: 0 0 16px; text-align: center; line-height: 1.9; }
     .sub a { color: #9b6ef0; }
     .box {
       background: #1a0a2e;
       border: 2px solid #7a4af0;
       border-radius: 8px;
-      padding: 20px 24px;
-      margin: 16px 0;
-      max-width: 600px;
+      padding: 16px 18px;
+      margin: 10px 0;
+      max-width: 520px;
       width: 100%;
     }
-    .box h2 { color: #9b6ef0; font-size: 10px; margin: 0 0 14px; }
-    .feature-grid {
+    .box h2 {
+      color: #9b6ef0;
+      font-size: 10px;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .box h2 svg { width: 12px; height: 12px; color: #c050ff; flex-shrink: 0; }
+    .hint { font-size: 7px; color: #8070aa; line-height: 1.8; margin: 8px 0 0; }
+    .feat-list { display: flex; flex-direction: column; gap: 4px; }
+    .feat-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 4px;
+      grid-template-columns: 16px 68px 1fr;
+      gap: 7px;
+      align-items: center;
+      font-size: 8px;
+      line-height: 1.6;
+      padding: 3px 0;
+      border-bottom: 1px solid #c050ff14;
     }
-    @media (max-width: 480px) { .feature-grid { grid-template-columns: 1fr; } }
-    .feature-card {
-      background: #100820;
-      border: 1px solid #c050ff44;
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 7px;
-      line-height: 1.9;
-    }
-    .feature-card .icon { font-size: 16px; margin-bottom: 6px; }
-    .feature-card h3 { color: #c050ff; font-size: 8px; margin: 0 0 6px; }
-    .feature-card p { margin: 0; color: #a090c0; }
+    .feat-row:last-child { border-bottom: none; }
+    .feat-icon { display: flex; align-items: center; justify-content: center; color: #c050ff; }
+    .feat-icon svg { width: 13px; height: 13px; display: block; }
+    .feat-name { color: #c8a0ff; }
+    .feat-desc { color: #7060a0; }
     .step {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
       font-size: 8px;
       line-height: 1.8;
     }
@@ -61,21 +78,22 @@
       background: #7a4af0;
       color: #fff;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 8px;
       flex-shrink: 0;
     }
-    .step-body { flex: 1; }
-    .step-body a { color: #4af0a0; }
+    .step-body { flex: 1; color: #a090c0; }
+    .step-body a, .step-body strong { color: #4af0a0; }
+    .step-body code { color: #4af0a0; font-size: 7px; }
     .btn-install {
       display: block;
       width: 100%;
-      margin-top: 20px;
-      padding: 14px;
+      margin-top: 12px;
+      padding: 12px;
       background: #7a4af0;
       color: #fff;
       text-align: center;
@@ -85,21 +103,16 @@
       border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
-      letter-spacing: 1px;
-      box-shadow: 0 0 16px #7a4af066;
-      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 12px #7a4af055;
+      transition: background 0.2s;
     }
-    .btn-install:hover { background: #9b6ef0; transform: scale(1.02); }
-    .tm-links {
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
+    .btn-install:hover { background: #9b6ef0; }
+    .tm-links { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
     .tm-links a {
       flex: 1;
-      min-width: 120px;
-      padding: 8px 6px;
+      min-width: 90px;
+      padding: 6px;
       background: #2a1a4e;
       border: 1px solid #7a4af0;
       border-radius: 4px;
@@ -107,183 +120,107 @@
       text-align: center;
       font-size: 7px;
       text-decoration: none;
-      transition: background 0.2s;
     }
     .tm-links a:hover { background: #3a2a5e; }
-    .kofi-wrap {
-      margin-top: 24px;
-      text-align: center;
-    }
+    .kofi-wrap { margin-top: 16px; text-align: center; }
     .kofi-wrap a {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
+      gap: 6px;
+      padding: 8px 14px;
       background: #2a1a4e;
-      border: 2px solid #ff5e5b;
-      border-radius: 8px;
+      border: 1px solid #ff5e5b;
+      border-radius: 6px;
       color: #ff8a88;
       font-size: 8px;
       text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 0 12px #ff5e5b33;
     }
-    .kofi-wrap a:hover { background: #3a2a5e; transform: scale(1.02); }
-    .kofi-wrap a svg { flex-shrink: 0; }
-    .kofi-note { font-size: 6px; color: #4a3a6a; margin-top: 8px; }
-    .footer { margin-top: 16px; font-size: 7px; color: #4a3a6a; text-align: center; }
-    .widget-hint {
-      font-size: 7px;
-      color: #8070aa;
-      text-align: center;
-      margin: 8px 0 0;
-      line-height: 2;
-    }
+    .kofi-wrap a svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .footer { margin-top: 12px; font-size: 7px; color: #4a3a6a; text-align: center; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <h1>🎮 PokeLike Toolkit</h1>
-  <p class="sub">
-    Tutto-in-uno per <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a>
-    &nbsp;·&nbsp; v6.2.0
-  </p>
+  <h1>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    PokeLike Toolkit
+  </h1>
+  <p class="sub"><a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> · v6.3.2</p>
 
   <div class="box">
-    <h2>✨ Cosa include</h2>
-    <p style="font-size:7px;line-height:2;margin:0 0 12px;color:#a090c0;">
-      Un unico widget in basso a sinistra con 6 tab:
-    </p>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="icon">🔊</div>
-        <h3>Audio</h3>
-        <p>SFX personalizzati (MP3 o sintesi), volume musica di gioco, bypass manutenzione e transizioni istantanee su desktop.</p>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Cosa include
+    </h2>
+    <div class="feat-list">
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span>
+        <span class="feat-name">Audio</span><span class="feat-desc">SFX e volume musica</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">📖</div>
-        <h3>Pokédex</h3>
-        <p>DexFaker: aggiungi Pokemon al Pokedex per numero o nome, con opzione Shiny.</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="feat-name">Pokédex</span><span class="feat-desc">DexFaker + Shiny</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">🖥️</div>
-        <h3>Starter PC</h3>
-        <p>StarterPC: un solo Pokemon nel PC della Battle Tower (N. o nome).</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+        <span class="feat-name">Starter PC</span><span class="feat-desc">PC Battle Tower</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">⚡</div>
-        <h3>EV / Buff</h3>
-        <p>BuffFaker: modifica gli EV/stat buff per singolo Pokémon (salvati in poke_stat_buffs).</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <span class="feat-name">EV / Buff</span><span class="feat-desc">Stat buff</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">🎒</div>
-        <h3>Item</h3>
-        <p>Catalogo di riferimento per item tenuti e passivi di mappa.</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></span>
+        <span class="feat-name">Item</span><span class="feat-desc">Catalogo item</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">💾</div>
-        <h3>Save</h3>
-        <p>Backup completo del localStorage: esporta, copia o importa il save.</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+        <span class="feat-name">Save</span><span class="feat-desc">Backup save</span>
       </div>
-      <div class="feature-card">
-        <div class="icon">🎁</div>
-        <h3>Daily Reward</h3>
-        <p>Una volta al giorno, al primo avvio con lo script attivo: reward casuale tra Pokédollars o uova Shiny/Leggendarie.</p>
+      <div class="feat-row">
+        <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none"><mask id="yt-feat" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="2" y="4" width="20" height="16"><path d="M12 5C21 5 21 5 21 12C21 19 21 19 12 19C3 19 3 19 3 12C3 5 3 5 12 5Z" fill="white" stroke="white" stroke-width="2"/><path d="M10 8.5L16 12L10 15.5V8.5Z" fill="black"/></mask><g mask="url(#yt-feat)"><path d="M0 0H24V24H0V0Z" fill="currentColor"/></g></svg></span>
+        <span class="feat-name">Playlist</span><span class="feat-desc">Video YouTube</span>
       </div>
     </div>
-    <p class="widget-hint">Clicca l'icona in basso a sinistra su pokelike.xyz per aprire il pannello.</p>
+    <p class="hint">Daily reward</p>
   </div>
 
   <div class="box">
-    <h2>💵 Pokédollars e Poké Mart (v2.0)</h2>
-    <p style="font-size:7px;line-height:2;margin:0 0 10px;color:#a090c0;">
-      Con l'aggiornamento v2.0 di <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> è stata introdotta la valuta <strong style="color:#c050ff;">Pokédollars</strong>, spendibile nel <strong>Poké Mart</strong> (pulsante nel menu principale).
-    </p>
-    <div class="step">
-      <div class="step-num">$</div>
-      <div class="step-body"><strong>Dove si salvano</strong> — localStorage: <code style="color:#4af0a0;">poke_pokedollars</code> (saldo) e <code style="color:#4af0a0;">poke_pokedollars_spent</code> (totale speso).</div>
-    </div>
-    <div class="step">
-      <div class="step-num">$</div>
-      <div class="step-body"><strong>Cosa si compra</strong> — Uovo Shiny (2.000), Uovo Leggendario (10.000), vitamine EV a 200 ciascuna (HP Up, Protein, Iron, Zinc, Carbos).</div>
-    </div>
-    <div class="step">
-      <div class="step-num">$</div>
-      <div class="step-body"><strong>Come si guadagnano in gioco</strong> — Completando Story, Battle Tower, Challenges; rimborsi se l'uovo dà un Pokémon già nel dex.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">🎁</div>
-      <div class="step-body"><strong>Daily Reward del Toolkit</strong> — Una volta al giorno: 500 / 1.000 / 2.000 / 3.000 Pokédollars, oppure uovo Shiny o Leggendario (probabilità uguali). Anteprima nel modal, poi consegna con grafica di gioco.</div>
-    </div>
-  </div>
-
-  <div class="box">
-    <h2>📦 Passo 1 - Installa Tampermonkey</h2>
-    <p style="font-size:8px;line-height:2;margin:0 0 10px;">
-      Tampermonkey è un'estensione gratuita che permette di eseguire userscript nel browser.
-    </p>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Installazione
+    </h2>
+    <div class="step"><div class="step-num">1</div><div class="step-body">Installa Tampermonkey</div></div>
     <div class="tm-links">
-      <a href="https://www.tampermonkey.net/?browser=chrome" target="_blank" rel="noopener">🟡 Chrome</a>
-      <a href="https://www.tampermonkey.net/?browser=firefox" target="_blank" rel="noopener">🦊 Firefox</a>
-      <a href="https://www.tampermonkey.net/?browser=edge" target="_blank" rel="noopener">🔵 Edge</a>
-      <a href="https://www.tampermonkey.net/?browser=safari" target="_blank" rel="noopener">🍎 Safari</a>
+      <a href="https://www.tampermonkey.net/?browser=chrome" target="_blank" rel="noopener">Chrome</a>
+      <a href="https://www.tampermonkey.net/?browser=firefox" target="_blank" rel="noopener">Firefox</a>
+      <a href="https://www.tampermonkey.net/?browser=edge" target="_blank" rel="noopener">Edge</a>
+      <a href="https://www.tampermonkey.net/?browser=safari" target="_blank" rel="noopener">Safari</a>
     </div>
-  </div>
-
-  <div class="box">
-    <h2>📥 Passo 2 - Installa lo script</h2>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-body">Assicurati di aver installato Tampermonkey (Passo 1).</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-body">Clicca il bottone qui sotto - Tampermonkey aprirà la pagina di installazione.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-body">Clicca <strong style="color:#4af0a0;">Installa</strong> nella pagina che si apre.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-body">Vai su <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> - il widget apparirà in basso a sinistra.</div>
-    </div>
+    <div class="step" style="margin-top:10px"><div class="step-num">2</div><div class="step-body">Clicca installa, conferma in Tampermonkey</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body">Apri <a href="https://pokelike.xyz" target="_blank" rel="noopener">pokelike.xyz</a> — widget in basso a sinistra</div></div>
     <a href="script/pokelike-audio.user.js" class="btn-install">INSTALLA POKELIKE TOOLKIT</a>
   </div>
 
   <div class="box">
-    <h2>Problemi su Chrome?</h2>
-    <p style="font-size:7px;line-height:2;margin:0;color:#a090c0;">
-      Se lo script non parte per alcuni utenti, di solito e uno di questi casi:
-    </p>
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-body"><strong>Tampermonkey disattivato</strong> - clicca l'icona TM e verifica che sia ON su pokelike.xyz.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-body"><strong>Script vecchio</strong> - in Tampermonkey apri lo script e clicca Controlla aggiornamenti (v6.2.0).</div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-body"><strong>Widget nascosto</strong> - icona viola in basso a sinistra (non piu il vecchio simbolo audio).</div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-body"><strong>Debug</strong> - F12 &gt; Console, cerca <code style="color:#4af0a0;">[POKE-TOOLKIT]</code>. Se c'e un errore rosso, segnalalo.</div>
-    </div>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Compatibilità
+    </h2>
+    <div class="step"><div class="step-num">FF</div><div class="step-body"><strong>Firefox</strong> — funziona subito</div></div>
+    <div class="step"><div class="step-num">CR</div><div class="step-body"><strong>Chrome / Edge</strong> — se non parte: <a href="chrome://extensions">chrome://extensions</a> → Tampermonkey → Dettagli → <strong>Consenti script utente</strong> → Ricaricare la pagina</div></div>
+    <p class="hint">Debug: console <code>[POKE-TOOLKIT]</code> · aggiorna a v6.3.2</p>
   </div>
 
   <div class="kofi-wrap">
-    <a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" title="Supporta su Ko-fi">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-      Supporta su Ko-fi
+    <a href="https://ko-fi.com/erry96" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      Ko-fi
     </a>
-    <p class="kofi-note">Se ti piace il progetto, offrimi un caffè</p>
   </div>
 
-  <p class="footer">DevEn-Debug · GitHub Pages · PokeLike Toolkit v6.2.0</p>
+  <p class="footer">DevEn-Debug - Erry96 · v6.3.2</p>
 
 </body>
 </html>
