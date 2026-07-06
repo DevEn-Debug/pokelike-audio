@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
-// @version      6.3.6
+// @version      6.3.7
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -40,7 +40,7 @@
   'use strict';
 
   try {
-    console.log('%c[POKE-TOOLKIT] carico v6.3.6', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
+    console.log('%c[POKE-TOOLKIT] carico v6.3.7', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
   } catch (_) {}
 
   // ============================================================
@@ -1353,7 +1353,7 @@
     if (!document.getElementById('pkt-yt-toast-style')) {
       const st = document.createElement('style');
       st.id = 'pkt-yt-toast-style';
-      st.textContent = '#pkt-yt-toast{position:fixed;bottom:58px;left:12px;z-index:100000;width:230px;background:#100820;border:2px solid #c050ff;border-radius:8px;box-shadow:0 0 16px #c050ff55;font-family:"Press Start 2P",monospace,sans-serif;overflow:hidden;animation:pktYtIn .3s ease}@keyframes pktYtIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}#pkt-yt-toast.pkt-yt-out{opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s}.pkt-yt-toast-close{position:absolute;top:2px;right:4px;z-index:2;background:none;border:none;color:#c8a0ff;font-size:14px;line-height:1;cursor:pointer;padding:2px 4px}.pkt-yt-toast-close:hover{color:#fff}.pkt-yt-toast-link{display:flex;flex-direction:column;text-decoration:none;color:inherit}.pkt-yt-toast-thumb img{display:block;width:100%;height:auto;border-bottom:1px solid #c050ff44}.pkt-yt-toast-body{padding:7px 8px}.pkt-yt-toast-tag{font-size:6px;color:#ff5e5b;margin-bottom:4px}.pkt-yt-toast-title{font-size:6px;color:#e0b0ff;line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}';
+      st.textContent = '#pkt-yt-toast{position:fixed;top:12px;left:12px;z-index:100000;width:180px;background:#100820;border:1px solid #c050ff;border-radius:6px;box-shadow:0 0 10px #c050ff44;font-family:"Press Start 2P",monospace,sans-serif;overflow:hidden;animation:pktYtIn .3s ease}@keyframes pktYtIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}#pkt-yt-toast.pkt-yt-out{opacity:0;transform:translateY(-8px);transition:opacity .3s,transform .3s}.pkt-yt-toast-close{position:absolute;top:1px;right:3px;z-index:2;background:none;border:none;color:#c8a0ff;font-size:12px;line-height:1;cursor:pointer;padding:1px 3px}.pkt-yt-toast-close:hover{color:#fff}.pkt-yt-toast-link{display:flex;flex-direction:row;align-items:center;gap:6px;text-decoration:none;color:inherit;padding:5px}.pkt-yt-toast-thumb img{display:block;width:56px;height:auto;border-radius:3px;flex:0 0 auto}.pkt-yt-toast-body{min-width:0}.pkt-yt-toast-tag{font-size:5px;color:#ff5e5b;margin-bottom:3px}.pkt-yt-toast-title{font-size:5px;color:#e0b0ff;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}';
       document.head.appendChild(st);
     }
     document.body.appendChild(el);
@@ -1397,7 +1397,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.3.6</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.3.7</div>',
       '<div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
@@ -1683,7 +1683,7 @@
   function init() {
     try {
     createPanel();
-    log('PokeLike Toolkit v6.3.6 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.3.7 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
