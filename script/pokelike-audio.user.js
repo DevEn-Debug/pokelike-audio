@@ -1,4 +1,4 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
 // @version      6.3.7
@@ -61,7 +61,7 @@
     map9:    `${CDN}/audio/bgm/map9.mp3`,
     map10:    `${CDN}/audio/bgm/map10.mp3`,
     map11:    `${CDN}/audio/bgm/map11.mp3`,
-    // gli altri pattern BGM usano solo la sintesi ? nessun MP3 aggiuntivo
+    // gli altri pattern BGM usano solo la sintesi — nessun MP3 aggiuntivo
   };
 
   const MP3_SFX = {
@@ -430,131 +430,131 @@
   const BF_DEFAULT = { hp: 0, atk: 0, def: 0, special: 0, spdef: 0, speed: 0 };
 
   const ITEM_CATALOG = [
-    { id: 'assault_vest', name: 'Assault Vest', desc: '+50% Difesa Speciale', icon: '??' },
-    { id: 'black_belt', name: 'Black Belt', desc: '+50% danno mosse Lotta', icon: '??' },
-    { id: 'charcoal', name: 'Charcoal', desc: '+50% danno mosse Fuoco', icon: '??' },
-    { id: 'choice_band', name: 'Choice Band', desc: '+40% danno fisico, -20% DEF', icon: '??' },
-    { id: 'choice_scarf', name: 'Choice Scarf', desc: '+50% Velocita', icon: '??' },
-    { id: 'choice_specs', name: 'Choice Specs', desc: '+30% danno speciale', icon: '??' },
-    { id: 'eviolite', name: 'Eviolite', desc: 'Blocca evo: +50% DEF e Sp.Def', icon: '??' },
-    { id: 'expert_belt', name: 'Expert Belt', desc: '+100% danno su superefficaci', icon: '??' },
-    { id: 'focus_sash', name: 'Focus Sash', desc: 'A PS pieni, sopravvivi con 1 PS', icon: '??' },
-    { id: 'kings_rock', name: 'King\'s Rock', desc: '30% chance tentennamento', icon: '??' },
-    { id: 'lagging_tail', name: 'Lagging Tail', desc: 'Sempre ultimo, +100% danno', icon: '??' },
-    { id: 'leftovers', name: 'Leftovers', desc: 'Recupera 10% PS max/turno', icon: '??' },
-    { id: 'life_orb', name: 'Life Orb', desc: '+30% danno, -10% PS per colpo', icon: '??' },
-    { id: 'loaded_dice', name: 'Loaded Dice', desc: 'Inizio lotta: 37% +2 stat o -1', icon: '??' },
-    { id: 'lucky_egg', name: 'Lucky Egg', desc: '+30% chance livello extra', icon: '??' },
-    { id: 'magnet', name: 'Magnet', desc: '+50% danno mosse Elettro', icon: '??' },
-    { id: 'metal_coat', name: 'Metal Coat', desc: '+50% danno mosse Acciaio', icon: '??' },
-    { id: 'metronome', name: 'Metronome', desc: 'Dual-type: altro tipo, +20%', icon: '??' },
-    { id: 'miracle_seed', name: 'Miracle Seed', desc: '+50% danno mosse Erba', icon: '??' },
-    { id: 'moon_stone', name: 'Moon Stone', desc: 'Forza evoluzione', icon: '??' },
-    { id: 'mystic_water', name: 'Mystic Water', desc: '+50% danno mosse Acqua', icon: '??' },
-    { id: 'pixie_plate', name: 'Pixie Plate', desc: '+50% danno mosse Folletto', icon: '?' },
-    { id: 'quick_claw', name: 'Quick Claw', desc: '50% chance attaccare per primo', icon: '??' },
-    { id: 'rare_candy', name: 'Rare Candy', desc: '+3 livelli', icon: '??', usable: true },
-    { id: 'red_card', name: 'Red Card', desc: '-50% danno da superefficaci', icon: '??' },
-    { id: 'rocky_helmet', name: 'Rocky Helmet', desc: 'Attaccante -12% PS max/colpo', icon: '??' },
-    { id: 'scope_lens', name: 'Scope Lens', desc: '+20% crit, crit +50% danno', icon: '??' },
-    { id: 'sharp_beak', name: 'Sharp Beak', desc: '+50% danno mosse Volante', icon: '??' },
-    { id: 'shell_bell', name: 'Shell Bell', desc: 'Cura 15% danno inflitto', icon: '??' },
-    { id: 'silk_scarf', name: 'Silk Scarf', desc: '+50% danno mosse Normale', icon: '??' },
-    { id: 'silver_powder', name: 'Silver Powder', desc: '+50% danno mosse Coleottero', icon: '??' },
-    { id: 'tm_normal', name: 'TM', desc: 'Aumenta move tier di 1', icon: '??', usable: true },
-    { id: 'twisted_spoon', name: 'Twisted Spoon', desc: '+50% danno mosse Psico', icon: '??' },
-    { id: 'wide_lens', name: 'Wide Lens', desc: '+20% danno tutte le mosse', icon: '??' },
-    { id: 'adrenaline_orb', name: 'Adrenaline Orb', desc: 'Su superefficace: +1 ATK e Sp.Atk', icon: '?' },
-    { id: 'power_bracer', name: 'Power Bracer', desc: 'Pokemon infliggono +2 danno', icon: '??', passive: true },
-    { id: 'bright_powder', name: 'Bright Powder', desc: 'Effetto passivo sulla mappa', icon: '??', passive: true },
-    { id: 'atk_band', name: 'Attack Band', desc: 'Bonus danno fisico', icon: '??', passive: true },
-    { id: 'sharp_beak_pass', name: 'Sharp Beak', desc: '+50% danno Volante (passivo)', icon: '??', passive: true },
-    { id: 'shoal_salt', name: 'Shoal Salt', desc: 'Effetto passivo sulla mappa', icon: '?', passive: true },
-    { id: 'lucky_punch', name: 'Lucky Punch', desc: 'Chance crit extra', icon: '??', passive: true },
-    { id: 'light_ball', name: 'Light Ball', desc: 'Potenzia Pokemon Elettro', icon: '?', passive: true },
-    { id: 'thick_club', name: 'Thick Club', desc: 'Normal infliggono piu danno', icon: '??', passive: true },
-    { id: 'light_clay', name: 'Light Clay', desc: 'Riduce danno da mosse speciali', icon: '??', passive: true },
-    { id: 'cell_battery', name: 'Cell Battery', desc: 'Bonus stat dopo colpo Elettro', icon: '??', passive: true },
-    { id: 'electric_seed', name: 'Electric Seed', desc: 'Mosse Elettro colpiscono due volte', icon: '?', passive: true },
-    { id: 'yache_berry', name: 'Yache Berry', desc: 'Boost stat dopo attacco Ghiaccio', icon: '??', passive: true },
-    { id: 'grepa_berry', name: 'Grepa Berry', desc: 'Nemico nerfato quando colpito', icon: '??', passive: true },
-    { id: 'shell_bell_pass', name: 'Shell Bell', desc: 'Danno ridotto ma attacchi potenziati', icon: '??', passive: true },
-    { id: 'leaf_stone', name: 'Leaf Stone', desc: 'Erba: cura a fine turno', icon: '??', passive: true },
-    { id: 'grass_spore', name: 'Grass Spore', desc: 'Addormenta invece di attaccare', icon: '??', passive: true },
-    { id: 'big_mushroom', name: 'Big Mushroom', desc: 'Danno extra ma ferisce il team', icon: '??', passive: true },
-    { id: 'sitrus_berry', name: 'Sitrus Berry', desc: 'Cura tutto il team', icon: '??', passive: true },
-    { id: 'figy_berry', name: 'Figy Berry', desc: 'Cura quando un alleato va KO', icon: '??', passive: true },
-    { id: 'mind_plate', name: 'Mind Plate', desc: 'Mosse Psico possono crittare', icon: '??', passive: true },
-    { id: 'splash_crit', name: 'Splash Plate', desc: 'Splash diventa critico', icon: '??', passive: true },
-    { id: 'hp_priority', name: 'HP Priority', desc: 'Pokemon con piu PS attacca prima', icon: '??', passive: true },
-    { id: 'execute_dmg', name: 'Execute Orb', desc: 'Bonus danno su nemici deboli', icon: '??', passive: true },
-    { id: 'ghost_heal', name: 'Ghost Heal', desc: 'Spettro: cura pari al danno', icon: '??', passive: true },
-    { id: 'ghost_curse', name: 'Ghost Curse', desc: 'Effetto maledizione Spettro', icon: '??', passive: true },
-    { id: 'ko_boost', name: 'KO Boost', desc: 'KO nemico: bonus al team', icon: '?', passive: true },
-    { id: 'flying_speed', name: 'Sky Plate', desc: 'Volante: +50% velocita', icon: '???', passive: true },
-    { id: 'shed_shell', name: 'Shed Shell', desc: 'Colpi riducono livello nemico', icon: '??', passive: true },
-    { id: 'reaper_cloth', name: 'Reaper Cloth', desc: 'Una volta per run: potere Spettro', icon: '??', passive: true },
-    { id: 'safety_goggles', name: 'Safety Goggles', desc: 'Buio: bonus livello crit', icon: '???', passive: true },
-    { id: 'dark_splash', name: 'Dark Splash', desc: 'Bonus danno Buio', icon: '??', passive: true },
-    { id: 'crit_lifesteal', name: 'Oran Berry', desc: 'Crit: cura dal danno', icon: '??', passive: true },
-    { id: 'rocky_pass', name: 'Rocky Helmet', desc: 'Rimborso danno ai attaccanti', icon: '???', passive: true },
-    { id: 'protective_pads', name: 'Protective Pads', desc: 'Lotta: sopravvivi con 1 PS', icon: '???', passive: true },
-    { id: 'spatk_stack', name: 'Sp.Atk Stack', desc: 'Stack Sp.Atk per colpo superefficace', icon: '?', passive: true },
-    { id: 'rock_sturdy', name: 'Rock Sturdy', desc: 'Roccia: sopravvivi a un KO', icon: '??', passive: true },
-    { id: 'dragon_fang', name: 'Dragon Fang', desc: '+50% danno Drago', icon: '??', passive: true },
-    { id: 'dragon_scale', name: 'Dragon Scale', desc: 'Primo crit Drago potenziato', icon: '??', passive: true },
-    { id: 'metal_alloy', name: 'Metal Alloy', desc: 'Acciaio: bonus difesa', icon: '??', passive: true },
-    { id: 'fairy_charm', name: 'Pink Bow', desc: 'Folletto: effetto flinch', icon: '??', passive: true },
-    { id: 'fairy_open', name: 'Fairy Open', desc: 'Attacchi Folletto potenziati', icon: '?', passive: true },
-    { id: 'fight_revive', name: 'Chople Berry', desc: 'Primo KO: rivivi con PS', icon: '??', passive: true },
-    { id: 'hp_up_orb', name: 'HP Up', desc: 'Bonus PS max per la run', icon: '??', passive: true },
-    { id: 'star_piece', name: 'Star Piece', desc: 'Potenzia mosse stellari', icon: '??', passive: true },
-    { id: 'comet_shard', name: 'Comet Shard', desc: 'Al pickup: team casuale', icon: '??', passive: true },
-    { id: 'legend_aegis', name: 'Legend Aegis', desc: 'Leggendari nel team: bonus', icon: '??', passive: true },
-    { id: 'water_mirror', name: 'Water Mirror', desc: 'Riflette bonus Acqua', icon: '??', passive: true },
-    { id: 'casteliacone', name: 'Casteliacone', desc: 'Ghiaccia nemici al contatto', icon: '??', passive: true },
-    { id: 'ice_freeze', name: 'Ice Freeze', desc: 'Chance congelamento', icon: '?', passive: true },
-    { id: 'fire_share', name: 'Heat Rock', desc: 'Fuoco: condivide bonus', icon: '??', passive: true },
-    { id: 'fire_amp', name: 'Fire Amp', desc: 'Potenzia mosse Fuoco', icon: '??', passive: true },
-    { id: 'ground_slow', name: 'Soft Sand', desc: 'Terra: rallenta al contatto', icon: '???', passive: true },
-    { id: 'poison_pass', name: 'Toxic Plate', desc: 'Avvelena il team nemico', icon: '??', passive: true },
-    { id: 'poison_armor', name: 'Poison Barb', desc: 'Veleno: bonus difesa', icon: '??', passive: true },
-    { id: 'poison_stack', name: 'Poison Stack', desc: 'Veleno: stack passivo', icon: '??', passive: true },
-    { id: 'bug_release', name: 'Insect Plate', desc: 'Coleottero: rilascia potere', icon: '??', passive: true },
-    { id: 'bug_legacy', name: 'Bug Legacy', desc: 'Coleottero: eredita bonus', icon: '??', passive: true },
-    { id: 'all_more', name: 'Absorb Orb', desc: 'Piu danno dato e ricevuto', icon: '??', passive: true },
-    { id: 'all_half', name: 'Guard Orb', desc: 'Meno danno dato e ricevuto', icon: '???', passive: true },
-    { id: 'dmg_cap', name: 'Light Clay', desc: 'Cap danno da superefficaci', icon: '??', passive: true },
-    { id: 'elec_chain', name: 'Magnet Pass', desc: 'Catena effetti Elettro', icon: '??', passive: true },
-    { id: 'elec_lead', name: 'Battery', desc: 'Elettro guida il team', icon: '??', passive: true },
-    { id: 'grassy_seed', name: 'Grassy Seed', desc: 'Inizio lotta: +100% HP Erba', icon: '??', passive: true },
-    { id: 'muscle_band', name: 'Muscle Band', desc: 'Chance boost ATK e Speed', icon: '??', passive: true },
-    { id: 'power_lens', name: 'Power Lens', desc: 'Bonus su superefficaci', icon: '??', passive: true },
-    { id: 'pure_incense', name: 'Pure Incense', desc: '+10% danno se slot vuoto', icon: '??', passive: true },
-    { id: 'rock_incense', name: 'Rock Incense', desc: 'Roccia: +50% da stage DEF', icon: '??', passive: true },
-    { id: 'smoke_ball', name: 'Smoke Ball', desc: 'Immune confusione/veleno', icon: '??', passive: true },
-    { id: 'smooth_rock', name: 'Smooth Rock', desc: 'Estende effetti campo', icon: '?', passive: true },
-    { id: 'air_balloon', name: 'Air Balloon', desc: 'Schiva un attacco', icon: '??', passive: true },
-    { id: 'dread_plate', name: 'Dread Plate', desc: 'Potenzia mosse spaventose', icon: '??', passive: true },
-    { id: 'master_ball_pass', name: 'Master Ball', desc: 'Effetto passivo raro', icon: '??', passive: true },
-    { id: 'tiny_mushroom', name: 'Tiny Mushroom', desc: 'Spore al posto dell attacco', icon: '??', passive: true },
-    { id: 'roseli_berry', name: 'Roseli Berry', desc: 'Annulla debuff', icon: '??', passive: true },
-    { id: 'chilan_berry', name: 'Chilan Berry', desc: 'Riduce danno Normale', icon: '??', passive: true },
-    { id: 'aspear_berry', name: 'Aspear Berry', desc: 'Cura quando alleato curato', icon: '??', passive: true },
-    { id: 'rand_nerf', name: 'Grepa Berry', desc: 'Nerf stat nemico al colpo', icon: '??', passive: true },
-    { id: 'ko_maxhp', name: 'HP Up Orb', desc: 'Bonus PS massimi run', icon: '??', passive: true },
-    { id: 'spell_tag', name: 'Spell Tag', desc: 'Potenzia mosse speciali', icon: '???', passive: true },
-    { id: 'lifesteal', name: 'Big Root', desc: 'Cura dal danno inflitto', icon: '??', passive: true },
-    { id: 'water_def_debuff', name: 'Mystic Water Pass', desc: 'Acqua: debuff difesa nemica', icon: '??', passive: true },
-    { id: 'ice_refreeze', name: 'Never-Melt Ice', desc: 'Ricongela i nemici', icon: '??', passive: true },
-    { id: 'ice_shatter', name: 'Ice Shatter', desc: 'Doppio danno su congelati', icon: '??', passive: true },
-    { id: 'half_twice', name: 'Half Twice', desc: 'Danno dimezzato ma due volte', icon: '??', passive: true },
-    { id: 'crit_overflow', name: 'Scope Pass', desc: 'Eccesso crit diventa danno', icon: '??', passive: true },
-    { id: 'flying_dodge', name: 'Feather Pass', desc: 'Volante: chance schivata', icon: '??', passive: true },
-    { id: 'ground_slow_onhit', name: 'Ground Slow', desc: 'Terra: rallenta al colpo', icon: '??', passive: true },
-    { id: 'poison_onhit', name: 'Poison Touch', desc: 'Avvelena al contatto', icon: '??', passive: true },
-    { id: 'debuff_mirror', name: 'Mental Herb', desc: 'Riflette debuff al nemico', icon: '??', passive: true },
-    { id: 'team_upgrade', name: 'Upgrade Disc', desc: 'Potenzia tutto il team', icon: '??', passive: true }
+    { id: 'assault_vest', name: 'Assault Vest', desc: '+50% Difesa Speciale', icon: '🦺' },
+    { id: 'black_belt', name: 'Black Belt', desc: '+50% danno mosse Lotta', icon: '🥋' },
+    { id: 'charcoal', name: 'Charcoal', desc: '+50% danno mosse Fuoco', icon: '🔥' },
+    { id: 'choice_band', name: 'Choice Band', desc: '+40% danno fisico, -20% DEF', icon: '🎀' },
+    { id: 'choice_scarf', name: 'Choice Scarf', desc: '+50% Velocita', icon: '🧣' },
+    { id: 'choice_specs', name: 'Choice Specs', desc: '+30% danno speciale', icon: '👓' },
+    { id: 'eviolite', name: 'Eviolite', desc: 'Blocca evo: +50% DEF e Sp.Def', icon: '💎' },
+    { id: 'expert_belt', name: 'Expert Belt', desc: '+100% danno su superefficaci', icon: '🥊' },
+    { id: 'focus_sash', name: 'Focus Sash', desc: 'A PS pieni, sopravvivi con 1 PS', icon: '🎽' },
+    { id: 'kings_rock', name: 'King\'s Rock', desc: '30% chance tentennamento', icon: '👑' },
+    { id: 'lagging_tail', name: 'Lagging Tail', desc: 'Sempre ultimo, +100% danno', icon: '🐌' },
+    { id: 'leftovers', name: 'Leftovers', desc: 'Recupera 10% PS max/turno', icon: '🍃' },
+    { id: 'life_orb', name: 'Life Orb', desc: '+30% danno, -10% PS per colpo', icon: '🌑' },
+    { id: 'loaded_dice', name: 'Loaded Dice', desc: 'Inizio lotta: 37% +2 stat o -1', icon: '🎲' },
+    { id: 'lucky_egg', name: 'Lucky Egg', desc: '+30% chance livello extra', icon: '🥚' },
+    { id: 'magnet', name: 'Magnet', desc: '+50% danno mosse Elettro', icon: '🧲' },
+    { id: 'metal_coat', name: 'Metal Coat', desc: '+50% danno mosse Acciaio', icon: '🔩' },
+    { id: 'metronome', name: 'Metronome', desc: 'Dual-type: altro tipo, +20%', icon: '🎵' },
+    { id: 'miracle_seed', name: 'Miracle Seed', desc: '+50% danno mosse Erba', icon: '🌱' },
+    { id: 'moon_stone', name: 'Moon Stone', desc: 'Forza evoluzione', icon: '🌙' },
+    { id: 'mystic_water', name: 'Mystic Water', desc: '+50% danno mosse Acqua', icon: '💧' },
+    { id: 'pixie_plate', name: 'Pixie Plate', desc: '+50% danno mosse Folletto', icon: '✨' },
+    { id: 'quick_claw', name: 'Quick Claw', desc: '50% chance attaccare per primo', icon: '🪝' },
+    { id: 'rare_candy', name: 'Rare Candy', desc: '+3 livelli', icon: '🍬', usable: true },
+    { id: 'red_card', name: 'Red Card', desc: '-50% danno da superefficaci', icon: '🟥' },
+    { id: 'rocky_helmet', name: 'Rocky Helmet', desc: 'Attaccante -12% PS max/colpo', icon: '⛑️' },
+    { id: 'scope_lens', name: 'Scope Lens', desc: '+20% crit, crit +50% danno', icon: '🔭' },
+    { id: 'sharp_beak', name: 'Sharp Beak', desc: '+50% danno mosse Volante', icon: '🦅' },
+    { id: 'shell_bell', name: 'Shell Bell', desc: 'Cura 15% danno inflitto', icon: '🐚' },
+    { id: 'silk_scarf', name: 'Silk Scarf', desc: '+50% danno mosse Normale', icon: '🤍' },
+    { id: 'silver_powder', name: 'Silver Powder', desc: '+50% danno mosse Coleottero', icon: '🦋' },
+    { id: 'tm_normal', name: 'TM', desc: 'Aumenta move tier di 1', icon: '💿', usable: true },
+    { id: 'twisted_spoon', name: 'Twisted Spoon', desc: '+50% danno mosse Psico', icon: '🥄' },
+    { id: 'wide_lens', name: 'Wide Lens', desc: '+20% danno tutte le mosse', icon: '🔎' },
+    { id: 'adrenaline_orb', name: 'Adrenaline Orb', desc: 'Su superefficace: +1 ATK e Sp.Atk', icon: '⚡' },
+    { id: 'power_bracer', name: 'Power Bracer', desc: 'Pokemon infliggono +2 danno', icon: '💪', passive: true },
+    { id: 'bright_powder', name: 'Bright Powder', desc: 'Effetto passivo sulla mappa', icon: '🥽', passive: true },
+    { id: 'atk_band', name: 'Attack Band', desc: 'Bonus danno fisico', icon: '🥋', passive: true },
+    { id: 'sharp_beak_pass', name: 'Sharp Beak', desc: '+50% danno Volante (passivo)', icon: '🪶', passive: true },
+    { id: 'shoal_salt', name: 'Shoal Salt', desc: 'Effetto passivo sulla mappa', icon: '⚪', passive: true },
+    { id: 'lucky_punch', name: 'Lucky Punch', desc: 'Chance crit extra', icon: '🥊', passive: true },
+    { id: 'light_ball', name: 'Light Ball', desc: 'Potenzia Pokemon Elettro', icon: '✨', passive: true },
+    { id: 'thick_club', name: 'Thick Club', desc: 'Normal infliggono piu danno', icon: '🔨', passive: true },
+    { id: 'light_clay', name: 'Light Clay', desc: 'Riduce danno da mosse speciali', icon: '🦺', passive: true },
+    { id: 'cell_battery', name: 'Cell Battery', desc: 'Bonus stat dopo colpo Elettro', icon: '🔋', passive: true },
+    { id: 'electric_seed', name: 'Electric Seed', desc: 'Mosse Elettro colpiscono due volte', icon: '⚡', passive: true },
+    { id: 'yache_berry', name: 'Yache Berry', desc: 'Boost stat dopo attacco Ghiaccio', icon: '🍇', passive: true },
+    { id: 'grepa_berry', name: 'Grepa Berry', desc: 'Nemico nerfato quando colpito', icon: '🌿', passive: true },
+    { id: 'shell_bell_pass', name: 'Shell Bell', desc: 'Danno ridotto ma attacchi potenziati', icon: '🍃', passive: true },
+    { id: 'leaf_stone', name: 'Leaf Stone', desc: 'Erba: cura a fine turno', icon: '🌿', passive: true },
+    { id: 'grass_spore', name: 'Grass Spore', desc: 'Addormenta invece di attaccare', icon: '😴', passive: true },
+    { id: 'big_mushroom', name: 'Big Mushroom', desc: 'Danno extra ma ferisce il team', icon: '🍄', passive: true },
+    { id: 'sitrus_berry', name: 'Sitrus Berry', desc: 'Cura tutto il team', icon: '❤️', passive: true },
+    { id: 'figy_berry', name: 'Figy Berry', desc: 'Cura quando un alleato va KO', icon: '🍑', passive: true },
+    { id: 'mind_plate', name: 'Mind Plate', desc: 'Mosse Psico possono crittare', icon: '🧠', passive: true },
+    { id: 'splash_crit', name: 'Splash Plate', desc: 'Splash diventa critico', icon: '🔍', passive: true },
+    { id: 'hp_priority', name: 'HP Priority', desc: 'Pokemon con piu PS attacca prima', icon: '🦞', passive: true },
+    { id: 'execute_dmg', name: 'Execute Orb', desc: 'Bonus danno su nemici deboli', icon: '🥋', passive: true },
+    { id: 'ghost_heal', name: 'Ghost Heal', desc: 'Spettro: cura pari al danno', icon: '👻', passive: true },
+    { id: 'ghost_curse', name: 'Ghost Curse', desc: 'Effetto maledizione Spettro', icon: '💀', passive: true },
+    { id: 'ko_boost', name: 'KO Boost', desc: 'KO nemico: bonus al team', icon: '⚫', passive: true },
+    { id: 'flying_speed', name: 'Sky Plate', desc: 'Volante: +50% velocita', icon: '🌫️', passive: true },
+    { id: 'shed_shell', name: 'Shed Shell', desc: 'Colpi riducono livello nemico', icon: '🐛', passive: true },
+    { id: 'reaper_cloth', name: 'Reaper Cloth', desc: 'Una volta per run: potere Spettro', icon: '🪦', passive: true },
+    { id: 'safety_goggles', name: 'Safety Goggles', desc: 'Buio: bonus livello crit', icon: '🕶️', passive: true },
+    { id: 'dark_splash', name: 'Dark Splash', desc: 'Bonus danno Buio', icon: '🌑', passive: true },
+    { id: 'crit_lifesteal', name: 'Oran Berry', desc: 'Crit: cura dal danno', icon: '🫐', passive: true },
+    { id: 'rocky_pass', name: 'Rocky Helmet', desc: 'Rimborso danno ai attaccanti', icon: '🛡️', passive: true },
+    { id: 'protective_pads', name: 'Protective Pads', desc: 'Lotta: sopravvivi con 1 PS', icon: '🛡️', passive: true },
+    { id: 'spatk_stack', name: 'Sp.Atk Stack', desc: 'Stack Sp.Atk per colpo superefficace', icon: '⚫', passive: true },
+    { id: 'rock_sturdy', name: 'Rock Sturdy', desc: 'Roccia: sopravvivi a un KO', icon: '🪨', passive: true },
+    { id: 'dragon_fang', name: 'Dragon Fang', desc: '+50% danno Drago', icon: '🐉', passive: true },
+    { id: 'dragon_scale', name: 'Dragon Scale', desc: 'Primo crit Drago potenziato', icon: '🐲', passive: true },
+    { id: 'metal_alloy', name: 'Metal Alloy', desc: 'Acciaio: bonus difesa', icon: '⚙️', passive: true },
+    { id: 'fairy_charm', name: 'Pink Bow', desc: 'Folletto: effetto flinch', icon: '💞', passive: true },
+    { id: 'fairy_open', name: 'Fairy Open', desc: 'Attacchi Folletto potenziati', icon: '✨', passive: true },
+    { id: 'fight_revive', name: 'Chople Berry', desc: 'Primo KO: rivivi con PS', icon: '🥊', passive: true },
+    { id: 'hp_up_orb', name: 'HP Up', desc: 'Bonus PS max per la run', icon: '💚', passive: true },
+    { id: 'star_piece', name: 'Star Piece', desc: 'Potenzia mosse stellari', icon: '🌟', passive: true },
+    { id: 'comet_shard', name: 'Comet Shard', desc: 'Al pickup: team casuale', icon: '☄️', passive: true },
+    { id: 'legend_aegis', name: 'Legend Aegis', desc: 'Leggendari nel team: bonus', icon: '🌟', passive: true },
+    { id: 'water_mirror', name: 'Water Mirror', desc: 'Riflette bonus Acqua', icon: '💧', passive: true },
+    { id: 'casteliacone', name: 'Casteliacone', desc: 'Ghiaccia nemici al contatto', icon: '🍦', passive: true },
+    { id: 'ice_freeze', name: 'Ice Freeze', desc: 'Chance congelamento', icon: '⛄', passive: true },
+    { id: 'fire_share', name: 'Heat Rock', desc: 'Fuoco: condivide bonus', icon: '🪨', passive: true },
+    { id: 'fire_amp', name: 'Fire Amp', desc: 'Potenzia mosse Fuoco', icon: '🔥', passive: true },
+    { id: 'ground_slow', name: 'Soft Sand', desc: 'Terra: rallenta al contatto', icon: '🏜️', passive: true },
+    { id: 'poison_pass', name: 'Toxic Plate', desc: 'Avvelena il team nemico', icon: '☠️', passive: true },
+    { id: 'poison_armor', name: 'Poison Barb', desc: 'Veleno: bonus difesa', icon: '🍇', passive: true },
+    { id: 'poison_stack', name: 'Poison Stack', desc: 'Veleno: stack passivo', icon: '🟣', passive: true },
+    { id: 'bug_release', name: 'Insect Plate', desc: 'Coleottero: rilascia potere', icon: '🐞', passive: true },
+    { id: 'bug_legacy', name: 'Bug Legacy', desc: 'Coleottero: eredita bonus', icon: '🪲', passive: true },
+    { id: 'all_more', name: 'Absorb Orb', desc: 'Piu danno dato e ricevuto', icon: '🔮', passive: true },
+    { id: 'all_half', name: 'Guard Orb', desc: 'Meno danno dato e ricevuto', icon: '🛡️', passive: true },
+    { id: 'dmg_cap', name: 'Light Clay', desc: 'Cap danno da superefficaci', icon: '🪨', passive: true },
+    { id: 'elec_chain', name: 'Magnet Pass', desc: 'Catena effetti Elettro', icon: '🧲', passive: true },
+    { id: 'elec_lead', name: 'Battery', desc: 'Elettro guida il team', icon: '🔋', passive: true },
+    { id: 'grassy_seed', name: 'Grassy Seed', desc: 'Inizio lotta: +100% HP Erba', icon: '🌱', passive: true },
+    { id: 'muscle_band', name: 'Muscle Band', desc: 'Chance boost ATK e Speed', icon: '🦾', passive: true },
+    { id: 'power_lens', name: 'Power Lens', desc: 'Bonus su superefficaci', icon: '💪', passive: true },
+    { id: 'pure_incense', name: 'Pure Incense', desc: '+10% danno se slot vuoto', icon: '☯️', passive: true },
+    { id: 'rock_incense', name: 'Rock Incense', desc: 'Roccia: +50% da stage DEF', icon: '⛰️', passive: true },
+    { id: 'smoke_ball', name: 'Smoke Ball', desc: 'Immune confusione/veleno', icon: '💨', passive: true },
+    { id: 'smooth_rock', name: 'Smooth Rock', desc: 'Estende effetti campo', icon: '⏳', passive: true },
+    { id: 'air_balloon', name: 'Air Balloon', desc: 'Schiva un attacco', icon: '🎈', passive: true },
+    { id: 'dread_plate', name: 'Dread Plate', desc: 'Potenzia mosse spaventose', icon: '💀', passive: true },
+    { id: 'master_ball_pass', name: 'Master Ball', desc: 'Effetto passivo raro', icon: '🌟', passive: true },
+    { id: 'tiny_mushroom', name: 'Tiny Mushroom', desc: 'Spore al posto dell attacco', icon: '🍄', passive: true },
+    { id: 'roseli_berry', name: 'Roseli Berry', desc: 'Annulla debuff', icon: '🧚', passive: true },
+    { id: 'chilan_berry', name: 'Chilan Berry', desc: 'Riduce danno Normale', icon: '❄️', passive: true },
+    { id: 'aspear_berry', name: 'Aspear Berry', desc: 'Cura quando alleato curato', icon: '🍑', passive: true },
+    { id: 'rand_nerf', name: 'Grepa Berry', desc: 'Nerf stat nemico al colpo', icon: '🌿', passive: true },
+    { id: 'ko_maxhp', name: 'HP Up Orb', desc: 'Bonus PS massimi run', icon: '💚', passive: true },
+    { id: 'spell_tag', name: 'Spell Tag', desc: 'Potenzia mosse speciali', icon: '🏷️', passive: true },
+    { id: 'lifesteal', name: 'Big Root', desc: 'Cura dal danno inflitto', icon: '🌿', passive: true },
+    { id: 'water_def_debuff', name: 'Mystic Water Pass', desc: 'Acqua: debuff difesa nemica', icon: '🔱', passive: true },
+    { id: 'ice_refreeze', name: 'Never-Melt Ice', desc: 'Ricongela i nemici', icon: '❄️', passive: true },
+    { id: 'ice_shatter', name: 'Ice Shatter', desc: 'Doppio danno su congelati', icon: '🧊', passive: true },
+    { id: 'half_twice', name: 'Half Twice', desc: 'Danno dimezzato ma due volte', icon: '↪️', passive: true },
+    { id: 'crit_overflow', name: 'Scope Pass', desc: 'Eccesso crit diventa danno', icon: '🔭', passive: true },
+    { id: 'flying_dodge', name: 'Feather Pass', desc: 'Volante: chance schivata', icon: '💨', passive: true },
+    { id: 'ground_slow_onhit', name: 'Ground Slow', desc: 'Terra: rallenta al colpo', icon: '🟤', passive: true },
+    { id: 'poison_onhit', name: 'Poison Touch', desc: 'Avvelena al contatto', icon: '☠️', passive: true },
+    { id: 'debuff_mirror', name: 'Mental Herb', desc: 'Riflette debuff al nemico', icon: '🍃', passive: true },
+    { id: 'team_upgrade', name: 'Upgrade Disc', desc: 'Potenzia tutto il team', icon: '⬆️', passive: true }
   ];
   const ITEMS_HELD = ITEM_CATALOG.filter(i => !i.passive);
   const ITEMS_PASSIVE = ITEM_CATALOG.filter(i => i.passive);
@@ -587,16 +587,16 @@
   }
 
   // ============================================================
-  // DAILY REWARD ? una riscossione al giorno (localStorage)
+  // DAILY REWARD — una riscossione al giorno (localStorage)
   // ============================================================
   const DAILY_REWARD_KEY = 'pkt_daily_reward_date';
   const DAILY_REWARDS = [
-    { type: 'dollars', amount: 500, label: '500 Pok?dollars', icon: '??' },
-    { type: 'dollars', amount: 1000, label: '1.000 Pok?dollars', icon: '??' },
-    { type: 'dollars', amount: 2000, label: '2.000 Pok?dollars', icon: '??' },
-    { type: 'dollars', amount: 3000, label: '3.000 Pok?dollars', icon: '??' },
-    { type: 'egg', eggType: 'shiny', label: 'Uovo Shiny', icon: '??' },
-    { type: 'egg', eggType: 'legendary', label: 'Uovo Leggendario', icon: '?' },
+    { type: 'dollars', amount: 500, label: '500 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 1000, label: '1.000 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 2000, label: '2.000 Pokédollars', icon: '💵' },
+    { type: 'dollars', amount: 3000, label: '3.000 Pokédollars', icon: '💵' },
+    { type: 'egg', eggType: 'shiny', label: 'Uovo Shiny', icon: '🥚' },
+    { type: 'egg', eggType: 'legendary', label: 'Uovo Leggendario', icon: '⭐' },
   ];
 
   function _todayKey() {
@@ -644,7 +644,7 @@
   async function _deliverDailyReward(reward) {
     try {
       await _applyDailyReward(reward);
-      if (reward.type === 'dollars') _showDailyDeliveryToast('+' + reward.amount + ' Pok?dollars!');
+      if (reward.type === 'dollars') _showDailyDeliveryToast('+' + reward.amount + ' Pokédollars!');
       log('Daily reward: ' + reward.label, '#f1c40f');
     } catch (err) {
       log('Daily reward errore: ' + err.message, '#e74c3c');
@@ -678,7 +678,7 @@
       '<div class="pkt-daily-badge">PokeLike Toolkit</div>',
       '<h2 id="pkt-daily-title">Reward Giornaliera</h2>',
       '<p class="pkt-daily-sub">Regalo gratuito dal nostro tool. Una volta al giorno.</p>',
-      '<div class="pkt-daily-icon" id="pkt-daily-icon">??</div>',
+      '<div class="pkt-daily-icon" id="pkt-daily-icon">🎁</div>',
       '<div id="pkt-daily-result" class="pkt-daily-result" hidden>',
       '<div class="pkt-daily-preview-label">La tua reward</div>',
       '<div class="pkt-daily-preview-name" id="pkt-daily-preview-name"></div>',
@@ -740,7 +740,7 @@
         previewNameEl.textContent = _rewardPreviewText(pendingReward);
         previewHintEl.textContent = pendingReward.type === 'egg'
           ? 'Chiudi per schiudere l\'uovo con la grafica di gioco.'
-          : 'Chiudi per accreditare i Pok?dollars.';
+          : 'Chiudi per accreditare i Pokédollars.';
         resultEl.hidden = false;
         claimBtn.textContent = 'Ricevi!';
         return;
@@ -877,7 +877,7 @@
     osc.stop(ctx.currentTime + delay + duration);
   }
 
-  // Cache buffer SFX: url ? AudioBuffer | false(fallito) | null(loading)
+  // Cache buffer SFX: url → AudioBuffer | false(fallito) | null(loading)
   const _sfxBuffers = {};
   let _sfxPreloaded = false;
 
@@ -888,7 +888,7 @@
       _preloadSfx(url); // avvia preload in background
       return false;     // usa sintesi subito
     }
-    if (!buf) return false; // in caricamento o fallito ? usa sintesi
+    if (!buf) return false; // in caricamento o fallito → usa sintesi
     const ctx = getCtx();
     const src = ctx.createBufferSource();
     const gain = ctx.createGain();
@@ -917,7 +917,7 @@
 
   // Cooldown per evitare SFX duplicati da observer multipli
   const _sfxCooldown = {};
-  const SYNTH_SCALE = 0.35; // synth pi? bassi rispetto agli MP3
+  const SYNTH_SCALE = 0.35; // synth più bassi rispetto agli MP3
   function _sfxOnce(key, fn, ms = 400) {
     const now = Date.now();
     if (_sfxCooldown[key] && now - _sfxCooldown[key] < ms) return;
@@ -925,12 +925,12 @@
     fn();
   }
 
-  // Helper: suona SFX e logga nome + modalit?
+  // Helper: suona SFX e logga nome + modalità
   function _sfx(name, url, synthFn) {
     if (!SETTINGS.sfxEnabled) return;
     const mp3 = playMp3Sfx(url);
     console.log(
-      `%c[SFX] ${name} ? ${mp3 ? '\uD83C\uDFB5 MP3' : '\uD83D\uDD0A SYNTH'}`,
+      `%c[SFX] ${name} → ${mp3 ? '\uD83C\uDFB5 MP3' : '\uD83D\uDD0A SYNTH'}`,
       `background:#0a1a2e;color:${mp3 ? '#00e5ff' : '#a0ffa0'};font-weight:bold;padding:1px 5px;border-left:2px solid ${mp3 ? '#00e5ff' : '#a0ffa0'};`
     );
     if (!mp3) synthFn();
@@ -999,7 +999,7 @@
   };
 
   // ============================================================
-  // BGM ? look-ahead scheduler + synth-first (MP3 subentra se carica)
+  // BGM — look-ahead scheduler + synth-first (MP3 subentra se carica)
   // ============================================================
   let bgmAudioEl    = null;  // elemento <audio> per MP3
   let _bgmInterval  = null;  // setInterval look-ahead
@@ -1038,7 +1038,7 @@
       if (!SETTINGS.bgmEnabled || _bgmPatName !== name) { _stopBgmSynth(); return; }
       const ctx = getCtx();
       if (ctx.state === 'suspended') return;
-      // Reset se il timestamp ? diventato stantio (tab in background, context sospeso, ecc.)
+      // Reset se il timestamp è diventato stantio (tab in background, context sospeso, ecc.)
       if (_bgmNextNote < ctx.currentTime - 0.5) _bgmNextNote = ctx.currentTime + 0.05;
       const pat = BGM_PATTERNS[_bgmPatName];
       while (_bgmNextNote < ctx.currentTime + BGM_LOOKAHEAD) {
@@ -1073,7 +1073,7 @@
     stopBgm();
     currentBgm = name;
 
-    // La sintesi parte immediatamente ? nessuna latenza, nessun fetch
+    // La sintesi parte immediatamente — nessuna latenza, nessun fetch
     _startBgmSynth(name);
 
     // Tenta MP3 in background: se carica con successo sostituisce la sintesi
@@ -1083,7 +1083,7 @@
       audio.loop = true;
       audio.volume = SETTINGS.bgmVolume;
       audio.addEventListener('canplaythrough', () => {
-        if (currentBgm !== name) return; // schermata gi? cambiata
+        if (currentBgm !== name) return; // schermata già cambiata
         _stopBgmSynth();                 // spegni sintesi
         bgmAudioEl = audio;              // subentra MP3
       }, { once: true });
@@ -1094,7 +1094,7 @@
 
   function updateBgmVolume() {
     if (bgmAudioEl) bgmAudioEl.volume = SETTINGS.bgmVolume;
-    // La sintesi legge SETTINGS.bgmVolume ad ogni nota ? aggiornamento automatico
+    // La sintesi legge SETTINGS.bgmVolume ad ogni nota — aggiornamento automatico
   }
 
   // ============================================================
@@ -1108,7 +1108,7 @@
     const prev = lastScreen;
     lastScreen = screenId;
 
-    // SFX per evento schermata ? il BGM non viene mai interrotto dal cambio schermata
+    // SFX per evento schermata — il BGM non viene mai interrotto dal cambio schermata
     if (screenId === 'battle-screen') {
       const title = document.getElementById('battle-title')?.textContent || '';
       if (title.includes('Gym') || title.includes('Big Boss') || title.includes('Final Boss')) {
@@ -1161,7 +1161,7 @@
           if (cls.includes('levelup') || node.textContent?.includes('grew to')) {
             _sfxOnce('levelup', () => SFX.LEVELUP());
           }
-          // Faint SOLO del player (ignora pok?mon avversario)
+          // Faint SOLO del player (ignora pokémon avversario)
           if (node.closest && node.closest('#player-side') &&
               (cls.includes('fainted') || node.textContent?.includes('fainted'))) {
             SFX.FAINT();
@@ -1206,7 +1206,7 @@
     obs.observe(document.body, { childList: true, subtree: true });
   }
 
-  // Click su carte pok?mon nello starter select ? suona SELECT
+  // Click su carte pokémon nello starter select → suona SELECT
   function initClickSounds() {
     document.addEventListener('click', (e) => {
       getCtx(); // risveglia il contesto audio al primo click
@@ -1219,7 +1219,7 @@
 
       const target = e.target;
 
-      // Bottoni primari ? click sound
+      // Bottoni primari → click sound
       if (target.closest('.btn-primary, .btn-secondary, .equip-btn, .hof-sort-btn')) {
         SFX.CLICK();
       }
@@ -1229,7 +1229,7 @@
         SFX.SELECT();
       }
 
-      // Cattura pok?mon
+      // Cattura pokémon
       if (target.closest('.poke-card') && lastScreen === 'catch-screen') {
         SFX.CATCH();
       }
@@ -1255,7 +1255,7 @@
     { videoId: 'JHglZOwB1zY', title: 'NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike' },
     { videoId: '_rr0dOVwr74', title: 'Ho ROTTO la CHALLENGE - Pokemon Roguelike Pokelike' },
     { videoId: 'igStBz6WbbQ', title: 'COMBO DEVASTANTE - Pokemon Roguelike Pokelike' },
-    { videoId: 'IjrFJztMtCU', title: 'Questo GIOCO ? una DROGA! 2.0 - Pokemon Roguelike Pokelike' },
+    { videoId: 'IjrFJztMtCU', title: 'Questo GIOCO è una DROGA! 2.0 - Pokemon Roguelike Pokelike' },
     { videoId: 'L2x_E3l3YNI', title: 'ORA cambia TUTTO! - v2.0 UPDATE | Pokemon Roguelike Pokelike' },
     { videoId: 'oCm9UHNENIQ', title: 'NUOVI POKEMON?! | Pokemon Roguelike Pokelike' },
     { videoId: '6USEm_JPlmQ', title: 'VINCO SENZA CENTRI POKEMON?! - Achievement | Pokemon Roguelike Pokelike' },
@@ -1446,7 +1446,7 @@
       '<button id="sv-import" class="pkt-btn pkt-full" style="margin-top:4px">Importa da file</button></div>',
       '<div class="pkt-section"><div id="sv-status" class="pkt-status">-</div></div></div>',
       '<div class="pkt-tab-panel" data-panel="playlist">',
-      '<div class="pkt-tab-head"><div class="pkt-tab-title">Playlist Pok?mon</div>',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">Playlist Pokémon</div>',
       '<div class="pkt-tab-desc">Video Pokelike AlepreRun, clicca per aprire su YouTube.</div></div>',
       '<div id="pkt-playlist-scroll" class="pkt-playlist-scroll"></div>',
       '<a href="' + YT_PLAYLIST_URL + '" target="_blank" rel="noopener" class="pkt-btn pkt-full" style="margin-top:6px;display:block;text-align:center;text-decoration:none">Apri playlist</a>',
@@ -1463,7 +1463,7 @@
       '</div>',
       '<div class="pkt-links">',
       '<a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" class="pkt-link pkt-link-kofi" title="Ko-fi">' + SVG.kofi + '<span>Ko-fi</span></a>',
-      '<a href="https://www.twitch.tv/alepre98" target="_blank" rel="noopener" class="pkt-link pkt-link-twitch" title="Twitch ? Alepre98">' + SVG.twitch + '<span>Twitch</span></a>',
+      '<a href="https://www.twitch.tv/alepre98" target="_blank" rel="noopener" class="pkt-link pkt-link-twitch" title="Twitch — Alepre98">' + SVG.twitch + '<span>Twitch</span></a>',
       '</div>',
       '</div></div>',
     ].join('');
@@ -1537,7 +1537,7 @@
       if (!btn) return;
       spcRemoveIndividual(btn.dataset.id);
       renderSpcCurrent();
-      spcIndStatusEl.textContent = 'Rimosso ? ricarico...';
+      spcIndStatusEl.textContent = 'Rimosso — ricarico...';
       _refreshSoon(1500);
     });
     document.getElementById('spc-enabled').addEventListener('change', e => {
@@ -1554,7 +1554,7 @@
     spcClearBtn.addEventListener('click', () => {
       spcClearIndividual();
       renderSpcCurrent();
-      spcIndStatusEl.textContent = 'Pokemon rimosso ? ricarico...';
+      spcIndStatusEl.textContent = 'Pokemon rimosso — ricarico...';
       _refreshSoon(1500);
     });
     document.getElementById('spc-add').addEventListener('click', async () => {
@@ -1568,7 +1568,7 @@
       const label = resolved.name || ('#' + resolved.id);
       _spcSyncToStorage();
       ensureSpcPatches();
-      spcIndStatusEl.textContent = label + ' aggiunto ? ricarico...';
+      spcIndStatusEl.textContent = label + ' aggiunto — ricarico...';
       input.value = '';
       await renderSpcCurrent();
       _refreshSoon(1500);
