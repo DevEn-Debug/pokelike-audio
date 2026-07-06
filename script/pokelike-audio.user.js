@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
-// @version      6.3.5
+// @version      6.3.6
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -40,7 +40,7 @@
   'use strict';
 
   try {
-    console.log('%c[POKE-TOOLKIT] carico v6.3.5', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
+    console.log('%c[POKE-TOOLKIT] carico v6.3.6', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
   } catch (_) {}
 
   // ============================================================
@@ -61,7 +61,7 @@
     map9:    `${CDN}/audio/bgm/map9.mp3`,
     map10:    `${CDN}/audio/bgm/map10.mp3`,
     map11:    `${CDN}/audio/bgm/map11.mp3`,
-    // gli altri pattern BGM usano solo la sintesi — nessun MP3 aggiuntivo
+    // gli altri pattern BGM usano solo la sintesi ? nessun MP3 aggiuntivo
   };
 
   const MP3_SFX = {
@@ -587,14 +587,14 @@
   }
 
   // ============================================================
-  // DAILY REWARD — una riscossione al giorno (localStorage)
+  // DAILY REWARD ? una riscossione al giorno (localStorage)
   // ============================================================
   const DAILY_REWARD_KEY = 'pkt_daily_reward_date';
   const DAILY_REWARDS = [
-    { type: 'dollars', amount: 500, label: '500 Pokédollars', icon: '??' },
-    { type: 'dollars', amount: 1000, label: '1.000 Pokédollars', icon: '??' },
-    { type: 'dollars', amount: 2000, label: '2.000 Pokédollars', icon: '??' },
-    { type: 'dollars', amount: 3000, label: '3.000 Pokédollars', icon: '??' },
+    { type: 'dollars', amount: 500, label: '500 Pok?dollars', icon: '??' },
+    { type: 'dollars', amount: 1000, label: '1.000 Pok?dollars', icon: '??' },
+    { type: 'dollars', amount: 2000, label: '2.000 Pok?dollars', icon: '??' },
+    { type: 'dollars', amount: 3000, label: '3.000 Pok?dollars', icon: '??' },
     { type: 'egg', eggType: 'shiny', label: 'Uovo Shiny', icon: '??' },
     { type: 'egg', eggType: 'legendary', label: 'Uovo Leggendario', icon: '?' },
   ];
@@ -644,7 +644,7 @@
   async function _deliverDailyReward(reward) {
     try {
       await _applyDailyReward(reward);
-      if (reward.type === 'dollars') _showDailyDeliveryToast('+' + reward.amount + ' Pokédollars!');
+      if (reward.type === 'dollars') _showDailyDeliveryToast('+' + reward.amount + ' Pok?dollars!');
       log('Daily reward: ' + reward.label, '#f1c40f');
     } catch (err) {
       log('Daily reward errore: ' + err.message, '#e74c3c');
@@ -740,7 +740,7 @@
         previewNameEl.textContent = _rewardPreviewText(pendingReward);
         previewHintEl.textContent = pendingReward.type === 'egg'
           ? 'Chiudi per schiudere l\'uovo con la grafica di gioco.'
-          : 'Chiudi per accreditare i Pokédollars.';
+          : 'Chiudi per accreditare i Pok?dollars.';
         resultEl.hidden = false;
         claimBtn.textContent = 'Ricevi!';
         return;
@@ -917,7 +917,7 @@
 
   // Cooldown per evitare SFX duplicati da observer multipli
   const _sfxCooldown = {};
-  const SYNTH_SCALE = 0.35; // synth più bassi rispetto agli MP3
+  const SYNTH_SCALE = 0.35; // synth pi? bassi rispetto agli MP3
   function _sfxOnce(key, fn, ms = 400) {
     const now = Date.now();
     if (_sfxCooldown[key] && now - _sfxCooldown[key] < ms) return;
@@ -925,7 +925,7 @@
     fn();
   }
 
-  // Helper: suona SFX e logga nome + modalità
+  // Helper: suona SFX e logga nome + modalit?
   function _sfx(name, url, synthFn) {
     if (!SETTINGS.sfxEnabled) return;
     const mp3 = playMp3Sfx(url);
@@ -999,7 +999,7 @@
   };
 
   // ============================================================
-  // BGM — look-ahead scheduler + synth-first (MP3 subentra se carica)
+  // BGM ? look-ahead scheduler + synth-first (MP3 subentra se carica)
   // ============================================================
   let bgmAudioEl    = null;  // elemento <audio> per MP3
   let _bgmInterval  = null;  // setInterval look-ahead
@@ -1038,7 +1038,7 @@
       if (!SETTINGS.bgmEnabled || _bgmPatName !== name) { _stopBgmSynth(); return; }
       const ctx = getCtx();
       if (ctx.state === 'suspended') return;
-      // Reset se il timestamp è diventato stantio (tab in background, context sospeso, ecc.)
+      // Reset se il timestamp ? diventato stantio (tab in background, context sospeso, ecc.)
       if (_bgmNextNote < ctx.currentTime - 0.5) _bgmNextNote = ctx.currentTime + 0.05;
       const pat = BGM_PATTERNS[_bgmPatName];
       while (_bgmNextNote < ctx.currentTime + BGM_LOOKAHEAD) {
@@ -1073,7 +1073,7 @@
     stopBgm();
     currentBgm = name;
 
-    // La sintesi parte immediatamente — nessuna latenza, nessun fetch
+    // La sintesi parte immediatamente ? nessuna latenza, nessun fetch
     _startBgmSynth(name);
 
     // Tenta MP3 in background: se carica con successo sostituisce la sintesi
@@ -1083,7 +1083,7 @@
       audio.loop = true;
       audio.volume = SETTINGS.bgmVolume;
       audio.addEventListener('canplaythrough', () => {
-        if (currentBgm !== name) return; // schermata già cambiata
+        if (currentBgm !== name) return; // schermata gi? cambiata
         _stopBgmSynth();                 // spegni sintesi
         bgmAudioEl = audio;              // subentra MP3
       }, { once: true });
@@ -1094,7 +1094,7 @@
 
   function updateBgmVolume() {
     if (bgmAudioEl) bgmAudioEl.volume = SETTINGS.bgmVolume;
-    // La sintesi legge SETTINGS.bgmVolume ad ogni nota — aggiornamento automatico
+    // La sintesi legge SETTINGS.bgmVolume ad ogni nota ? aggiornamento automatico
   }
 
   // ============================================================
@@ -1108,7 +1108,7 @@
     const prev = lastScreen;
     lastScreen = screenId;
 
-    // SFX per evento schermata — il BGM non viene mai interrotto dal cambio schermata
+    // SFX per evento schermata ? il BGM non viene mai interrotto dal cambio schermata
     if (screenId === 'battle-screen') {
       const title = document.getElementById('battle-title')?.textContent || '';
       if (title.includes('Gym') || title.includes('Big Boss') || title.includes('Final Boss')) {
@@ -1161,7 +1161,7 @@
           if (cls.includes('levelup') || node.textContent?.includes('grew to')) {
             _sfxOnce('levelup', () => SFX.LEVELUP());
           }
-          // Faint SOLO del player (ignora pokémon avversario)
+          // Faint SOLO del player (ignora pok?mon avversario)
           if (node.closest && node.closest('#player-side') &&
               (cls.includes('fainted') || node.textContent?.includes('fainted'))) {
             SFX.FAINT();
@@ -1206,7 +1206,7 @@
     obs.observe(document.body, { childList: true, subtree: true });
   }
 
-  // Click su carte pokémon nello starter select ? suona SELECT
+  // Click su carte pok?mon nello starter select ? suona SELECT
   function initClickSounds() {
     document.addEventListener('click', (e) => {
       getCtx(); // risveglia il contesto audio al primo click
@@ -1229,7 +1229,7 @@
         SFX.SELECT();
       }
 
-      // Cattura pokémon
+      // Cattura pok?mon
       if (target.closest('.poke-card') && lastScreen === 'catch-screen') {
         SFX.CATCH();
       }
@@ -1255,7 +1255,7 @@
     { videoId: 'JHglZOwB1zY', title: 'NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike' },
     { videoId: '_rr0dOVwr74', title: 'Ho ROTTO la CHALLENGE - Pokemon Roguelike Pokelike' },
     { videoId: 'igStBz6WbbQ', title: 'COMBO DEVASTANTE - Pokemon Roguelike Pokelike' },
-    { videoId: 'IjrFJztMtCU', title: 'Questo GIOCO è una DROGA! 2.0 - Pokemon Roguelike Pokelike' },
+    { videoId: 'IjrFJztMtCU', title: 'Questo GIOCO ? una DROGA! 2.0 - Pokemon Roguelike Pokelike' },
     { videoId: 'L2x_E3l3YNI', title: 'ORA cambia TUTTO! - v2.0 UPDATE | Pokemon Roguelike Pokelike' },
     { videoId: 'oCm9UHNENIQ', title: 'NUOVI POKEMON?! | Pokemon Roguelike Pokelike' },
     { videoId: '6USEm_JPlmQ', title: 'VINCO SENZA CENTRI POKEMON?! - Achievement | Pokemon Roguelike Pokelike' },
@@ -1298,7 +1298,7 @@
   }
 
   const YT_NOTIFY_KEY = 'poke_yt_notified';
-  const YT_NOTIFY_WINDOW_MS = 24 * 60 * 60 * 1000;
+  const YT_NOTIFY_WINDOW_MS = 30 * 60 * 60 * 1000;
 
   function scheduleYoutubeNotify() {
     if (_dailyRewardClaimedToday()) {
@@ -1397,7 +1397,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.3.5</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.3.6</div>',
       '<div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
@@ -1446,7 +1446,7 @@
       '<button id="sv-import" class="pkt-btn pkt-full" style="margin-top:4px">Importa da file</button></div>',
       '<div class="pkt-section"><div id="sv-status" class="pkt-status">-</div></div></div>',
       '<div class="pkt-tab-panel" data-panel="playlist">',
-      '<div class="pkt-tab-head"><div class="pkt-tab-title">Playlist Pokémon</div>',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">Playlist Pok?mon</div>',
       '<div class="pkt-tab-desc">Video Pokelike AlepreRun, clicca per aprire su YouTube.</div></div>',
       '<div id="pkt-playlist-scroll" class="pkt-playlist-scroll"></div>',
       '<a href="' + YT_PLAYLIST_URL + '" target="_blank" rel="noopener" class="pkt-btn pkt-full" style="margin-top:6px;display:block;text-align:center;text-decoration:none">Apri playlist</a>',
@@ -1463,7 +1463,7 @@
       '</div>',
       '<div class="pkt-links">',
       '<a href="https://ko-fi.com/erry96" target="_blank" rel="noopener" class="pkt-link pkt-link-kofi" title="Ko-fi">' + SVG.kofi + '<span>Ko-fi</span></a>',
-      '<a href="https://www.twitch.tv/alepre98" target="_blank" rel="noopener" class="pkt-link pkt-link-twitch" title="Twitch — Alepre98">' + SVG.twitch + '<span>Twitch</span></a>',
+      '<a href="https://www.twitch.tv/alepre98" target="_blank" rel="noopener" class="pkt-link pkt-link-twitch" title="Twitch ? Alepre98">' + SVG.twitch + '<span>Twitch</span></a>',
       '</div>',
       '</div></div>',
     ].join('');
@@ -1537,7 +1537,7 @@
       if (!btn) return;
       spcRemoveIndividual(btn.dataset.id);
       renderSpcCurrent();
-      spcIndStatusEl.textContent = 'Rimosso — ricarico...';
+      spcIndStatusEl.textContent = 'Rimosso ? ricarico...';
       _refreshSoon(1500);
     });
     document.getElementById('spc-enabled').addEventListener('change', e => {
@@ -1554,7 +1554,7 @@
     spcClearBtn.addEventListener('click', () => {
       spcClearIndividual();
       renderSpcCurrent();
-      spcIndStatusEl.textContent = 'Pokemon rimosso — ricarico...';
+      spcIndStatusEl.textContent = 'Pokemon rimosso ? ricarico...';
       _refreshSoon(1500);
     });
     document.getElementById('spc-add').addEventListener('click', async () => {
@@ -1568,7 +1568,7 @@
       const label = resolved.name || ('#' + resolved.id);
       _spcSyncToStorage();
       ensureSpcPatches();
-      spcIndStatusEl.textContent = label + ' aggiunto — ricarico...';
+      spcIndStatusEl.textContent = label + ' aggiunto ? ricarico...';
       input.value = '';
       await renderSpcCurrent();
       _refreshSoon(1500);
@@ -1683,7 +1683,7 @@
   function init() {
     try {
     createPanel();
-    log('PokeLike Toolkit v6.3.5 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.3.6 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
