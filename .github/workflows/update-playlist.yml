@@ -1,0 +1,63 @@
+name: Update YouTube playlist
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-playlist
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch playlist feed and build playlist.json
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const PLAYLIST_ID = 'PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz';
+          const url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=' + PLAYLIST_ID;
+
+          (async () => {
+            const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const xml = await res.text();
+
+            const ids = [...xml.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g)].map(m => m[1]);
+            const titles = [...xml.matchAll(/<title>([^<]+)<\/title>/g)].map(m => m[1]).slice(1);
+
+            if (!ids.length) throw new Error('Nessun video trovato');
+
+            const decode = (s) => (s || 'Video')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>');
+
+            const items = ids.map((id, i) => ({ videoId: id, title: decode(titles[i]) }));
+            const payload = { playlistId: PLAYLIST_ID, updatedAt: new Date().toISOString(), items };
+            fs.writeFileSync('playlist.json', JSON.stringify(payload, null, 2) + '\n');
+            console.log('playlist.json aggiornato:', items.length, 'video');
+          })().catch((err) => { console.error(err); process.exit(1); });
+          EOF
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- playlist.json; then
+            echo "Nessuna modifica alla playlist."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add playlist.json
+            git commit -m "chore: aggiorna playlist YouTube [skip ci]"
+            git push
+          fi
