@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
-// @version      6.3.3
+// @version      6.3.4
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -40,7 +40,7 @@
   'use strict';
 
   try {
-    console.log('%c[POKE-TOOLKIT] carico v6.3.3', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
+    console.log('%c[POKE-TOOLKIT] carico v6.3.4', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
   } catch (_) {}
 
   // ============================================================
@@ -1297,6 +1297,61 @@
     }
   }
 
+  const YT_NOTIFY_KEY = 'poke_yt_notified';
+  const YT_NOTIFY_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+  async function initYoutubeNotify() {
+    try {
+      const res = await fetch(YT_PLAYLIST_JSON + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) return;
+      const data = await res.json();
+      const items = Array.isArray(data.items) ? data.items.filter(v => v && v.videoId && v.published) : [];
+      if (!items.length) return;
+      const now = Date.now();
+      const recent = items
+        .map(v => ({ ...v, ts: Date.parse(v.published) }))
+        .filter(v => !isNaN(v.ts) && now - v.ts <= YT_NOTIFY_WINDOW_MS)
+        .sort((a, b) => b.ts - a.ts);
+      if (!recent.length) return;
+      const latest = recent[0];
+      if (localStorage.getItem(YT_NOTIFY_KEY) === latest.videoId) return;
+      _showYoutubeToast(latest);
+      try { localStorage.setItem(YT_NOTIFY_KEY, latest.videoId); } catch {}
+    } catch (err) {
+      console.warn('[POKE-TOOLKIT] YT notify:', err);
+    }
+  }
+
+  function _showYoutubeToast(video) {
+    if (document.getElementById('pkt-yt-toast')) return;
+    const url = 'https://www.youtube.com/watch?v=' + video.videoId + '&list=' + YT_PLAYLIST_ID;
+    const el = document.createElement('div');
+    el.id = 'pkt-yt-toast';
+    el.innerHTML =
+      '<button type="button" class="pkt-yt-toast-close" title="Chiudi">&times;</button>' +
+      '<a class="pkt-yt-toast-link" href="' + url + '" target="_blank" rel="noopener">' +
+      '<div class="pkt-yt-toast-thumb"><img src="https://i.ytimg.com/vi/' + video.videoId + '/mqdefault.jpg" alt=""></div>' +
+      '<div class="pkt-yt-toast-body"><div class="pkt-yt-toast-tag">NUOVO VIDEO</div>' +
+      '<div class="pkt-yt-toast-title">' + video.title.replace(/</g, '&lt;') + '</div></div></a>';
+    if (!document.getElementById('pkt-yt-toast-style')) {
+      const st = document.createElement('style');
+      st.id = 'pkt-yt-toast-style';
+      st.textContent = '#pkt-yt-toast{position:fixed;bottom:58px;left:12px;z-index:100000;width:230px;background:#100820;border:2px solid #c050ff;border-radius:8px;box-shadow:0 0 16px #c050ff55;font-family:"Press Start 2P",monospace,sans-serif;overflow:hidden;animation:pktYtIn .3s ease}@keyframes pktYtIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}#pkt-yt-toast.pkt-yt-out{opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s}.pkt-yt-toast-close{position:absolute;top:2px;right:4px;z-index:2;background:none;border:none;color:#c8a0ff;font-size:14px;line-height:1;cursor:pointer;padding:2px 4px}.pkt-yt-toast-close:hover{color:#fff}.pkt-yt-toast-link{display:flex;flex-direction:column;text-decoration:none;color:inherit}.pkt-yt-toast-thumb img{display:block;width:100%;height:auto;border-bottom:1px solid #c050ff44}.pkt-yt-toast-body{padding:7px 8px}.pkt-yt-toast-tag{font-size:6px;color:#ff5e5b;margin-bottom:4px}.pkt-yt-toast-title{font-size:6px;color:#e0b0ff;line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}';
+      document.head.appendChild(st);
+    }
+    document.body.appendChild(el);
+    let closed = false;
+    const dismiss = () => {
+      if (closed) return;
+      closed = true;
+      el.classList.add('pkt-yt-out');
+      setTimeout(() => el.remove(), 300);
+    };
+    el.querySelector('.pkt-yt-toast-close').addEventListener('click', (e) => { e.preventDefault(); dismiss(); });
+    el.querySelector('.pkt-yt-toast-link').addEventListener('click', () => setTimeout(dismiss, 100));
+    setTimeout(dismiss, 10000);
+  }
+
   function createPanel() {
     if (!document.body) { setTimeout(createPanel, 300); return; }
     const legacy = document.getElementById('poke-audio-panel');
@@ -1325,7 +1380,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.3.3</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.3.4</div>',
       '<div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
@@ -1611,7 +1666,7 @@
   function init() {
     try {
     createPanel();
-    log('PokeLike Toolkit v6.3.3 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.3.4 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
@@ -1635,6 +1690,7 @@
     initBattleObserver();
     initToastObserver();
     initClickSounds();
+    setTimeout(initYoutubeNotify, 3000);
     } catch (err) {
       console.error('[POKE-TOOLKIT] Errore init:', err);
     }

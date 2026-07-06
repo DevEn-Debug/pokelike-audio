@@ -33,6 +33,7 @@ jobs:
 
             const ids = [...xml.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g)].map(m => m[1]);
             const titles = [...xml.matchAll(/<title>([^<]+)<\/title>/g)].map(m => m[1]).slice(1);
+            const published = [...xml.matchAll(/<published>([^<]+)<\/published>/g)].map(m => m[1]).slice(1);
 
             if (!ids.length) throw new Error('Nessun video trovato');
 
@@ -43,7 +44,7 @@ jobs:
               .replace(/&lt;/g, '<')
               .replace(/&gt;/g, '>');
 
-            const items = ids.map((id, i) => ({ videoId: id, title: decode(titles[i]) }));
+            const items = ids.map((id, i) => ({ videoId: id, title: decode(titles[i]), published: published[i] || null }));
             const payload = { playlistId: PLAYLIST_ID, updatedAt: new Date().toISOString(), items };
             fs.writeFileSync('playlist.json', JSON.stringify(payload, null, 2) + '\n');
             console.log('playlist.json aggiornato:', items.length, 'video');
