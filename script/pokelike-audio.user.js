@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         PokeLike Toolkit
 // @namespace    http://tampermonkey.net/
-// @version      6.3.2
+// @version      6.3.3
 // @description  Audio engine + DexFaker + StarterPC + BuffFaker + Item catalog + Save backup per pokelike.xyz
 // @author       Erry96
 // @match        https://pokelike.xyz/*
@@ -40,7 +40,7 @@
   'use strict';
 
   try {
-    console.log('%c[POKE-TOOLKIT] carico v6.3.2', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
+    console.log('%c[POKE-TOOLKIT] carico v6.3.3', 'background:#1a0a2e;color:#2ecc71;font-weight:bold;padding:2px 6px;border:1px solid #2ecc71');
   } catch (_) {}
 
   // ============================================================
@@ -126,8 +126,16 @@
     'Gen 7  (722-809)': [722, 809], 'Gen 8  (810-905)': [810, 905],
     'Gen 9  (906-1025)': [906, 1025],
   };
-  const TOOLS = { dfShiny: false, spcEnabled: false, spcShiny: false, spcIndividuals: [], spcInjection: null };
-  function loadTools() { try { Object.assign(TOOLS, JSON.parse(localStorage.getItem(TOOLS_STORAGE_KEY) || '{}')); } catch {} }
+  const TOOLS = { dfShiny: false, spcEnabled: false, spcShiny: false, spcIndividuals: [], spcInjections: [] };
+  function loadTools() {
+    try {
+      const data = JSON.parse(localStorage.getItem(TOOLS_STORAGE_KEY) || '{}');
+      Object.assign(TOOLS, data);
+      if (data.spcInjection && !data.spcInjections) TOOLS.spcInjections = [data.spcInjection];
+      if (!Array.isArray(TOOLS.spcInjections)) TOOLS.spcInjections = [];
+      delete TOOLS.spcInjection;
+    } catch {}
+  }
   function saveTools() { try { localStorage.setItem(TOOLS_STORAGE_KEY, JSON.stringify(TOOLS)); } catch {} }
   loadTools();
   let _dfRunning = false;
@@ -181,16 +189,23 @@
     progEl.textContent = '';
   }
   function spcBuildIds() {
-    const ids = TOOLS.spcIndividuals || [];
-    return ids.length ? [ids[0]] : [];
+    return (TOOLS.spcIndividuals || []).filter((id, i, arr) => arr.indexOf(id) === i);
   }
-  function spcSetIndividual(id) {
+  function spcAddIndividual(id) {
     const n = parseInt(id, 10);
     if (!n || n < 1 || n > 1025) return { ok: false, msg: 'ID non valido (1-1025)' };
-    TOOLS.spcIndividuals = [n];
+    const ids = spcBuildIds();
+    if (ids.includes(n)) return { ok: false, msg: 'Gia in lista' };
+    TOOLS.spcIndividuals = [...ids, n];
     TOOLS.spcEnabled = true;
     saveTools();
     return { ok: true, id: n };
+  }
+  function spcRemoveIndividual(id) {
+    const n = parseInt(id, 10);
+    TOOLS.spcIndividuals = spcBuildIds().filter(x => x !== n);
+    saveTools();
+    _spcSyncToStorage();
   }
   function spcClearIndividual() {
     TOOLS.spcIndividuals = [];
@@ -202,7 +217,7 @@
     if (!q) return { ok: false, msg: 'Inserisci un nome' };
     try {
       const data = await _fetchPoke(q);
-      const added = spcSetIndividual(data.id);
+      const added = spcAddIndividual(data.id);
       if (!added.ok) return { ...added, name: data.name };
       return { ok: true, id: data.id, name: data.name };
     } catch {
@@ -264,21 +279,22 @@
 
   function _spcSyncToStorage() {
     let idx = _spcReadIndex();
-    idx = _spcRemoveInjection(idx, TOOLS.spcInjection);
-    TOOLS.spcInjection = null;
+    for (const inj of (TOOLS.spcInjections || [])) idx = _spcRemoveInjection(idx, inj);
+    TOOLS.spcInjections = [];
 
     const ids = spcBuildIds();
     if (TOOLS.spcEnabled && ids.length) {
-      const speciesId = ids[0];
-      const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
-      const legendary = _spcIsLegendary(speciesId);
-      _spcAddUnique(idx.evoLineRoots, root);
-      if (TOOLS.spcShiny) _spcAddUnique(idx.shinySpecies, speciesId);
-      if (legendary) {
-        _spcAddUnique(idx.eggLegendaries, root);
-        if (TOOLS.spcShiny) _spcAddUnique(idx.eggLegendaryShinies, root);
+      for (const speciesId of ids) {
+        const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+        const legendary = _spcIsLegendary(speciesId);
+        _spcAddUnique(idx.evoLineRoots, root);
+        if (TOOLS.spcShiny) _spcAddUnique(idx.shinySpecies, speciesId);
+        if (legendary) {
+          _spcAddUnique(idx.eggLegendaries, root);
+          if (TOOLS.spcShiny) _spcAddUnique(idx.eggLegendaryShinies, root);
+        }
+        TOOLS.spcInjections.push({ root, speciesId, legendary, shiny: !!TOOLS.spcShiny });
       }
-      TOOLS.spcInjection = { root, speciesId, legendary, shiny: !!TOOLS.spcShiny };
     }
 
     saveTools();
@@ -290,54 +306,50 @@
     }
   }
 
-  function _spcFakeEntry() {
+  function _spcFakeEntries() {
     const ids = spcBuildIds();
-    if (ids.length === 0) return null;
-    const speciesId = ids[0];
-    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
-    const legendary = _spcIsLegendary(speciesId);
-    const member = { speciesId, level: 5 };
-    if (TOOLS.spcShiny) member.isShiny = 1;
-    const entry = {
-      _starterpc_fake: true,
-      savedAt: Date.now(),
-      runNumber: 0,
-      hardMode: false,
-      endless: true,
-      stageNumber: 1,
-      starterSpeciesId: speciesId,
-      date: '',
-      team: [member],
-    };
-    if (legendary) entry.source = 'egg';
-    return entry;
+    if (!ids.length) return [];
+    return ids.map(speciesId => {
+      const legendary = _spcIsLegendary(speciesId);
+      const member = { speciesId, level: 5 };
+      if (TOOLS.spcShiny) member.isShiny = 1;
+      const entry = {
+        _starterpc_fake: true,
+        savedAt: Date.now(),
+        runNumber: 0,
+        hardMode: false,
+        endless: true,
+        stageNumber: 1,
+        starterSpeciesId: speciesId,
+        date: '',
+        team: [member],
+      };
+      if (legendary) entry.source = 'egg';
+      return entry;
+    });
   }
 
   function _spcPatchHofIndex(real) {
     const ids = spcBuildIds();
     if (!ids.length) return real;
-    const speciesId = ids[0];
-    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
-    const legendary = _spcIsLegendary(speciesId);
     const idx = { ...real };
     const roots = new Set(idx.evoLineRoots || []);
-    roots.add(root);
-    idx.evoLineRoots = [...roots];
-    if (TOOLS.spcShiny) {
-      const shinies = new Set(idx.shinySpecies || []);
-      shinies.add(speciesId);
-      idx.shinySpecies = [...shinies];
-    }
-    if (legendary) {
-      const eggs = new Set(idx.eggLegendaries || []);
-      eggs.add(root);
-      idx.eggLegendaries = [...eggs];
-      if (TOOLS.spcShiny) {
-        const eggShiny = new Set(idx.eggLegendaryShinies || []);
-        eggShiny.add(root);
-        idx.eggLegendaryShinies = [...eggShiny];
+    const shinies = new Set(idx.shinySpecies || []);
+    const eggs = new Set(idx.eggLegendaries || []);
+    const eggShiny = new Set(idx.eggLegendaryShinies || []);
+    for (const speciesId of ids) {
+      const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+      roots.add(root);
+      if (TOOLS.spcShiny) shinies.add(speciesId);
+      if (_spcIsLegendary(speciesId)) {
+        eggs.add(root);
+        if (TOOLS.spcShiny) eggShiny.add(root);
       }
     }
+    idx.evoLineRoots = [...roots];
+    if (TOOLS.spcShiny) idx.shinySpecies = [...shinies];
+    idx.eggLegendaries = [...eggs];
+    if (TOOLS.spcShiny) idx.eggLegendaryShinies = [...eggShiny];
     return idx;
   }
 
@@ -351,10 +363,11 @@
     if (!TOOLS.spcEnabled) return requestedId;
     const ids = spcBuildIds();
     if (!ids.length) return requestedId;
-    const speciesId = ids[0];
-    const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
     const req = Number(requestedId);
-    if (req === root || req === speciesId) return speciesId;
+    for (const speciesId of ids) {
+      const root = typeof window.getEvoLineRoot === 'function' ? window.getEvoLineRoot(speciesId) : speciesId;
+      if (req === root || req === speciesId) return speciesId;
+    }
     return requestedId;
   }
 
@@ -375,8 +388,8 @@
     function patchedGetHof() {
       const real = _spcOrigGetHof();
       if (!TOOLS.spcEnabled) return real;
-      const fake = _spcFakeEntry();
-      return fake ? [...real, fake] : real;
+      const fakes = _spcFakeEntries();
+      return fakes.length ? [...real, ...fakes] : real;
     }
 
     function patchedGetHofIndex() {
@@ -1234,7 +1247,9 @@
   let activeTab = 'audio';
   const YT_PLAYLIST_ID = 'PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz';
   const YT_PLAYLIST_URL = 'https://www.youtube.com/playlist?list=' + YT_PLAYLIST_ID;
+  const YT_PLAYLIST_JSON = CDN + '/playlist.json';
   const YT_PLAYLIST_FALLBACK = [
+    { videoId: '_ExFI2iZd0s', title: 'DISTRUGGO la MONOTYPE VELENO - Pokemon Roguelike Pokelike' },
     { videoId: '4gVLygCnzIE', title: 'COME VINCERE HOENN - Pokemon Roguelike Pokelike' },
     { videoId: 'zlExsKT6vB4', title: 'DISTRUGGO la SUPER4 GHOST - Pokemon Roguelike Pokelike' },
     { videoId: 'JHglZOwB1zY', title: 'NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike' },
@@ -1254,20 +1269,6 @@
   let _playlistInit = false;
   let _playlistLive = false;
 
-  function _fetchText(url) {
-    return fetch(url).then(r => (r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status))));
-  }
-
-  function _parseYoutubePlaylistXml(text) {
-    const xml = new DOMParser().parseFromString(text, 'text/xml');
-    return Array.from(xml.querySelectorAll('entry')).map(entry => {
-      const idEl = entry.getElementsByTagNameNS('http://www.youtube.com/xml/schemas/2015', 'videoId')[0];
-      const videoId = idEl ? idEl.textContent : (entry.querySelector('link')?.getAttribute('href') || '').split('v=')[1]?.split('&')[0];
-      const title = (entry.querySelector('title')?.textContent || 'Video').replace(/&amp;/g, '&');
-      return { videoId, title };
-    }).filter(v => v.videoId);
-  }
-
   function _renderPlaylistItems(container, items) {
     container.innerHTML = items.map(v =>
       '<a class="pkt-playlist-item" href="https://www.youtube.com/watch?v=' + v.videoId + '&list=' + YT_PLAYLIST_ID + '" target="_blank" rel="noopener" title="' + v.title.replace(/"/g, '&quot;') + '">' +
@@ -1284,8 +1285,10 @@
     }
     if (_playlistLive) return;
     try {
-      const text = await _fetchText('https://www.youtube.com/feeds/videos.xml?playlist_id=' + YT_PLAYLIST_ID);
-      const items = _parseYoutubePlaylistXml(text);
+      const res = await fetch(YT_PLAYLIST_JSON + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const items = Array.isArray(data.items) ? data.items.filter(v => v && v.videoId) : [];
       if (!items.length) throw new Error('Playlist vuota');
       _renderPlaylistItems(container, items);
       _playlistLive = true;
@@ -1322,7 +1325,7 @@
     panel.innerHTML = [
       '<div id="pkt-toggle" title="PokeLike Toolkit">' + SVG.toggle + '</div>',
       '<div id="pkt-body" style="display:none">',
-      '<div class="pkt-header">PokeLike Toolkit v6.3.2</div>',
+      '<div class="pkt-header">PokeLike Toolkit v6.3.3</div>',
       '<div class="pkt-tab-panels">',
       '<div class="pkt-tab-panel active" data-panel="audio">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">Audio Engine</div><div class="pkt-tab-desc">SFX personalizzati e controllo volume musica di gioco.</div></div>',
@@ -1339,13 +1342,13 @@
       '<div class="pkt-section"><label class="pkt-check-row"><input type="checkbox" id="df-shiny-chk" ' + (TOOLS.dfShiny ? 'checked' : '') + '><span>Aggiungi anche versione Shiny</span></label></div>',
       '<div class="pkt-section"><div id="df-status" class="pkt-status">-</div></div></div>',
       '<div class="pkt-tab-panel" data-panel="starter">',
-      '<div class="pkt-tab-head"><div class="pkt-tab-title">StarterPC</div><div class="pkt-tab-desc">Inserisci la forma esatta (es. Butterfree, non Caterpie). Leggendari: supporto limitato.</div></div>',
+      '<div class="pkt-tab-head"><div class="pkt-tab-title">StarterPC</div><div class="pkt-tab-desc">Aggiungi Pokemon al PC Tower (N. o nome, piu alla volta).</div></div>',
       '<div class="pkt-section"><label class="pkt-check-row pkt-main"><input type="checkbox" id="spc-enabled" ' + (TOOLS.spcEnabled ? 'checked' : '') + '><span>Abilita StarterPC</span></label></div>',
       '<div class="pkt-section"><label class="pkt-check-row"><input type="checkbox" id="spc-shiny-chk" ' + (TOOLS.spcShiny ? 'checked' : '') + '><span>Mostrali come Shiny</span></label></div>',
       '<div class="pkt-section"><div class="pkt-label">N. Pokedex o nome</div>',
-      '<div class="pkt-row"><input type="text" id="spc-input" placeholder="es. 25 o Pikachu" class="pkt-input"><button id="spc-add" class="pkt-btn">Imposta</button></div>',
-      '<div id="spc-current" class="pkt-hint" style="margin-top:6px">Nessun Pokemon selezionato</div>',
-      '<button id="spc-clear" class="pkt-btn pkt-full" style="margin-top:4px;display:none">Rimuovi</button>',
+      '<div class="pkt-row"><input type="text" id="spc-input" placeholder="es. 25 o Pikachu" class="pkt-input"><button id="spc-add" class="pkt-btn">Aggiungi</button></div>',
+      '<div id="spc-current-list" class="spc-ind-list"></div>',
+      '<button id="spc-clear" class="pkt-btn pkt-full" style="margin-top:4px;display:none">Rimuovi tutti</button>',
       '<div id="spc-individual-status" class="pkt-hint" style="margin-top:4px"></div></div></div>',
       '<div class="pkt-tab-panel" data-panel="ev">',
       '<div class="pkt-tab-head"><div class="pkt-tab-title">BuffFaker</div><div class="pkt-tab-desc">Modifica gli EV/stat buff per singolo Pokemon.</div></div>',
@@ -1433,26 +1436,38 @@
     document.getElementById('df-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); document.getElementById('df-single-btn').click(); }
     });
-    const spcCurrentEl = document.getElementById('spc-current');
+    const spcListEl = document.getElementById('spc-current-list');
     const spcClearBtn = document.getElementById('spc-clear');
     const spcIndStatusEl = document.getElementById('spc-individual-status');
     async function renderSpcCurrent() {
       const ids = spcBuildIds();
-      if (ids.length === 0) {
-        spcCurrentEl.textContent = 'Nessun Pokemon selezionato';
+      if (!ids.length) {
+        spcListEl.innerHTML = '<span class="pkt-hint">Nessun Pokemon selezionato</span>';
         spcClearBtn.style.display = 'none';
         return;
       }
       spcClearBtn.style.display = 'block';
-      const id = ids[0];
-      try {
-        const data = await _fetchPoke(id);
-        spcCurrentEl.textContent = '#' + id + ' ' + data.name;
-      } catch {
-        spcCurrentEl.textContent = '#' + id;
-      }
+      spcListEl.innerHTML = ids.map(id => '<span class="spc-ind-tag" data-id="' + id + '">#' + id + ' <span class="spc-ind-name">...</span><button type="button" class="spc-ind-rm" data-id="' + id + '" title="Rimuovi">x</button></span>').join('');
+      await Promise.all(ids.map(async id => {
+        const nameEl = spcListEl.querySelector('.spc-ind-tag[data-id="' + id + '"] .spc-ind-name');
+        if (!nameEl) return;
+        try {
+          const data = await _fetchPoke(id);
+          nameEl.textContent = data.name;
+        } catch {
+          nameEl.textContent = '';
+        }
+      }));
     }
     renderSpcCurrent();
+    spcListEl.addEventListener('click', e => {
+      const btn = e.target.closest('.spc-ind-rm');
+      if (!btn) return;
+      spcRemoveIndividual(btn.dataset.id);
+      renderSpcCurrent();
+      spcIndStatusEl.textContent = 'Rimosso — ricarico...';
+      _refreshSoon(1500);
+    });
     document.getElementById('spc-enabled').addEventListener('change', e => {
       TOOLS.spcEnabled = e.target.checked;
       saveTools();
@@ -1475,7 +1490,7 @@
       spcIndStatusEl.textContent = 'Ricerca...';
       const resolved = await _resolvePokeId(input.value);
       if (!resolved.ok) { spcIndStatusEl.textContent = resolved.msg; return; }
-      const res = spcSetIndividual(resolved.id);
+      const res = spcAddIndividual(resolved.id);
       if (!res.ok) { spcIndStatusEl.textContent = res.msg; return; }
       document.getElementById('spc-enabled').checked = true;
       const label = resolved.name || ('#' + resolved.id);
@@ -1596,7 +1611,7 @@
   function init() {
     try {
     createPanel();
-    log('PokeLike Toolkit v6.3.2 avviato', '#2ecc71');
+    log('PokeLike Toolkit v6.3.3 avviato', '#2ecc71');
     initDailyReward();
     watchMaintenanceBypass();
     injectInstantScreenCSS();
