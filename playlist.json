@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-07T07:19:25.043Z",
+  "updatedAt": "2026-07-07T10:12:45.920Z",
   "items": [
+    {
+      "videoId": "3xTs5WGwE1A",
+      "title": "CHALLENGE SOLO LEGGENDARI -  Pokemon Roguelike Pokelike",
+      "published": "2026-07-07T10:00:29+00:00"
+    },
     {
       "videoId": "_ExFI2iZd0s",
       "title": "DISTRUGGO la MONOTYPE VELENO -  Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "FerauBIml9g",
       "title": "ARCEUS IMBATTIBILE! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike",
       "published": "2026-05-18T10:00:33+00:00"
-    },
-    {
-      "videoId": "R-eRBg0FNRg",
-      "title": "DISTRUGGO LA TORRE! - Il POKEMON Finale | Pokemon Roguelike Pokelike",
-      "published": "2026-05-13T10:00:28+00:00"
     }
   ]
 }
