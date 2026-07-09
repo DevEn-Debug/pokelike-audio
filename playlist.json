@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-09T07:29:46.582Z",
+  "updatedAt": "2026-07-09T10:23:02.218Z",
   "items": [
+    {
+      "videoId": "MFEOTjcYzAI",
+      "title": "VINCO la RANDOMIZER?! -  Pokemon Roguelike Pokelike",
+      "published": "2026-07-09T10:00:02+00:00"
+    },
     {
       "videoId": "3xTs5WGwE1A",
       "title": "CHALLENGE SOLO LEGGENDARI -  Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "XU6hEfzWAHo",
       "title": "GIOCHIAMO IN NUZLOCKE! - Kanto & Johto | Pokemon Roguelike Pokelike",
       "published": "2026-05-23T10:00:29+00:00"
-    },
-    {
-      "videoId": "FerauBIml9g",
-      "title": "ARCEUS IMBATTIBILE! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike",
-      "published": "2026-05-18T10:00:33+00:00"
     }
   ]
 }
