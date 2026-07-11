@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-11T09:35:06.804Z",
+  "updatedAt": "2026-07-11T12:24:47.333Z",
   "items": [
+    {
+      "videoId": "cYHE5QMruMs",
+      "title": "COMBO DIFESA INFINITA - Monotype Acciaio - Pokemon Roguelike Pokelike",
+      "published": "2026-07-11T10:00:28+00:00"
+    },
     {
       "videoId": "MFEOTjcYzAI",
       "title": "VINCO la RANDOMIZER?! -  Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "rioCqSn2cCo",
       "title": "DISTRUGGO CAMILLA! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike",
       "published": "2026-05-27T10:00:26+00:00"
-    },
-    {
-      "videoId": "XU6hEfzWAHo",
-      "title": "GIOCHIAMO IN NUZLOCKE! - Kanto & Johto | Pokemon Roguelike Pokelike",
-      "published": "2026-05-23T10:00:29+00:00"
     }
   ]
 }
