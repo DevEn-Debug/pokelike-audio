@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-13T07:16:59.333Z",
+  "updatedAt": "2026-07-13T10:11:12.906Z",
   "items": [
+    {
+      "videoId": "9aIgwJpXkM0",
+      "title": "NUOVA GEN e MEGAEVOLUZIONI! - v2.3 UPDATE | Pokemon Roguelike Pokelike",
+      "published": "2026-07-13T10:00:17+00:00"
+    },
     {
       "videoId": "cYHE5QMruMs",
       "title": "COMBO DIFESA INFINITA - Monotype Acciaio - Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "l8hRCkgaolM",
       "title": "COME BATTERE UNIMA! - Torre Pokemon | Pokemon Roguelike Pokelike",
       "published": "2026-05-30T10:00:35+00:00"
-    },
-    {
-      "videoId": "rioCqSn2cCo",
-      "title": "DISTRUGGO CAMILLA! - Torre Pokemon Sinnoh | Pokemon Roguelike Pokelike",
-      "published": "2026-05-27T10:00:26+00:00"
     }
   ]
 }
