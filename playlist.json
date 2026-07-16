@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-16T09:45:58.135Z",
+  "updatedAt": "2026-07-16T12:40:06.017Z",
   "items": [
+    {
+      "videoId": "U3o0P0aPqF4",
+      "title": "ENDLESS MODE MEGA CHARIZARD | Pokemon Roguelike Pokelike",
+      "published": "2026-07-16T10:00:30+00:00"
+    },
     {
       "videoId": "9aIgwJpXkM0",
       "title": "NUOVA GEN e MEGAEVOLUZIONI! - v2.3 UPDATE | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "6USEm_JPlmQ",
       "title": "VINCO SENZA CENTRI POKEMON?! - Achievement | Pokemon Roguelike Pokelike",
       "published": "2026-06-10T10:00:00+00:00"
-    },
-    {
-      "videoId": "l8hRCkgaolM",
-      "title": "COME BATTERE UNIMA! - Torre Pokemon | Pokemon Roguelike Pokelike",
-      "published": "2026-05-30T10:00:35+00:00"
     }
   ]
 }
