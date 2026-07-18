@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-18T09:34:18.260Z",
+  "updatedAt": "2026-07-18T12:23:29.679Z",
   "items": [
+    {
+      "videoId": "Tdj3AeMoRvw",
+      "title": "HO ROTTO LA ENDLESS | Pokemon Roguelike Pokelike",
+      "published": "2026-07-18T10:00:32+00:00"
+    },
     {
       "videoId": "U3o0P0aPqF4",
       "title": "ENDLESS MODE MEGA CHARIZARD | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "oCm9UHNENIQ",
       "title": "NUOVI POKEMON?! | Pokemon Roguelike Pokelike",
       "published": "2026-06-13T10:00:20+00:00"
-    },
-    {
-      "videoId": "6USEm_JPlmQ",
-      "title": "VINCO SENZA CENTRI POKEMON?! - Achievement | Pokemon Roguelike Pokelike",
-      "published": "2026-06-10T10:00:00+00:00"
     }
   ]
 }
