@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-20T07:14:31.776Z",
+  "updatedAt": "2026-07-20T10:06:49.658Z",
   "items": [
+    {
+      "videoId": "7obkL70NiJk",
+      "title": "NUOVO AGGIORNAMENTO INCREDIBILE! - v2.3.1 UPDATE | Pokemon Roguelike Pokelike",
+      "published": "2026-07-20T10:00:20+00:00"
+    },
     {
       "videoId": "Tdj3AeMoRvw",
       "title": "HO ROTTO LA ENDLESS | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "L2x_E3l3YNI",
       "title": "ORA cambia TUTTO! - v2.0 UPDATE | Pokemon Roguelike Pokelike",
       "published": "2026-06-17T10:00:35+00:00"
-    },
-    {
-      "videoId": "oCm9UHNENIQ",
-      "title": "NUOVI POKEMON?! | Pokemon Roguelike Pokelike",
-      "published": "2026-06-13T10:00:20+00:00"
     }
   ]
 }
