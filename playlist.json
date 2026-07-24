@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-24T09:51:36.974Z",
+  "updatedAt": "2026-07-24T12:37:12.666Z",
   "items": [
+    {
+      "videoId": "GXF8jECHhIk",
+      "title": "I TRAITS PIÙ FORTI | Pokemon Roguelike Pokelike",
+      "published": "2026-07-24T10:00:32+00:00"
+    },
     {
       "videoId": "EGg0aNZowk8",
       "title": "COME SBLOCCARE MEW | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "igStBz6WbbQ",
       "title": "COMBO DEVASTANTE - Pokemon Roguelike Pokelike",
       "published": "2026-06-23T10:00:00+00:00"
-    },
-    {
-      "videoId": "IjrFJztMtCU",
-      "title": "Questo GIOCO è una DROGA! 2.0 - Pokemon Roguelike Pokelike",
-      "published": "2026-06-20T10:00:22+00:00"
     }
   ]
 }
