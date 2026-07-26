@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-26T09:44:12.483Z",
+  "updatedAt": "2026-07-26T12:29:40.801Z",
   "items": [
+    {
+      "videoId": "bM-EPSYySxE",
+      "title": "COME VINCERE SINNOH - Aggiornamento 2.4 | Pokemon Roguelike Pokelike",
+      "published": "2026-07-26T10:00:09+00:00"
+    },
     {
       "videoId": "GXF8jECHhIk",
       "title": "I TRAITS PIÙ FORTI | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "_rr0dOVwr74",
       "title": "Ho ROTTO la CHALLENGE - Pokemon Roguelike Pokelike",
       "published": "2026-06-25T10:29:32+00:00"
-    },
-    {
-      "videoId": "igStBz6WbbQ",
-      "title": "COMBO DEVASTANTE - Pokemon Roguelike Pokelike",
-      "published": "2026-06-23T10:00:00+00:00"
     }
   ]
 }
