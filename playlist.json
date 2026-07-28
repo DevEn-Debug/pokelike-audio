@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-28T09:55:33.415Z",
+  "updatedAt": "2026-07-28T12:43:27.249Z",
   "items": [
+    {
+      "videoId": "PdBcnl18DrU",
+      "title": "DISTRUGGO la SINNOH CHALLENGE | Pokemon Roguelike Pokelike",
+      "published": "2026-07-28T10:00:09+00:00"
+    },
     {
       "videoId": "bM-EPSYySxE",
       "title": "COME VINCERE SINNOH - Aggiornamento 2.4 | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "JHglZOwB1zY",
       "title": "NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike",
       "published": "2026-06-28T10:00:30+00:00"
-    },
-    {
-      "videoId": "_rr0dOVwr74",
-      "title": "Ho ROTTO la CHALLENGE - Pokemon Roguelike Pokelike",
-      "published": "2026-06-25T10:29:32+00:00"
     }
   ]
 }
