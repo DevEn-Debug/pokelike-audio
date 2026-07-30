@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-07-30T09:53:12.367Z",
+  "updatedAt": "2026-07-30T12:40:41.369Z",
   "items": [
+    {
+      "videoId": "k2V9haJRZVo",
+      "title": "LA SFIDA IMPOSSIBILE di CAMILLA | Pokemon Roguelike Pokelike",
+      "published": "2026-07-30T10:11:09+00:00"
+    },
     {
       "videoId": "PdBcnl18DrU",
       "title": "DISTRUGGO la SINNOH CHALLENGE | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "zlExsKT6vB4",
       "title": "DISTRUGGO la SUPER4 GHOST -  Pokemon Roguelike Pokelike",
       "published": "2026-06-30T10:00:11+00:00"
-    },
-    {
-      "videoId": "JHglZOwB1zY",
-      "title": "NUOVA REGIONE! - v2.1 UPDATE | Pokemon Roguelike Pokelike",
-      "published": "2026-06-28T10:00:30+00:00"
     }
   ]
 }
