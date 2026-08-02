@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-02T09:43:05.157Z",
+  "updatedAt": "2026-08-02T12:28:09.349Z",
   "items": [
+    {
+      "videoId": "Fehmv7NQkTI",
+      "title": "MULTIPLAYER SU POKELIKE! | Pokemon Roguelike Pokelike",
+      "published": "2026-08-02T10:00:34+00:00"
+    },
     {
       "videoId": "k2V9haJRZVo",
       "title": "LA SFIDA IMPOSSIBILE di CAMILLA | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "4gVLygCnzIE",
       "title": "COME VINCERE HOENN -  Pokemon Roguelike Pokelike",
       "published": "2026-07-02T10:00:36+00:00"
-    },
-    {
-      "videoId": "zlExsKT6vB4",
-      "title": "DISTRUGGO la SUPER4 GHOST -  Pokemon Roguelike Pokelike",
-      "published": "2026-06-30T10:00:11+00:00"
     }
   ]
 }
