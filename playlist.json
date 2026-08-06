@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-06T08:42:11.830Z",
+  "updatedAt": "2026-08-06T11:26:12.338Z",
   "items": [
+    {
+      "videoId": "xaeBAh9leeY",
+      "title": "Questa MODALITÀ è IMPOSSIBILE! | Pokemon Roguelike Pokelike",
+      "published": "2026-08-06T10:00:06+00:00"
+    },
     {
       "videoId": "6Qp3PYErqNQ",
       "title": "NUOVA ABILITÀ MEGAEVOLUZIONI! | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "3xTs5WGwE1A",
       "title": "CHALLENGE SOLO LEGGENDARI -  Pokemon Roguelike Pokelike",
       "published": "2026-07-07T10:00:29+00:00"
-    },
-    {
-      "videoId": "_ExFI2iZd0s",
-      "title": "DISTRUGGO la MONOTYPE VELENO -  Pokemon Roguelike Pokelike",
-      "published": "2026-07-05T10:00:11+00:00"
     }
   ]
 }
