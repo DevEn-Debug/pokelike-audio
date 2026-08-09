@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-09T12:57:22.896Z",
+  "updatedAt": "2026-08-09T15:34:53.760Z",
   "items": [
+    {
+      "videoId": "PyFLLjr-syA",
+      "title": "POKELIKE TRICK ROOM  #pokemon",
+      "published": "2026-08-09T15:00:00+00:00"
+    },
     {
       "videoId": "NNBtPCcruWk",
       "title": "NUOVA CHALLENGE ASSURDA! - Challenge Trick Room | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "cYHE5QMruMs",
       "title": "COMBO DIFESA INFINITA - Monotype Acciaio - Pokemon Roguelike Pokelike",
       "published": "2026-07-11T10:00:28+00:00"
-    },
-    {
-      "videoId": "MFEOTjcYzAI",
-      "title": "VINCO la RANDOMIZER?! -  Pokemon Roguelike Pokelike",
-      "published": "2026-07-09T10:00:02+00:00"
     }
   ]
 }
