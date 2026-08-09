@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-09T09:42:32.760Z",
+  "updatedAt": "2026-08-09T12:57:22.896Z",
   "items": [
+    {
+      "videoId": "NNBtPCcruWk",
+      "title": "NUOVA CHALLENGE ASSURDA! - Challenge Trick Room | Pokemon Roguelike Pokelike",
+      "published": "2026-08-09T10:00:26+00:00"
+    },
     {
       "videoId": "xaeBAh9leeY",
       "title": "Questa MODALITÀ è IMPOSSIBILE! | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "MFEOTjcYzAI",
       "title": "VINCO la RANDOMIZER?! -  Pokemon Roguelike Pokelike",
       "published": "2026-07-09T10:00:02+00:00"
-    },
-    {
-      "videoId": "3xTs5WGwE1A",
-      "title": "CHALLENGE SOLO LEGGENDARI -  Pokemon Roguelike Pokelike",
-      "published": "2026-07-07T10:00:29+00:00"
     }
   ]
 }
