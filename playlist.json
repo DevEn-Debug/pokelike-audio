@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-13T07:39:17.701Z",
+  "updatedAt": "2026-08-13T10:10:37.791Z",
   "items": [
+    {
+      "videoId": "jh8yum9C7Uk",
+      "title": "DISTRUGGO la ENDLESS con i MUTANTI!  | Pokemon Roguelike Pokelike",
+      "published": "2026-08-13T10:00:02+00:00"
+    },
     {
       "videoId": "fQYN2wowS9c",
       "title": "I NUOVI Pokemon MUTANTI non hanno SENSO!  | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "U3o0P0aPqF4",
       "title": "ENDLESS MODE MEGA CHARIZARD | Pokemon Roguelike Pokelike",
       "published": "2026-07-16T10:00:30+00:00"
-    },
-    {
-      "videoId": "9aIgwJpXkM0",
-      "title": "NUOVA GEN e MEGAEVOLUZIONI! - v2.3 UPDATE | Pokemon Roguelike Pokelike",
-      "published": "2026-07-13T10:00:17+00:00"
     }
   ]
 }
