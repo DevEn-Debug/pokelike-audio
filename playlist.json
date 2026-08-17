@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-17T09:45:30.019Z",
+  "updatedAt": "2026-08-17T12:50:02.564Z",
   "items": [
+    {
+      "videoId": "JAufrbS8fOI",
+      "title": "DIVENTO il PROPRIETARIO di una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
+      "published": "2026-08-17T10:00:19+00:00"
+    },
     {
       "videoId": "Uhd98aA7Sq4",
       "title": "HO COMPRATO una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "7obkL70NiJk",
       "title": "NUOVO AGGIORNAMENTO INCREDIBILE! - v2.3.1 UPDATE | Pokemon Roguelike Pokelike",
       "published": "2026-07-20T10:00:20+00:00"
-    },
-    {
-      "videoId": "Tdj3AeMoRvw",
-      "title": "HO ROTTO LA ENDLESS | Pokemon Roguelike Pokelike",
-      "published": "2026-07-18T10:00:32+00:00"
     }
   ]
 }
