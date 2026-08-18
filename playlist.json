@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-18T09:36:44.944Z",
+  "updatedAt": "2026-08-18T12:52:09.628Z",
   "items": [
+    {
+      "videoId": "P1g89KJxT9w",
+      "title": "NUOVA NUZLOCKE con le MEGAEVOLUZIONI!  | Pokemon Roguelike Pokelike",
+      "published": "2026-08-18T10:00:29+00:00"
+    },
     {
       "videoId": "JAufrbS8fOI",
       "title": "DIVENTO il PROPRIETARIO di una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "EGg0aNZowk8",
       "title": "COME SBLOCCARE MEW | Pokemon Roguelike Pokelike",
       "published": "2026-07-22T10:00:03+00:00"
-    },
-    {
-      "videoId": "7obkL70NiJk",
-      "title": "NUOVO AGGIORNAMENTO INCREDIBILE! - v2.3.1 UPDATE | Pokemon Roguelike Pokelike",
-      "published": "2026-07-20T10:00:20+00:00"
     }
   ]
 }
