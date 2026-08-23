@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-23T09:30:46.042Z",
+  "updatedAt": "2026-08-23T12:45:55.358Z",
   "items": [
+    {
+      "videoId": "-OyZy7ukPwg",
+      "title": "ARRIVANO le CARTE su POKELIKE!  | Pokemon Roguelike Pokelike",
+      "published": "2026-08-23T10:00:18+00:00"
+    },
     {
       "videoId": "P1g89KJxT9w",
       "title": "NUOVA NUZLOCKE con le MEGAEVOLUZIONI!  | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "GXF8jECHhIk",
       "title": "I TRAITS PIÙ FORTI | Pokemon Roguelike Pokelike",
       "published": "2026-07-24T10:00:32+00:00"
-    },
-    {
-      "videoId": "EGg0aNZowk8",
-      "title": "COME SBLOCCARE MEW | Pokemon Roguelike Pokelike",
-      "published": "2026-07-22T10:00:03+00:00"
     }
   ]
 }
