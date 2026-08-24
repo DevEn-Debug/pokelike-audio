@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-24T09:51:11.061Z",
+  "updatedAt": "2026-08-24T12:55:56.667Z",
   "items": [
+    {
+      "videoId": "DuflcV03uik",
+      "title": "IL GIOCO POKEMON DEFINITIVO!  | Pokemon Salt & Shadow",
+      "published": "2026-08-24T10:00:07+00:00"
+    },
     {
       "videoId": "-OyZy7ukPwg",
       "title": "ARRIVANO le CARTE su POKELIKE!  | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "bM-EPSYySxE",
       "title": "COME VINCERE SINNOH - Aggiornamento 2.4 | Pokemon Roguelike Pokelike",
       "published": "2026-07-26T10:00:09+00:00"
-    },
-    {
-      "videoId": "GXF8jECHhIk",
-      "title": "I TRAITS PIÙ FORTI | Pokemon Roguelike Pokelike",
-      "published": "2026-07-24T10:00:32+00:00"
     }
   ]
 }
