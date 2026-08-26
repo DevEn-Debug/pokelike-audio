@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-26T09:45:55.345Z",
+  "updatedAt": "2026-08-26T12:58:00.803Z",
   "items": [
+    {
+      "videoId": "7iEHjZTM1Bo",
+      "title": "HO DISTRUTTO la CHALLENGE!  | Pokemon Roguelike Pokelike",
+      "published": "2026-08-26T10:00:23+00:00"
+    },
     {
       "videoId": "DuflcV03uik",
       "title": "IL GIOCO POKEMON DEFINITIVO!  | Pokemon Salt & Shadow",
@@ -71,11 +76,6 @@
       "videoId": "PdBcnl18DrU",
       "title": "DISTRUGGO la SINNOH CHALLENGE | Pokemon Roguelike Pokelike",
       "published": "2026-07-28T10:00:09+00:00"
-    },
-    {
-      "videoId": "bM-EPSYySxE",
-      "title": "COME VINCERE SINNOH - Aggiornamento 2.4 | Pokemon Roguelike Pokelike",
-      "published": "2026-07-26T10:00:09+00:00"
     }
   ]
 }
