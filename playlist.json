@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-08-30T04:31:17.344Z",
+  "updatedAt": "2026-08-30T11:32:48.651Z",
   "items": [
+    {
+      "videoId": "CtuHoWMoHzk",
+      "title": "BATTAGLIA NAVALE POKEMON VS @DROODTHUND3RLIVE | Pokemon Battleship QWILFIGHT",
+      "published": "2026-08-30T10:00:32+00:00"
+    },
     {
       "videoId": "7iEHjZTM1Bo",
       "title": "HO DISTRUTTO la CHALLENGE!  | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "PdBcnl18DrU",
       "title": "DISTRUGGO la SINNOH CHALLENGE | Pokemon Roguelike Pokelike",
       "published": "2026-07-28T10:00:09+00:00"
-    },
-    {
-      "videoId": "bM-EPSYySxE",
-      "title": "COME VINCERE SINNOH - Aggiornamento 2.4 | Pokemon Roguelike Pokelike",
-      "published": "2026-07-26T10:00:09+00:00"
     }
   ]
 }
