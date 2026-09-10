@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-09-09T23:03:17.121Z",
+  "updatedAt": "2026-09-10T10:55:26.254Z",
   "items": [
+    {
+      "videoId": "nj-V7rC00KQ",
+      "title": "FUSIONI POKEMON ASSURDE - Update V3.0 | Pokemon Roguelike Pokelike",
+      "published": "2026-09-10T10:00:06+00:00"
+    },
     {
       "videoId": "FsWohWo0jg8",
       "title": "COME VINCERE UNIMA?! - Update V2.9 | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "Fehmv7NQkTI",
       "title": "MULTIPLAYER SU POKELIKE! | Pokemon Roguelike Pokelike",
       "published": "2026-08-02T10:00:34+00:00"
-    },
-    {
-      "videoId": "k2V9haJRZVo",
-      "title": "LA SFIDA IMPOSSIBILE di CAMILLA | Pokemon Roguelike Pokelike",
-      "published": "2026-07-30T10:11:09+00:00"
     }
   ]
 }
