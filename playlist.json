@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-09-19T22:45:14.567Z",
+  "updatedAt": "2026-09-20T10:56:14.104Z",
   "items": [
+    {
+      "videoId": "_aUSd8MtZQE",
+      "title": "IL NUOVO ROGUELIKE POKELIKE2! | Pokemon Roguelike Pokelike",
+      "published": "2026-09-20T10:00:04+00:00"
+    },
     {
       "videoId": "_TXY5b414pw",
       "title": "LE NUOVE MOSSE SONO DEVASTANTI - Update V3.1.1 | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "xaeBAh9leeY",
       "title": "Questa MODALITÀ è IMPOSSIBILE! | Pokemon Roguelike Pokelike",
       "published": "2026-08-06T10:00:06+00:00"
-    },
-    {
-      "videoId": "6Qp3PYErqNQ",
-      "title": "NUOVA ABILITÀ MEGAEVOLUZIONI! | Pokemon Roguelike Pokelike",
-      "published": "2026-08-04T10:05:53+00:00"
     }
   ]
 }
