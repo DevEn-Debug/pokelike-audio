@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-09-21T23:55:36.956Z",
+  "updatedAt": "2026-09-22T11:12:52.877Z",
   "items": [
+    {
+      "videoId": "cJO9B2AdoCo",
+      "title": "IL NUOVO ROGUELIKE POKÉMON SURVIVOR! | Pokemon Survivor Burst",
+      "published": "2026-09-22T10:00:38+00:00"
+    },
     {
       "videoId": "_aUSd8MtZQE",
       "title": "IL NUOVO ROGUELIKE POKELIKE2! | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "NNBtPCcruWk",
       "title": "NUOVA CHALLENGE ASSURDA! - Challenge Trick Room | Pokemon Roguelike Pokelike",
       "published": "2026-08-09T10:00:26+00:00"
-    },
-    {
-      "videoId": "xaeBAh9leeY",
-      "title": "Questa MODALITÀ è IMPOSSIBILE! | Pokemon Roguelike Pokelike",
-      "published": "2026-08-06T10:00:06+00:00"
     }
   ]
 }
