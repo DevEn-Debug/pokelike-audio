@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-04T21:02:15.156Z",
+  "updatedAt": "2026-10-05T14:01:29.323Z",
   "items": [
+    {
+      "videoId": "FUITJplJIXE",
+      "title": "DISTRUGGO LA ENDLESS SU POKELIKE! | Pokemon Roguelike Pokelike",
+      "published": "2026-10-05T10:00:20+00:00"
+    },
     {
       "videoId": "2X5pGvyJZxY",
       "title": "SOLO METRONOMO SU POKÉMON HEARTGOLD RANDOMIZER! | Pokémon HeartGold Dumbattle Randomizer",
@@ -71,11 +76,6 @@
       "videoId": "fQYN2wowS9c",
       "title": "I NUOVI Pokemon MUTANTI non hanno SENSO!  | Pokemon Roguelike Pokelike",
       "published": "2026-08-11T10:00:28+00:00"
-    },
-    {
-      "videoId": "PyFLLjr-syA",
-      "title": "POKELIKE TRICK ROOM  #pokemon",
-      "published": "2026-08-09T15:00:00+00:00"
     }
   ]
 }
