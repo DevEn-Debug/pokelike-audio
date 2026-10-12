@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-11T19:23:52.521Z",
+  "updatedAt": "2026-10-12T10:27:11.866Z",
   "items": [
+    {
+      "videoId": "DLlKCODoDUo",
+      "title": "QUESTO GIOCO È UNA DROGA! | Pokemon Roguelike Pokesurvivor",
+      "published": "2026-10-12T10:00:22+00:00"
+    },
     {
       "videoId": "d6j2lGSExoM",
       "title": "IL GIOCO DI CARTE DEI POKEMON!? | Balatro Pokemon Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "Uhd98aA7Sq4",
       "title": "HO COMPRATO una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
       "published": "2026-08-14T10:00:16+00:00"
-    },
-    {
-      "videoId": "jh8yum9C7Uk",
-      "title": "DISTRUGGO la ENDLESS con i MUTANTI!  | Pokemon Roguelike Pokelike",
-      "published": "2026-08-13T10:00:02+00:00"
     }
   ]
 }
