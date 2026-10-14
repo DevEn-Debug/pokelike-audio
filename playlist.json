@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-13T16:47:36.508Z",
+  "updatedAt": "2026-10-14T11:27:43.032Z",
   "items": [
+    {
+      "videoId": "NjK2fiGLDmo",
+      "title": "HO DISTRUTTO POKEMON SURVIVOR! | Pokemon Roguelike Pokesurvivor",
+      "published": "2026-10-14T10:00:26+00:00"
+    },
     {
       "videoId": "DLlKCODoDUo",
       "title": "QUESTO GIOCO È UNA DROGA! | Pokemon Roguelike Pokesurvivor",
@@ -71,11 +76,6 @@
       "videoId": "JAufrbS8fOI",
       "title": "DIVENTO il PROPRIETARIO di una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
       "published": "2026-08-17T10:00:19+00:00"
-    },
-    {
-      "videoId": "Uhd98aA7Sq4",
-      "title": "HO COMPRATO una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
-      "published": "2026-08-14T10:00:16+00:00"
     }
   ]
 }
