@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-17T22:56:41.468Z",
+  "updatedAt": "2026-10-18T10:37:49.358Z",
   "items": [
+    {
+      "videoId": "iRRJOaeSGx8",
+      "title": "QUESTO POKÉMON TI CREA DIPENDENZA! | Pokemon Roguelike Pokebonk",
+      "published": "2026-10-18T10:00:23+00:00"
+    },
     {
       "videoId": "NjK2fiGLDmo",
       "title": "HO DISTRUTTO POKEMON SURVIVOR! | Pokemon Roguelike Pokesurvivor",
@@ -71,11 +76,6 @@
       "videoId": "P1g89KJxT9w",
       "title": "NUOVA NUZLOCKE con le MEGAEVOLUZIONI!  | Pokemon Roguelike Pokelike",
       "published": "2026-08-18T10:00:29+00:00"
-    },
-    {
-      "videoId": "JAufrbS8fOI",
-      "title": "DIVENTO il PROPRIETARIO di una PALESTRA POKEMON!  | Pokemon Gym Manager Roguelike",
-      "published": "2026-08-17T10:00:19+00:00"
     }
   ]
 }
