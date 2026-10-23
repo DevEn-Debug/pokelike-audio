@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-22T21:19:51.863Z",
+  "updatedAt": "2026-10-23T11:14:52.049Z",
   "items": [
+    {
+      "videoId": "Rvr1zGchOAg",
+      "title": "NUOVO AGGIORNAMENTO ASSURDO! | Pokemon Roguelike Pokesurvivor",
+      "published": "2026-10-23T10:00:22+00:00"
+    },
     {
       "videoId": "q49nX8EWhRQ",
       "title": "DISTRUGGIAMO ARCEUS IN COOP! | Pokemon Roguelike Pokesurvivor",
@@ -71,11 +76,6 @@
       "videoId": "7iEHjZTM1Bo",
       "title": "HO DISTRUTTO la CHALLENGE!  | Pokemon Roguelike Pokelike",
       "published": "2026-08-26T10:00:23+00:00"
-    },
-    {
-      "videoId": "-OyZy7ukPwg",
-      "title": "ARRIVANO le CARTE su POKELIKE!  | Pokemon Roguelike Pokelike",
-      "published": "2026-08-23T10:00:18+00:00"
     }
   ]
 }
