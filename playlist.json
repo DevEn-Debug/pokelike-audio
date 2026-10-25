@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-25T10:58:53.090Z",
+  "updatedAt": "2026-10-25T15:47:27.944Z",
   "items": [
+    {
+      "videoId": "UwfyzggjPcQ",
+      "title": "IL NUMERO 1 IN ITALIA MI COACHA SU POKEMON TFT! | Pokemon Kanto Tactics TFT",
+      "published": "2026-10-25T11:00:14+00:00"
+    },
     {
       "videoId": "Rvr1zGchOAg",
       "title": "NUOVO AGGIORNAMENTO ASSURDO! | Pokemon Roguelike Pokesurvivor",
@@ -71,11 +76,6 @@
       "videoId": "CtuHoWMoHzk",
       "title": "BATTAGLIA NAVALE POKEMON VS @DROODTHUND3RLIVE | Pokemon Battleship QWILFIGHT",
       "published": "2026-08-30T10:00:32+00:00"
-    },
-    {
-      "videoId": "7iEHjZTM1Bo",
-      "title": "HO DISTRUTTO la CHALLENGE!  | Pokemon Roguelike Pokelike",
-      "published": "2026-08-26T10:00:23+00:00"
     }
   ]
 }
