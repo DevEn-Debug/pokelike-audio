@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-27T21:57:00.894Z",
+  "updatedAt": "2026-10-28T12:23:20.194Z",
   "items": [
+    {
+      "videoId": "-6nRR83p4ho",
+      "title": "HO DISTRUTTO LA TORRE DI LAVANDONIA! | Pokemon Roguelike Pokebonk",
+      "published": "2026-10-28T11:00:09+00:00"
+    },
     {
       "videoId": "UwfyzggjPcQ",
       "title": "IL NUMERO 1 IN ITALIA MI COACHA SU POKEMON TFT! | Pokemon Kanto Tactics TFT",
@@ -71,11 +76,6 @@
       "videoId": "FsWohWo0jg8",
       "title": "COME VINCERE UNIMA?! - Update V2.9 | Pokemon Roguelike Pokelike",
       "published": "2026-09-03T10:00:28+00:00"
-    },
-    {
-      "videoId": "CtuHoWMoHzk",
-      "title": "BATTAGLIA NAVALE POKEMON VS @DROODTHUND3RLIVE | Pokemon Battleship QWILFIGHT",
-      "published": "2026-08-30T10:00:32+00:00"
     }
   ]
 }
