@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-10-31T21:12:42.415Z",
+  "updatedAt": "2026-11-01T12:53:43.698Z",
   "items": [
+    {
+      "videoId": "K6tvtqSuXDc",
+      "title": "POKEMON incontra ISAAC! | PokeIsaac Pokemon Roguelike",
+      "published": "2026-11-01T11:07:31+00:00"
+    },
     {
       "videoId": "rK5CbP-F7Bs",
       "title": "HO DISTRUTTO IL GIOCO! | Pokemon Roguelike Pokebonk",
@@ -71,11 +76,6 @@
       "videoId": "_TXY5b414pw",
       "title": "LE NUOVE MOSSE SONO DEVASTANTI - Update V3.1.1 | Pokemon Roguelike Pokelike",
       "published": "2026-09-16T10:00:36+00:00"
-    },
-    {
-      "videoId": "nj-V7rC00KQ",
-      "title": "FUSIONI POKEMON ASSURDE - Update V3.0 | Pokemon Roguelike Pokelike",
-      "published": "2026-09-10T10:00:06+00:00"
     }
   ]
 }
