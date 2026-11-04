@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-04T10:38:26.843Z",
+  "updatedAt": "2026-11-04T19:31:33.494Z",
   "items": [
+    {
+      "videoId": "yQA5E_FrZaw",
+      "title": "QUESTO FANGAME È GRATIS ED È POKÉMON CULT OF THE LAMB! | PokéDive Pokemon Roguelike",
+      "published": "2026-11-04T11:12:27+00:00"
+    },
     {
       "videoId": "K6tvtqSuXDc",
       "title": "POKEMON incontra ISAAC! | PokeIsaac Pokemon Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "_aUSd8MtZQE",
       "title": "IL NUOVO ROGUELIKE POKELIKE2! | Pokemon Roguelike Pokelike",
       "published": "2026-09-20T10:00:04+00:00"
-    },
-    {
-      "videoId": "_TXY5b414pw",
-      "title": "LE NUOVE MOSSE SONO DEVASTANTI - Update V3.1.1 | Pokemon Roguelike Pokelike",
-      "published": "2026-09-16T10:00:36+00:00"
     }
   ]
 }
