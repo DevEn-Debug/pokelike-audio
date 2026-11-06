@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-06T10:34:04.631Z",
+  "updatedAt": "2026-11-06T19:04:10.918Z",
   "items": [
+    {
+      "videoId": "r5b_sFtnPro",
+      "title": "NUOVO AGGIORNAMENTO GEN 2! | Pokemon Roguelike Pokebonk",
+      "published": "2026-11-06T11:00:29+00:00"
+    },
     {
       "videoId": "yQA5E_FrZaw",
       "title": "QUESTO FANGAME È GRATIS ED È POKÉMON CULT OF THE LAMB! | PokéDive Pokemon Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "cJO9B2AdoCo",
       "title": "IL NUOVO ROGUELIKE POKÉMON SURVIVOR! | Pokemon Survivor Burst",
       "published": "2026-09-22T10:00:38+00:00"
-    },
-    {
-      "videoId": "_aUSd8MtZQE",
-      "title": "IL NUOVO ROGUELIKE POKELIKE2! | Pokemon Roguelike Pokelike",
-      "published": "2026-09-20T10:00:04+00:00"
     }
   ]
 }
