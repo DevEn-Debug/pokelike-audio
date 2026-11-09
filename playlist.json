@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-08T19:25:26.344Z",
+  "updatedAt": "2026-11-09T11:05:30.200Z",
   "items": [
+    {
+      "videoId": "_wgdjamMxRI",
+      "title": "ROGUELIKE CON LE CARTE POKEMON! | PokéSpire Pokemon Roguelike",
+      "published": "2026-11-09T11:00:28+00:00"
+    },
     {
       "videoId": "r5b_sFtnPro",
       "title": "NUOVO AGGIORNAMENTO GEN 2! | Pokemon Roguelike Pokebonk",
@@ -71,11 +76,6 @@
       "videoId": "2X5pGvyJZxY",
       "title": "SOLO METRONOMO SU POKÉMON HEARTGOLD RANDOMIZER! | Pokémon HeartGold Dumbattle Randomizer",
       "published": "2026-09-27T10:00:28+00:00"
-    },
-    {
-      "videoId": "cJO9B2AdoCo",
-      "title": "IL NUOVO ROGUELIKE POKÉMON SURVIVOR! | Pokemon Survivor Burst",
-      "published": "2026-09-22T10:00:38+00:00"
     }
   ]
 }
