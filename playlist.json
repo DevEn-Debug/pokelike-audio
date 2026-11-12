@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-11T21:47:33.715Z",
+  "updatedAt": "2026-11-12T17:26:18.674Z",
   "items": [
+    {
+      "videoId": "tjz1p91f2kI",
+      "title": "IL NUOVO POKEMON ROGUELIKE - ROGUEMON",
+      "published": "2026-11-12T11:00:32+00:00"
+    },
     {
       "videoId": "_wgdjamMxRI",
       "title": "ROGUELIKE CON LE CARTE POKEMON! | PokéSpire Pokemon Roguelike",
@@ -71,11 +76,6 @@
       "videoId": "FUITJplJIXE",
       "title": "DISTRUGGO LA ENDLESS SU POKELIKE! | Pokemon Roguelike Pokelike",
       "published": "2026-10-05T10:00:20+00:00"
-    },
-    {
-      "videoId": "2X5pGvyJZxY",
-      "title": "SOLO METRONOMO SU POKÉMON HEARTGOLD RANDOMIZER! | Pokémon HeartGold Dumbattle Randomizer",
-      "published": "2026-09-27T10:00:28+00:00"
     }
   ]
 }
