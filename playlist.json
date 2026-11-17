@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-17T07:11:50.462Z",
+  "updatedAt": "2026-11-17T18:18:01.575Z",
   "items": [
+    {
+      "videoId": "9y28Ndh8WU0",
+      "title": "[AGGIORNAMENTO] ETERNATUS IL BOSS FINALE!? | Pokemon Roguelike Pokesurvivor",
+      "published": "2026-11-17T11:00:28+00:00"
+    },
     {
       "videoId": "tjz1p91f2kI",
       "title": "IL NUOVO POKEMON ROGUELIKE - ROGUEMON",
@@ -71,11 +76,6 @@
       "videoId": "d6j2lGSExoM",
       "title": "IL GIOCO DI CARTE DEI POKEMON!? | Balatro Pokemon Roguelike",
       "published": "2026-10-07T10:00:04+00:00"
-    },
-    {
-      "videoId": "FUITJplJIXE",
-      "title": "DISTRUGGO LA ENDLESS SU POKELIKE! | Pokemon Roguelike Pokelike",
-      "published": "2026-10-05T10:00:20+00:00"
     }
   ]
 }
