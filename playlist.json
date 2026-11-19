@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-19T02:22:48.589Z",
+  "updatedAt": "2026-11-19T11:18:13.077Z",
   "items": [
+    {
+      "videoId": "XuHKdLAtPiQ",
+      "title": "NUOVO AGGIORNAMENTO INCREDIBILE! | Pokemon Roguelike Pokelike",
+      "published": "2026-11-19T11:00:36+00:00"
+    },
     {
       "videoId": "9y28Ndh8WU0",
       "title": "[AGGIORNAMENTO] ETERNATUS IL BOSS FINALE!? | Pokemon Roguelike Pokesurvivor",
@@ -71,11 +76,6 @@
       "videoId": "DLlKCODoDUo",
       "title": "QUESTO GIOCO È UNA DROGA! | Pokemon Roguelike Pokesurvivor",
       "published": "2026-10-12T10:00:22+00:00"
-    },
-    {
-      "videoId": "d6j2lGSExoM",
-      "title": "IL GIOCO DI CARTE DEI POKEMON!? | Balatro Pokemon Roguelike",
-      "published": "2026-10-07T10:00:04+00:00"
     }
   ]
 }
