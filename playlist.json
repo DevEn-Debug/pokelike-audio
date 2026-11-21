@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-21T10:45:57.181Z",
+  "updatedAt": "2026-11-21T18:52:21.113Z",
   "items": [
+    {
+      "videoId": "dfi-V6nlHsY",
+      "title": "IL POKEMON PIU FORTE DEL GIOCO CHARIZARD SHINY AURORA! | Pokemon Roguelike Pokelike",
+      "published": "2026-11-21T11:00:32+00:00"
+    },
     {
       "videoId": "XuHKdLAtPiQ",
       "title": "NUOVO AGGIORNAMENTO INCREDIBILE! | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "NjK2fiGLDmo",
       "title": "HO DISTRUTTO POKEMON SURVIVOR! | Pokemon Roguelike Pokesurvivor",
       "published": "2026-10-14T10:00:26+00:00"
-    },
-    {
-      "videoId": "DLlKCODoDUo",
-      "title": "QUESTO GIOCO È UNA DROGA! | Pokemon Roguelike Pokesurvivor",
-      "published": "2026-10-12T10:00:22+00:00"
     }
   ]
 }
