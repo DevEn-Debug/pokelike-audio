@@ -1,7 +1,12 @@
 {
   "playlistId": "PL9sQLK1ZZa9M7lOQB-8w9zii8UOV-ioMz",
-  "updatedAt": "2026-11-25T07:42:12.507Z",
+  "updatedAt": "2026-11-25T19:01:16.777Z",
   "items": [
+    {
+      "videoId": "HiHqczitJZA",
+      "title": "HO PROVATO IL DARK SOULS DEI POKÉMON! | Pokemon Soulslike Pokeborn",
+      "published": "2026-11-25T11:00:29+00:00"
+    },
     {
       "videoId": "dfi-V6nlHsY",
       "title": "IL POKEMON PIU FORTE DEL GIOCO CHARIZARD SHINY AURORA! | Pokemon Roguelike Pokelike",
@@ -71,11 +76,6 @@
       "videoId": "iRRJOaeSGx8",
       "title": "QUESTO POKÉMON TI CREA DIPENDENZA! | Pokemon Roguelike Pokebonk",
       "published": "2026-10-18T10:00:23+00:00"
-    },
-    {
-      "videoId": "NjK2fiGLDmo",
-      "title": "HO DISTRUTTO POKEMON SURVIVOR! | Pokemon Roguelike Pokesurvivor",
-      "published": "2026-10-14T10:00:26+00:00"
     }
   ]
 }
